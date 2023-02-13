@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+.product-grid{
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+  margin: 50px;
+}
+.grid-title{
+  font-weight: bold;
+}
+.unit-button{
+  padding: 5px;
+}
