@@ -6,15 +6,16 @@ import React from 'react';
 
 function App() {
     return(
-        <div className="App">
-            <FetchProducts />
+        <div className="basket">
+            <Basket />
         </div>
     )
 }
 
-function FetchProducts() {
+function Basket() {
     const [products, setProducts] = useState<{id: string, name: string,price: number, currency: String, rebateQuantity: number, rebatePercent: number, upsellProductId: string}[]>([]);
-    async function onClick() {
+    fetchProducts();
+    async function fetchProducts() {
         const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product.json";
         try {
             const response = await fetch(URL);
@@ -29,6 +30,9 @@ function FetchProducts() {
         } catch(e){
             console.log(e)
         }
+    }
+    function getAverageProductPrice(){
+
     }
 
     function less(product: { id: string; name: string; price: number; currency: String; rebateQuantity: number; rebatePercent: number; upsellProductId: string }) {
@@ -53,9 +57,14 @@ function FetchProducts() {
         setProducts(newProducts);
     }
 
+    function getTotal() {
+        let total : number = 0;
+        products.forEach(p=>total+=p.price*(1-p.rebatePercent*(1/100))*p.rebateQuantity);
+        return total;
+    }
+
     return (
         <div>
-            <button onClick={onClick}>GO!</button>
             <p>Basket</p>
                 {products.map((product)=>(
                     <div key={product.id} className="product-grid">
@@ -69,21 +78,26 @@ function FetchProducts() {
 
                         <div className="grid-item">{product.id}</div>
                         <div className="grid-item">{product.name}</div>
-                        <div className="grid-item">{product.price}</div>
+                        <div className="grid-item">{product.price} {product.currency}</div>
                         <div className="grid-item">{product.rebatePercent}%</div>
                         <div className="grid-item">
                             <button className="unit-button" onClick={ () => less(product) }>-</button>
                             <a>{product.rebateQuantity}</a>
                             <button className="unit-button" onClick={ () => more(product) }>+</button>
                         </div>
-                        <div className="grid-item">{product.price*(1-product.rebatePercent*(1/100))*product.rebateQuantity}</div>
+                        <div className="grid-item">{(product.price*(1-product.rebatePercent*(1/100))*product.rebateQuantity).toFixed(2)} {product.currency}</div>
 
                     </div>
                 ))}
+            <div className="grand-total">
+                <p>GRAND TOTAL: {getTotal().toFixed(2) } {products[0]?.currency}</p>
+            </div>
+
 
         </div>
 
     )
 }
+
 
 export default App
