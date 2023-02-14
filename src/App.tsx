@@ -76,7 +76,7 @@ function FetchProducts() {
                             <a>{product.rebateQuantity}</a>
                             <button className="unit-button" onClick={ () => more(product) }>+</button>
                         </div>
-                        <div className="grid-item">{product.price*product.rebatePercent*product.rebateQuantity}</div>
+                        <div className="grid-item">{product.price*(1-product.rebatePercent*(1/100))*product.rebateQuantity}</div>
 
                     </div>
                 ))}
