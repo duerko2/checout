@@ -12,8 +12,6 @@ function App() {
     )
 }
 
-
-
 function FetchProducts() {
     const [products, setProducts] = useState<{id: string, name: string,price: number, currency: String, rebateQuantity: number, rebatePercent: number, upsellProductId: string}[]>([]);
     async function onClick() {
@@ -31,6 +29,28 @@ function FetchProducts() {
         } catch(e){
             console.log(e)
         }
+    }
+
+    function less(product: { id: string; name: string; price: number; currency: String; rebateQuantity: number; rebatePercent: number; upsellProductId: string }) {
+
+        let newProducts=products.map(e=>e);
+        for(let i=0;i<products.length;i++){
+            if(products[i].rebateQuantity===0){
+            } else if(products[i].id===product.id){
+                newProducts[i].rebateQuantity--;
+            }
+        }
+        setProducts(newProducts);
+    }
+
+    function more(product: { id: string; name: string; price: number; currency: String; rebateQuantity: number; rebatePercent: number; upsellProductId: string }) {
+        let newProducts=products.map(e=>e);
+        for(let i=0;i<products.length;i++){
+            if(products[i].id===product.id){
+                newProducts[i].rebateQuantity++;
+            }
+        }
+        setProducts(newProducts);
     }
 
     return (
@@ -52,9 +72,9 @@ function FetchProducts() {
                         <div className="grid-item">{product.price}</div>
                         <div className="grid-item">{product.rebatePercent}%</div>
                         <div className="grid-item">
-                            <button className="unit-button">-</button>
+                            <button className="unit-button" onClick={ () => less(product) }>-</button>
                             <a>{product.rebateQuantity}</a>
-                            <button className="unit-button">+</button>
+                            <button className="unit-button" onClick={ () => more(product) }>+</button>
                         </div>
                         <div className="grid-item">{product.price*product.rebatePercent*product.rebateQuantity}</div>
 
