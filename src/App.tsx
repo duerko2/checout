@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import './App.css'
 import React from 'react';
-import minus from '/assets/minus-png.png'
+import minus from './minus.png'
 
 
 
@@ -91,7 +91,11 @@ function Basket() {
         let newItems=itemList.map(e=>e);
         for(let i=0;i<itemList.length;i++){
             if(itemList[i].product.id===item.product.id){
-                newItems.splice(i,i);
+                if(i===0){
+                    newItems.shift();
+                } else {
+                    newItems.splice(i,1);
+                }
             }
         }
         setItems(newItems);
@@ -101,7 +105,7 @@ function Basket() {
         <div>
             <p>Basket</p>
             <div className="product-grid">
-                <div></div>
+                <div className="grid-title"></div>
                 <div className="grid-title">Product ID</div>
                 <div className="grid-title">Product Name</div>
                 <div className="grid-title">Unit Price</div>
@@ -112,8 +116,8 @@ function Basket() {
 
                 {itemList.map((item)=>(
                     <>
-                        <div>
-                            <img src={minus} onClick={()=>removeItem(item)}/>
+                        <div className="grid-item" id="minus-thing">
+                            <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
                         </div>
                         <div className="grid-item">{item.product.id}</div>
                         <div className="grid-item">{item.product.name}</div>
