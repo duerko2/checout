@@ -113,9 +113,10 @@ function Basket() {
                 <div className="grid-title">Units</div>
                 <div className="grid-title">Total Price</div>
                 <div className="grid-title">Gift Wrapped</div>
-
+            </div>
                 {itemList.map((item)=>(
-                    <>
+                    <div className="product-card">
+                        <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
                             <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
                         </div>
@@ -134,9 +135,9 @@ function Basket() {
                                 <input type="checkbox" onChange={()=>changeGiftWrapped(item)}/>
                             </label>
                         </div>
-                    </>
+                        </div>
+                    </div>
                     ))}
-            </div>
             <div className="grand-total">
                 <p>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</p>
             </div>
