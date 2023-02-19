@@ -25,8 +25,14 @@ type Product = {
 type Item ={ product: Product; quantity: number; giftWrap: boolean }
 
 function Basket() {
-    const [itemList,setItems] = useState<Item[]>([])
-    if(!itemList[0]){fetchProducts();}
+    const [loaded,setLoaded] = useState<Boolean>(false);
+    const [itemList,setItems] = useState<Item[]>([]);
+
+    if(!loaded) {
+        fetchProducts();
+        setLoaded(true)
+    }
+
     async function fetchProducts() {
         const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product.json";
         try {
@@ -103,7 +109,7 @@ function Basket() {
 
     return (
         <div>
-            <p>Basket</p>
+            <h2>Basket</h2>
             <div className="product-grid">
                 <div className="grid-title"></div>
                 <div className="grid-title">Product ID</div>
@@ -139,7 +145,7 @@ function Basket() {
                     </div>
                     ))}
             <div className="grand-total">
-                <p>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</p>
+                <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
             </div>
         </div>
     )
