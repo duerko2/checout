@@ -29,6 +29,7 @@ function Basket() {
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
+    let recurring: boolean;
 
     if(!loaded) {
         fetchProducts();
@@ -95,6 +96,14 @@ function Basket() {
         setItems(newItems);
     }
 
+    function changeRecurringOrder() {
+        if (recurring==false){
+            recurring=true
+        }else if (recurring==true){
+            recurring=false
+        }
+    }
+
     function removeItem(item: Item) {
         let newItems=itemList.map(e=>e);
         for(let i=0;i<itemList.length;i++){
@@ -138,7 +147,6 @@ function Basket() {
                 <div className="grid-title">Units</div>
                 <div className="grid-title">Total Price</div>
                 <div className="grid-title">Gift Wrapped</div>
-                <div className="grid-title">Recurring Order</div>
             </div>
                 {itemList.map((item)=>(
                     <div className="product-card">
@@ -159,17 +167,25 @@ function Basket() {
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
                         <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
-                        <div className="grid-item">
-                            <label>
-                                <input type="checkbox" onChange={()=>changeGiftWrapped(item)}/>
-                            </label>
-                        </div>
+                            <div className="grid-item">
+                                <label>
+                                    <input type ="checkbox" onChange={()=>changeGiftWrapped(item)}/>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     ))}
             <div className="grand-total">
                 <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
             </div>
+
+            <div className="recurring-order">
+                <label>
+                    <h2>Recurring order: <input type="checkbox" onChange={()=>changeRecurringOrder()}/></h2>
+
+                </label>
+            </div>
+
             <div>
                 <ShowRebate
                  showRebate={show.showRebate}
