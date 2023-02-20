@@ -29,7 +29,7 @@ function Basket() {
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
-    let recurring: boolean;
+    let recurring = false;
 
     if(!loaded) {
         fetchProducts();
