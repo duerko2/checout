@@ -1,7 +1,8 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 import React from 'react';
-import minus from './minus.png'
+import minus from './minus.png';
+import question from './question-mark.png';
 
 
 
@@ -26,6 +27,7 @@ type Item ={ product: Product; quantity: number; giftWrap: boolean }
 
 function Basket() {
     const [loaded,setLoaded] = useState<Boolean>(false);
+    const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
 
     if(!loaded) {
@@ -107,6 +109,23 @@ function Basket() {
         setItems(newItems);
     }
 
+    function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
+        const x = event.pageX;
+        const y = event.pageY
+        if(show.pos.y===0 && show.pos.x===0){
+            setShowRebate({showRebate: true, product: item.product, pos: {x: x, y: y}})
+
+        }
+    }
+
+    function unshowRebateItem(event: React.MouseEvent<HTMLDivElement>) {
+        const x = event.pageX;
+        const y = event.pageY
+        if(show.pos.x!=x && show.pos.y!=y) {
+            setShowRebate({showRebate: false, product: undefined, pos: {x: 0, y: 0}})
+        }
+    }
+
     return (
         <div>
             <h2>Basket</h2>
@@ -129,7 +148,10 @@ function Basket() {
                         <div className="grid-item">{item.product.id}</div>
                         <div className="grid-item">{item.product.name}</div>
                         <div className="grid-item">{item.product.price} {item.product.currency}</div>
-                        <div className="grid-item">{calculateRebate(item)}%</div>
+                        <div className="grid-item">{calculateRebate(item)}%
+                            <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
+
+                        </div>
                         <div className="grid-item">
                             <button className="unit-button" onClick={() => less(item)}>-</button>
                             <a>{item.quantity}</a>
@@ -147,8 +169,26 @@ function Basket() {
             <div className="grand-total">
                 <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
             </div>
+            <div>
+                <ShowRebate
+                 showRebate={show.showRebate}
+                 product={show.product}
+                 pos={show.pos}
+                />
+            </div>
         </div>
     )
+}
+
+function ShowRebate(state: { showRebate:boolean; product?:Product;pos:{x:number;y:number} }){
+    if(state.showRebate && state.product)
+        return(
+            <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
+                <p>Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
+            </div>
+        );
+    else
+        return (<div></div>);
 }
 
 

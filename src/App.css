@@ -80,3 +80,19 @@
 .minus-button:hover{
   cursor: pointer;
 }
+.rebate-question{
+  display: inline;
+}
+.question-img{
+  height:8px;
+  width:8px;
+  filter: invert(70%);
+  padding:1px;
+  margin:2px;
+  border: 1px solid #646cffaa;
+  border-radius: 10px;
+}
+.floating-rebate-card{
+  position: absolute;
+  display: block;
+}
