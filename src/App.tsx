@@ -31,6 +31,8 @@ function Basket() {
     const [itemList,setItems] = useState<Item[]>([]);
     let recurring = false;
 
+
+
     if(!loaded) {
         fetchProducts();
         setLoaded(true)
