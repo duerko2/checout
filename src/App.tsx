@@ -138,6 +138,7 @@ function Basket() {
                 <div className="grid-title">Units</div>
                 <div className="grid-title">Total Price</div>
                 <div className="grid-title">Gift Wrapped</div>
+                <div className="grid-title">Recurring Order</div>
             </div>
                 {itemList.map((item)=>(
                     <div className="product-card">
