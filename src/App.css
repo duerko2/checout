@@ -97,17 +97,6 @@
   border-radius: 10px;
 }
 .floating-rebate-card{
-  padding:5px;
   position: absolute;
   display: block;
-  backdrop-filter: blur(1px);
-}
-.rebate-text{
-  font-size: 12px;
-  padding:0px;
-
-}
-
-.character{
-  position: absolute;
 }

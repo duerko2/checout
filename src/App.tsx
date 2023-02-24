@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
 import './App.css'
 import React from 'react';
-import minus from './assets/minus.png';
-import question from './assets/question-mark.png';
+import minus from './minus.png';
+import question from './question-mark.png';
 
 
 
@@ -24,8 +24,6 @@ type Product = {
     upsellProductId: string;
 }
 type Item ={ product: Product; quantity: number; giftWrap: boolean }
-
-
 
 function Basket() {
     const [loaded,setLoaded] = useState<Boolean>(false);
@@ -197,9 +195,6 @@ function Basket() {
                  pos={show.pos}
                 />
             </div>
-            <div>
-                <Character/>
-            </div>
         </div>
     )
 }
@@ -208,61 +203,11 @@ function ShowRebate(state: { showRebate:boolean; product?:Product;pos:{x:number;
     if(state.showRebate && state.product)
         return(
             <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
-                <p className="rebate-text">Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
+                <p>Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
             </div>
         );
     else
         return (<div></div>);
-}
-
-function Character() {
-    const [charPos,setCharPos] = useState<{x:number;y:number}>({x:50,y:50});
-    const[keyDown,setKeyDown] = useState<{code:string}[]>([]);
-
-    let velocity = 1;
-
-
-
-    document.addEventListener('keyup', function(e) {
-        let code = e.code
-        if(e.code==="KeyW"||e.code==="KeyA"||e.code==="KeyS"||e.code==="KeyD"){
-            setKeyDown(
-                keyDown.filter(a=>a.code!==code)
-            )
-        }
-    })
-
-    document.addEventListener('keydown', function(e) {
-        if(e.code==="KeyW"||e.code==="KeyA"||e.code==="KeyS"||e.code==="KeyD"){
-            setKeyDown([...keyDown,{code:e.code}])
-
-        }
-    })
-    runCharacter(keyDown,charPos);
-
-
-    async function runCharacter(keyDown: { code: string }[], charPos: { x: number; y: number }) {
-        let j=0;
-        while(j<1){
-            for(let i=0;i<keyDown.length;i++){
-                if(keyDown[i].code==="KeyW"){
-                    setCharPos({x:charPos.x,y:charPos.y-10});
-                }
-            }
-            await timeout(100);
-            j++;
-        }
-    }
-
-    return (
-        <div className="character" style={{top:charPos.y,left:charPos.x}}>
-            <img src={minus} height="25" width="25"/>
-        </div>
-    );
-}
-
-function timeout(delay: number) {
-    return new Promise( res => setTimeout(res, delay) );
 }
 
 
