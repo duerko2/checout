@@ -200,7 +200,13 @@ function Basket() {
 }
 
 function ShowRebate(state: { showRebate:boolean; product?:Product;pos:{x:number;y:number} }){
-    if(state.showRebate && state.product)
+    if(state.showRebate && state.product && state.product.rebatePercent===0)
+        return(
+            <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
+                <p>No discount on this product</p>
+            </div>
+        )
+    else if(state.showRebate && state.product)
         return(
             <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
                 <p>Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
