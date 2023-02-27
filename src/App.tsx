@@ -22,13 +22,15 @@ type Product = {
     rebateQuantity: number;
     rebatePercent: number;
     upsellProductId: string;
-}
-type Item ={ product: Product; quantity: number; giftWrap: boolean }
+};
+type Item ={ product: Product; quantity: number; giftWrap: boolean };
+type Order = { itemList:Item[]; recurring: boolean };
 
 function Basket() {
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
+    const [order,setOrder] = useState<Order>({itemList:itemList,recurring:false});
     let recurring = false;
 
 
@@ -99,10 +101,10 @@ function Basket() {
     }
 
     function changeRecurringOrder() {
-        if (recurring==false){
-            recurring=true
-        }else if (recurring==true){
-            recurring=false
+        if (order.recurring){
+            setOrder({itemList:itemList,recurring:false})
+        } else {
+            setOrder({itemList:itemList,recurring:true})
         }
     }
 
@@ -142,7 +144,6 @@ function Basket() {
             <h2>Basket</h2>
             <div className="product-grid">
                 <div className="grid-title"></div>
-                <div className="grid-title">Product ID</div>
                 <div className="grid-title">Product Name</div>
                 <div className="grid-title">Unit Price</div>
                 <div className="grid-title">Discount</div>
@@ -153,23 +154,22 @@ function Basket() {
                 {itemList.map((item)=>(
                     <div className="product-card">
                         <div className="product-grid">
-                        <div className="grid-item" id="minus-thing">
-                            <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
-                        </div>
-                        <div className="grid-item">{item.product.id}</div>
-                        <div className="grid-item">{item.product.name}</div>
-                        <div className="grid-item">{item.product.price} {item.product.currency}</div>
-                        <div className="grid-item">{calculateRebate(item)}%
-                            <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
+                            <div className="grid-item" id="minus-thing">
+                                <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
+                            </div>
+                            <div className="grid-item">{item.product.name}</div>
+                            <div className="grid-item">{item.product.price} {item.product.currency}</div>
+                            <div className="grid-item">{calculateRebate(item)}%
+                                <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
 
-                        </div>
-                        <div className="grid-item">
-                            <button className="unit-button" onClick={() => less(item)}>-</button>
-                            <a>{item.quantity}</a>
-                            <button className="unit-button" onClick={() => more(item)}>+</button>
-                        </div>
-                        <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                            </div>
                             <div className="grid-item">
+                                <button className="unit-button" onClick={() => less(item)}>-</button>
+                                <a>{item.quantity}</a>
+                                <button className="unit-button" onClick={() => more(item)}>+</button>
+                            </div>
+                            <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                            <div className="grid-item" style={{placeSelf:"center"}}>
                                 <label>
                                     <input type ="checkbox" onChange={()=>changeGiftWrapped(item)}/>
                                 </label>
@@ -177,13 +177,13 @@ function Basket() {
                         </div>
                     </div>
                     ))}
-            <div className="grand-total">
+            <div className="grand-total" >
                 <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
             </div>
 
             <div className="recurring-order">
                 <label>
-                    <h2>Recurring order: <input type="checkbox" onChange={()=>changeRecurringOrder()}/></h2>
+                    <h2>Monthly recurring order: <input type="checkbox" onChange={()=>changeRecurringOrder()}/></h2>
 
                 </label>
             </div>
