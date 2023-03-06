@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
 import minus from'./assets/trashCan.png';
-import question from './question-mark.png';
+import question from './assets/question-mark.png';
+
+
 
 
 function App() {
@@ -11,17 +13,113 @@ function App() {
         </div>
     )
 }
-type Product = {
-    id: string;
-    name: string;
-    price: number;
-    currency: string;
-    rebateQuantity: number;
-    rebatePercent: number;
-    upsellProductId: string;
-};
-type Item ={ product: Product; quantity: number; giftWrap: boolean };
-type Order = { itemList:Item[]; recurring: boolean };
+function BasketGrid({itemList,setItems}: {itemList:Item[],setItems:(items:Item[])=>void}) {
+
+    const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
+
+    function calculateRebate(item: Item) {
+        if(item.quantity>=item.product.rebateQuantity && item.product.rebateQuantity!=0){
+            return item.product.rebatePercent;
+        } else return 0;
+    }
+
+    function changeGiftWrapped(item: Item) {
+        let newItems=itemList.map(e=>e);
+        for(let i=0;i<itemList.length;i++){
+            if(itemList[i].product.id===item.product.id){
+                newItems[i].giftWrap=!newItems[i].giftWrap
+            }
+        }
+        setItems(newItems);
+    }
+    function less(item : Item) {
+        let newItems=itemList.map(e=>e);
+        for(let i=0;i<itemList.length;i++){
+            if(itemList[i].product.id===item.product.id && itemList[i].quantity>0){
+                newItems[i].quantity--;
+            }
+        }
+        setItems(newItems);
+    }
+
+    function more(item : Item) {
+        let newItems=itemList.map(e=>e);
+        for(let i=0;i<itemList.length;i++){
+            if(itemList[i].product.id===item.product.id){
+                newItems[i].quantity++;
+            }
+        }
+        setItems(newItems);
+    }
+    function removeItem(item: Item) {
+        let newItems=itemList.map(e=>e);
+        for(let i=0;i<itemList.length;i++){
+            if(itemList[i].product.id===item.product.id){
+                if(i===0){
+                    newItems.shift();
+                } else {
+                    newItems.splice(i,1);
+                }
+            }
+        }
+        setItems(newItems);
+    }
+    function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
+        const x = event.pageX;
+        const y = event.pageY
+        if(show.pos.y===0 && show.pos.x===0){
+            setShowRebate({showRebate: true, product: item.product, pos: {x: x, y: y}})
+
+        }
+    }
+
+    function unshowRebateItem(event: React.MouseEvent<HTMLDivElement>) {
+        const x = event.pageX;
+        const y = event.pageY
+        if(show.pos.x!=x && show.pos.y!=y) {
+            setShowRebate({showRebate: false, product: undefined, pos: {x: 0, y: 0}})
+        }
+    }
+
+    return (<div>
+        <div className="product-grid">
+            <div className="grid-title"></div>
+            <div className="grid-title">Product Name</div>
+            <div className="grid-title">Unit Price</div>
+            <div className="grid-title">Discount</div>
+            <div className="grid-title">Units</div>
+            <div className="grid-title">Total Price</div>
+            <div className="grid-title">Gift Wrapped</div>
+        </div>
+    {itemList.map((item)=>(
+        <div className="product-card">
+            <div className="product-grid">
+                <div className="grid-item" id="minus-thing">
+                    <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
+                </div>
+                <div className="grid-item">{item.product.name}</div>
+                <div className="grid-item">{item.product.price} {item.product.currency}</div>
+                <div className="grid-item">{calculateRebate(item)}%
+                    <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
+
+                </div>
+                <div className="grid-item">
+                    <button className="unit-button" onClick={() => less(item)}>-</button>
+                    <a>{item.quantity}</a>
+                    <button className="unit-button" onClick={() => more(item)}>+</button>
+                </div>
+                <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                <div className="grid-item" style={{placeSelf:"center"}}>
+                    <label>
+                        <input type ="checkbox" onChange={()=>changeGiftWrapped(item)}/>
+                    </label>
+                </div>
+            </div>
+        </div>
+    ))}
+        </div>
+    )
+}
 
 function Basket() {
     let products: { [id: string] : Product } = {};
@@ -66,25 +164,7 @@ function Basket() {
         setItems(basket);
     }
 
-    function less(item : Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id && itemList[i].quantity>0){
-                newItems[i].quantity--;
-            }
-        }
-        setItems(newItems);
-    }
 
-    function more(item : Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
-                newItems[i].quantity++;
-            }
-        }
-        setItems(newItems);
-    }
 
     function getTotal() {
         let total : number = 0;
@@ -92,21 +172,7 @@ function Basket() {
         return total;
     }
 
-    function calculateRebate(item: Item) {
-        if(item.quantity>=item.product.rebateQuantity && item.product.rebateQuantity!=0){
-            return item.product.rebatePercent;
-        } else return 0;
-    }
 
-    function changeGiftWrapped(item: Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
-                newItems[i].giftWrap=!newItems[i].giftWrap
-            }
-        }
-        setItems(newItems);
-    }
 
     function changeRecurringOrder() {
         if (order.recurring){
@@ -116,75 +182,17 @@ function Basket() {
         }
     }
 
-    function removeItem(item: Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
-                if(i===0){
-                    newItems.shift();
-                } else {
-                    newItems.splice(i,1);
-                }
-            }
-        }
-        setItems(newItems);
-    }
 
-    function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
-        const x = event.pageX;
-        const y = event.pageY
-        if(show.pos.y===0 && show.pos.x===0){
-            setShowRebate({showRebate: true, product: item.product, pos: {x: x, y: y}})
 
-        }
-    }
 
-    function unshowRebateItem(event: React.MouseEvent<HTMLDivElement>) {
-        const x = event.pageX;
-        const y = event.pageY
-        if(show.pos.x!=x && show.pos.y!=y) {
-            setShowRebate({showRebate: false, product: undefined, pos: {x: 0, y: 0}})
-        }
-    }
 
     return (
         <div>
             <h2>Basket</h2>
-            <div className="product-grid">
-                <div className="grid-title"></div>
-                <div className="grid-title">Product Name</div>
-                <div className="grid-title">Unit Price</div>
-                <div className="grid-title">Discount</div>
-                <div className="grid-title">Units</div>
-                <div className="grid-title">Total Price</div>
-                <div className="grid-title">Gift Wrapped</div>
-            </div>
-                {itemList.map((item)=>(
-                    <div className="product-card">
-                        <div className="product-grid">
-                            <div className="grid-item" id="minus-thing">
-                                <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
-                            </div>
-                            <div className="grid-item">{item.product.name}</div>
-                            <div className="grid-item">{item.product.price} {item.product.currency}</div>
-                            <div className="grid-item">{calculateRebate(item)}%
-                                <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
-
-                            </div>
-                            <div className="grid-item">
-                                <button className="unit-button" onClick={() => less(item)}>-</button>
-                                <a>{item.quantity}</a>
-                                <button className="unit-button" onClick={() => more(item)}>+</button>
-                            </div>
-                            <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
-                            <div className="grid-item" style={{placeSelf:"center"}}>
-                                <label>
-                                    <input type ="checkbox" onChange={()=>changeGiftWrapped(item)}/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    ))}
+            <BasketGrid
+                itemList={itemList}
+                setItems={setItems}
+            />
             <div className="grand-total" >
                 <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
             </div>
@@ -224,5 +232,17 @@ function ShowRebate(state: { showRebate:boolean; product?:Product;pos:{x:number;
         return (<div></div>);
 }
 
+
+type Product = {
+    id: string;
+    name: string;
+    price: number;
+    currency: string;
+    rebateQuantity: number;
+    rebatePercent: number;
+    upsellProductId: string;
+};
+type Item ={ product: Product; quantity: number; giftWrap: boolean };
+type Order = { itemList:Item[]; recurring: boolean };
 
 export default App
