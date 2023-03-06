@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import './App.css'
-import minus from './minus.png';
+import React, {useState} from 'react';
+import './App.css';
+import minus from'./assets/trashCan.png';
 import question from './question-mark.png';
 
 
