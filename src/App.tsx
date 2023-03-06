@@ -1,10 +1,7 @@
-import {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import './App.css'
-import React from 'react';
 import minus from './minus.png';
 import question from './question-mark.png';
-
-
 
 
 function App() {
@@ -27,6 +24,7 @@ type Item ={ product: Product; quantity: number; giftWrap: boolean };
 type Order = { itemList:Item[]; recurring: boolean };
 
 function Basket() {
+    let products: { [id: string] : Product } = {};
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
@@ -36,7 +34,7 @@ function Basket() {
 
 
     if(!loaded) {
-        fetchProducts();
+        fetchProducts().then(fetchBasket);
         setLoaded(true)
     }
 
@@ -46,16 +44,26 @@ function Basket() {
             const response = await fetch(URL);
             const result = (await response.json()) as Product[];
 
-            setItems(result.map(
-                (p) => ({product: p,quantity:0,giftWrap:false})
-            ));
+
+
+            result.map(
+                (p) => (products[p.id] = p)
+            );
+
 
         } catch(e){
             console.log(e)
         }
     }
-    function getAverageProductPrice(){
+    async function fetchBasket() {
+        // TODO: async kald til backend for at hente indkøbskurv
 
+        let basket = [
+            { product: products["coffeebeans-organic-500g"], quantity: 1, giftWrap: false },
+            { product: products["coffee-grinder-pro"], quantity: 1, giftWrap: false },
+            { product: products["coffeebeans-500g"], quantity: 1, giftWrap: false },
+        ];
+        setItems(basket);
     }
 
     function less(item : Item) {
