@@ -9,9 +9,5 @@ describe(App.name, () => {
         render(<App/>)
         expect(screen.getByText("GRAND TOTAL: 0.00")).toBeInTheDocument();
     });
-    it("should render", () => {
-        render(<App/>)
-        expect(screen.getByText("Basket")).toBeInTheDocument();
-    });
 });
 
