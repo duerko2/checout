@@ -1,13 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import React from "react";
-import App from "../App";
+import Delivery from "../App";
 
 
-describe(App.name, () => {
+describe(Delivery.name, () => {
     it("should render", () => {
-        render(<App/>)
-        expect(screen.getByText("GRAND TOTAL: 0.00")).toBeInTheDocument();
+        render(<Delivery/>)
+        expect(screen.getByRole(
+            "button",
+            { name: /Go To Payment/i }
+        )).toBeInTheDocument();
     });
 });
 
