@@ -331,6 +331,11 @@ type Zipcode = {
 type Item ={ product: Product; quantity: number; giftWrap: boolean };
 type Order = { itemList:Item[]; recurring: boolean };
 
+
+/**
+ * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
+ * @constructor
+ */
 function Delivery() {
 
     return (<div className="delivery-form">
@@ -356,7 +361,7 @@ function Delivery() {
                 </li>
                 <li>
                     <label key="zip">Zip: </label>
-                    <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} pattern="[0-9]{4}" />
+                    <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} pattern="[0-9]{4}" required={true} />
                     <label id = "validZip">Ikke en zip</label>
                 </li>
                 <li>
