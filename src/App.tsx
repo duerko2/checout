@@ -18,10 +18,11 @@ function App() {
         </div>
     )
 }
+let zipcodes: Array<Zipcode>;
 
 function Basket() {
     let products: { [id: string] : Product } = {};
-    let zipcodes: Array<Zipcode>;
+
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
@@ -59,14 +60,7 @@ function Basket() {
         }
     }
 
-    function checkZip(Inputzip: string){
-        for(var i = 0; i < zipcodes.length; i++){
-            if(zipcodes[i].nr==Inputzip){
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     async function fetchBasket() {
         // TODO: async kald til backend for at hente indkøbskurv
@@ -126,6 +120,24 @@ function Basket() {
             </div>
         </div>
     )
+}
+
+function checkZip(Inputzip: string) {
+    var label = document.getElementById("validZip");
+    if (label != null) {
+        if(Inputzip===""){
+            label.innerHTML="";
+        } else {
+            for (var zipcode of zipcodes) {
+                if (Inputzip === zipcode.nr) {
+                    label.innerHTML = zipcode.navn;
+                    break;
+                } else {
+                    label.innerHTML = "Ikke en zip"
+                }
+            }
+        }
+    }
 }
 
 function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],setItems:(items:Item[])=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
@@ -307,7 +319,8 @@ function Delivery() {
                 </li>
                 <li>
                     <label key="zip">Zip: </label>
-                    <input type="text" id="zip" name="zip" placeholder="Zip"/>
+                    <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} />
+                    <label id = "validZip"> </label>
                 </li>
                 <li>
                     <label key="city">City: </label>
