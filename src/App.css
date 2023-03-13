@@ -139,6 +139,7 @@
   display: inline-block;
   width: 80px;
   text-align: left;
+
 }
 .delivery-form input,
 textarea {
@@ -153,4 +154,5 @@ textarea {
 
   /* Match form field borders */
   border: 1px solid #999;
+
 }

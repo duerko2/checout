@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import './App.css';
-import minus from'./assets/trashCan.png';
+import minus from './assets/trashCan.png';
 import question from './assets/question-mark.png';
-
-
+import {Simulate} from "react-dom/test-utils";
+import submit = Simulate.submit;
 
 
 function App() {
-    return(
+    return (
         <div className="page-grid">
             <div className="basket">
-                <Basket />
+                <Basket/>
             </div>
             <div className="delivery">
                 <Delivery/>
@@ -29,8 +29,7 @@ function Basket() {
     const [order,setOrder] = useState<Order>({itemList:itemList,recurring:false});
 
 
-
-    if(!loaded) {
+    if (!loaded) {
         fetchProducts().then(fetchBasket);
         fetchZip().then(fetchZip);
         setLoaded(true)
@@ -44,7 +43,7 @@ function Basket() {
             result.map(
                 (p) => (products[p.id] = p)
             );
-        } catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -66,29 +65,35 @@ function Basket() {
         // TODO: async kald til backend for at hente indkøbskurv
 
         let basket = [
-            { product: products["coffeebeans-organic-500g"], quantity: 1, giftWrap: false },
-            { product: products["coffee-grinder-pro"], quantity: 1, giftWrap: false },
-            { product: products["coffeebeans-500g"], quantity: 1, giftWrap: false },
+            {product: products["coffeebeans-organic-500g"], quantity: 1, giftWrap: false},
+            {product: products["coffee-grinder-pro"], quantity: 1, giftWrap: false},
+            {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
 
         ];
         setItems(basket);
     }
+
     function getTotal() {
-        let total : number = 0;
-        itemList.forEach(p=>total+=p.product.price*(1-p.product.rebatePercent*(1/100))*p.quantity);
-        if(total>300){
-            total = total*0.9;
+        let total: number = 0;
+        itemList.forEach( p => {if(p.quantity>p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
+            else {total += p.product.price * p.quantity;}
+        if (total > 300) {
+            total = total * 0.9;
         }
+        })
         return total;
+
     }
+
     function changeRecurringOrder() {
-        if (order.recurring){
-            setOrder({itemList:itemList,recurring:false})
+        if (order.recurring) {
+            setOrder({itemList: itemList, recurring: false})
         } else {
-            setOrder({itemList:itemList,recurring:true})
+            setOrder({itemList: itemList, recurring: true})
         }
     }
-    if(itemList.length===0){
+
+    if (itemList.length === 0) {
         return <div>
             <p>Basket is empty</p>
         </div>
@@ -101,21 +106,27 @@ function Basket() {
                 show={show}
                 setShowRebate={setShowRebate}
             />
-            <div className="grand-total" >
-                <h2>GRAND TOTAL: {getTotal().toFixed(2) } {itemList[0]?.product.currency}</h2>
+            <div>
+            <p>
+                All orders over 300 DKK has a 10% discount
+            </p>
+        </div>
+            <div className="grand-total">
+
+                <h2>GRAND TOTAL: {getTotal().toFixed(2)} {itemList[0]?.product.currency}</h2>
             </div>
 
             <div className="recurring-order">
                 <label>
-                    <h2>Monthly recurring order: <input type="checkbox" onChange={()=>changeRecurringOrder()}/></h2>
+                    <h2>Monthly recurring order: <input type="checkbox" onChange={() => changeRecurringOrder()}/></h2>
                 </label>
             </div>
 
             <div>
                 <ShowRebate
-                 showRebate={show.showRebate}
-                 product={show.product}
-                 pos={show.pos}
+                    showRebate={show.showRebate}
+                    product={show.product}
+                    pos={show.pos}
                 />
             </div>
         </div>
@@ -143,56 +154,58 @@ function checkZip(Inputzip: string) {
 function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],setItems:(items:Item[])=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
 
     function calculateRebate(item: Item) {
-        if(item.quantity>=item.product.rebateQuantity && item.product.rebateQuantity!=0){
+        if (item.quantity >= item.product.rebateQuantity && item.product.rebateQuantity != 0) {
             return item.product.rebatePercent;
         } else return 0;
     }
 
     function changeGiftWrapped(item: Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
-                newItems[i].giftWrap=!newItems[i].giftWrap
+        let newItems = itemList.map(e => e);
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].product.id === item.product.id) {
+                newItems[i].giftWrap = !newItems[i].giftWrap
             }
         }
         setItems(newItems);
     }
-    function less(item : Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id && itemList[i].quantity>0){
+
+    function less(item: Item) {
+        let newItems = itemList.map(e => e);
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].product.id === item.product.id && itemList[i].quantity > 0) {
                 newItems[i].quantity--;
             }
         }
         setItems(newItems);
     }
 
-    function more(item : Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
+    function more(item: Item) {
+        let newItems = itemList.map(e => e);
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].product.id === item.product.id) {
                 newItems[i].quantity++;
             }
         }
         setItems(newItems);
     }
     function removeItem(item: Item) {
-        let newItems=itemList.map(e=>e);
-        for(let i=0;i<itemList.length;i++){
-            if(itemList[i].product.id===item.product.id){
-                if(i===0){
+        let newItems = itemList.map(e => e);
+        for (let i = 0; i < itemList.length; i++) {
+            if (itemList[i].product.id === item.product.id) {
+                if (i === 0) {
                     newItems.shift();
                 } else {
-                    newItems.splice(i,1);
+                    newItems.splice(i, 1);
                 }
             }
         }
         setItems(newItems);
     }
+
     function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
         const x = event.pageX;
         const y = event.pageY
-        if(show.pos.y===0 && show.pos.x===0){
+        if (show.pos.y === 0 && show.pos.x === 0) {
             setShowRebate({showRebate: true, product: item.product, pos: {x: x, y: y}})
 
         }
@@ -201,7 +214,7 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
     function unshowRebateItem(event: React.MouseEvent<HTMLDivElement>) {
         const x = event.pageX;
         const y = event.pageY
-        if(show.pos.x!=x && show.pos.y!=y) {
+        if (show.pos.x != x && show.pos.y != y) {
             setShowRebate({showRebate: false, product: undefined, pos: {x: 0, y: 0}})
         }
     }
@@ -216,16 +229,20 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
                 <div className="grid-title">Total Price</div>
                 <div className="grid-title">Gift Wrapped</div>
             </div>
-            {itemList.map((item)=>(
+            {itemList.map((item) => (
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <button onClick={()=>removeItem(item)} className="minus-button"><img src={minus} height="25" width="25"/></button>
+                            <button onClick={() => removeItem(item)} className="minus-button"><img src={minus}
+                                                                                                   height="25"
+                                                                                                   width="25"/></button>
                         </div>
                         <div className="grid-item">{item.product.name}</div>
                         <div className="grid-item">{item.product.price} {item.product.currency}</div>
                         <div className="grid-item">{calculateRebate(item)}%
-                            <div className="rebate-question" onMouseEnter={(event)=>showRebateItem(item,event)} onMouseLeave={(event)=>unshowRebateItem(event)}> <img src={question} className="question-img"/></div>
+                            <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
+                                 onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
+                                                                                        className="question-img"/></div>
 
                         </div>
                         <div className="grid-item">
@@ -233,10 +250,11 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
                             <a>{item.quantity}</a>
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
-                        <div className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
-                        <div className="grid-item" style={{placeSelf:"center"}}>
+                        <div
+                            className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                        <div className="grid-item" style={{placeSelf: "center"}}>
                             <label>
-                                <input type ="checkbox" onChange={()=>changeGiftWrapped(item)}/>
+                                <input type="checkbox" onChange={() => changeGiftWrapped(item)}/>
                             </label>
                         </div>
                     </div>
@@ -247,22 +265,39 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
 }
 
 
-function ShowRebate(state: { showRebate:boolean; product?:Product;pos:{x:number;y:number} }){
-    if(state.showRebate && state.product && state.product.rebatePercent===0)
-        return(
-            <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
+function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }) {
+    if (state.showRebate && state.product && state.product.rebatePercent === 0)
+        return (
+            <div className="floating-rebate-card" style={{top: state.pos.y, left: state.pos.x}}>
                 <p>No discount on this product</p>
             </div>
         )
-    else if(state.showRebate && state.product)
-        return(
-            <div className="floating-rebate-card" style={{top:state.pos.y,left:state.pos.x}}>
+    else if (state.showRebate && state.product)
+        return (
+            <div className="floating-rebate-card" style={{top: state.pos.y, left: state.pos.x}}>
                 <p>Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
             </div>
         );
     else
         return (<div></div>);
 }
+
+/*function ShowTotalRebate(state: { getTotal: Number; }) {
+    if (state.getTotal < 300 && state.getTotal > 250) {
+        return(
+        <div>
+            <p>
+                All orders over 300 DKK has a 10% discount
+            </p>
+        </div>
+        )
+
+    } else {
+        return null;
+}}
+ */
+
+
 
 
 type Product = {
@@ -301,37 +336,45 @@ function Delivery() {
             <ul>
                 <li>
                     <label key="name">Name: </label>
-                    <input type="text" id="name" name="name" placeholder="Name"/>
+                    <input type="text" id="name" name="name" placeholder="Name" required={true}  />
                 </li>
                 <li>
                     <label key="phone">Phone: </label>
-                    <input type="tel" id="phone" name="phone" placeholder="00 00 00 00"/>
+                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="00 00 00 00" required={true}  />
                 </li>
                 <li>
                     <label key="email">E-mail: </label>
-                    <input type="email" id="email" name="email" placeholder="eksempel@eksempel.dk"/>
+                    <input type="email" id="email" name="email" placeholder="eksempel@eksempel.dk" required={true}/>
                 </li>
                 <li>
                     <label key="address">Address: </label>
-                    <input type="text" id="address" name="address" placeholder="Address"/>
-                    <input type="text" id="address" name="address" placeholder="Address 2nd line"/>
+                    <input type="text" id="address" name="address" placeholder="Address" required={true}/>
+                    <input type="text" id="address" name="address" placeholder="Billing address "/>
 
                 </li>
                 <li>
                     <label key="zip">Zip: </label>
-                    <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} />
+                    <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} pattern="[0-9]{4}" />
                     <label id = "validZip"> </label>
                 </li>
                 <li>
                     <label key="city">City: </label>
-                    <input type="text" id="city" name="city" placeholder="City"/>
+                    <input type="text" id="city" name="city" placeholder="City" required={true}/>
                 </li>
                 <li>
                     <label key="country">Country: </label>
-                    <input type="text" id="country" name="country" placeholder="Country"/>
+                    <input type="text" id="country" name="country" placeholder="Country" required={true}/>
+                </li>
+                <li>
+                    <label key="Company Name">Comapany: </label>
+                    <input type="text" id="company" name="company" placeholder="Company"/>
+                </li>
+                <li>
+                    <label key="VAT">VAT: </label>
+                    <input type="text" id="vat" name="vat" placeholder="00 00 00 00" pattern={"[0-9]{8}"}/>
                 </li>
                 <li className="button">
-                    <button type="submit">Go to payment</button>
+                    <button type="submit" >Go to payment</button>
                 </li>
             </ul>
         </form>
