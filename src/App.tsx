@@ -135,16 +135,18 @@ function Basket() {
 
 function checkZip(Inputzip: string) {
     var label = document.getElementById("validZip");
-    if (label != null) {
+    var cityText = document.getElementById("city") as HTMLInputElement;
+    if (label != null && cityText != null) {
         if(Inputzip===""){
-            label.innerHTML="";
+            label.style.display="none";
         } else {
             for (var zipcode of zipcodes) {
                 if (Inputzip === zipcode.nr) {
-                    label.innerHTML = zipcode.navn;
+                    cityText.value = zipcode.navn;
+                    label.style.display="none";
                     break;
                 } else {
-                    label.innerHTML = "Ikke en zip"
+                    label.style.display="block";
                 }
             }
         }
@@ -355,7 +357,7 @@ function Delivery() {
                 <li>
                     <label key="zip">Zip: </label>
                     <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e)=> checkZip(e.target.value)} pattern="[0-9]{4}" />
-                    <label id = "validZip"> </label>
+                    <label id = "validZip">Ikke en zip</label>
                 </li>
                 <li>
                     <label key="city">City: </label>

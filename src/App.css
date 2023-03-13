@@ -154,5 +154,7 @@ textarea {
 
   /* Match form field borders */
   border: 1px solid #999;
-
+}
+#validZip{
+  display:none;
 }
