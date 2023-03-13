@@ -266,7 +266,7 @@ type Product = {
 type Zipcode = {
     href: string;
     nr: string;
-    name: string;
+    navn: string;
     bigreceiver: string;
     bbox: Array<number>;
     visual: Array<number>;
