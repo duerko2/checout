@@ -21,7 +21,7 @@ function App() {
 
 function Basket() {
     let products: { [id: string] : Product } = {};
-    let zipcodes: { [href: string] : Zipcode } = {};
+    let zipcodes: { [nr: string] : Zipcode } = {};
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
@@ -31,6 +31,7 @@ function Basket() {
 
     if(!loaded) {
         fetchProducts().then(fetchBasket);
+        fetchZip().then(fetchZip);
         setLoaded(true)
     }
 
@@ -53,7 +54,7 @@ function Basket() {
             const response = await fetch(URL);
             const result = (await response.json()) as Zipcode[];
             result.map(
-                (p) => (zipcodes[p.href] = p)
+                (p) => (zipcodes[p.nr] = p)
             );
         } catch(e){
             console.log(e)
