@@ -21,6 +21,7 @@ function App() {
 
 function Basket() {
     let products: { [id: string] : Product } = {};
+    let zipcodes: { [href: string] : Zipcode } = {};
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
     const [itemList,setItems] = useState<Item[]>([]);
@@ -45,6 +46,20 @@ function Basket() {
             console.log(e)
         }
     }
+
+    async function fetchZip() {
+        const URL = "https://api.dataforsyningen.dk/postnumre";
+        try {
+            const response = await fetch(URL);
+            const result = (await response.json()) as Zipcode[];
+            result.map(
+                (p) => (zipcodes[p.href] = p)
+            );
+        } catch(e){
+            console.log(e)
+        }
+    }
+
     async function fetchBasket() {
         // TODO: async kald til backend for at hente indkøbskurv
 
@@ -239,6 +254,23 @@ type Product = {
     rebatePercent: number;
     upsellProductId: string;
 };
+
+type Zipcode = {
+    href: string;
+    nr: string;
+    name: string;
+    bigreceiver: string;
+    bbox: Array<number>;
+    visual: Array<number>;
+    commune: { [key: string]: string};
+    changedDate: string;
+    locationChangedDate: string;
+    locationVersion: number;
+    dagi_id: string;
+
+
+}
+
 type Item ={ product: Product; quantity: number; giftWrap: boolean };
 type Order = { itemList:Item[]; recurring: boolean };
 
