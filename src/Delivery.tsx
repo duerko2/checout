@@ -74,8 +74,8 @@ export function Delivery() {
                     <label key="zip">Zip: </label>
                     <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
                            pattern="[0-9]{4}" required={true}/>
-                    <label id="validZip" style="display:"{zipVisible}>Ikke en zip</label>
-                </li>np
+                    <label id="validZip">Ikke en zip</label>
+                </li>
                 <li>
                     <label key="city">City: </label>
                     <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true} value={cityName}/>
