@@ -56,7 +56,7 @@ export function Delivery() {
                 </li>
                 <li>
                     <label key="phone">Phone: </label>
-                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true}/>
+                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
                 </li>
                 <li>
                     <label key="email">E-mail: </label>
