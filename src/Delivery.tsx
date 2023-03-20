@@ -3,17 +3,19 @@ import React from "react";
 
 
 let zipcodes: Array<Zipcode>;
+let cityName: String;
+
 
 function checkZip(Inputzip: string) {
     var label = document.getElementById("validZip");
     var cityText = document.getElementById("city") as HTMLInputElement;
-    if (label != null && cityText != null) {
+    if (label != null && cityName != null) {
         if (Inputzip === "") {
             label.style.display = "none";
         } else {
             for (var zipcode of zipcodes) {
                 if (Inputzip === zipcode.nr) {
-                    cityText.value = zipcode.navn;
+                    cityName = zipcode.navn;
                     label.style.display = "none";
                     break;
                 } else {
@@ -75,7 +77,7 @@ export function Delivery() {
                 </li>
                 <li>
                     <label key="city">City: </label>
-                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true}/>
+                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true} value={cityName}/>
                 </li>
                 <li>
                     <label key="country">Country: </label>
