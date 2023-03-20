@@ -3,9 +3,11 @@ import {Product, Zipcode, Item, Order} from "./types";
 import minus from "./assets/trashCan.png";
 import question from "./assets/question-mark.png";
 
+// Dictionary of products
+let products: { [id: string] : Product } = {};
 
 export function Basket() {
-    let products: { [id: string] : Product } = {};
+
 
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
@@ -39,7 +41,6 @@ export function Basket() {
             {product: products["coffeebeans-organic-500g"], quantity: 1, giftWrap: false},
             {product: products["coffee-grinder-pro"], quantity: 1, giftWrap: false},
             {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
-
         ];
         setItems(basket);
     }
@@ -100,6 +101,10 @@ export function Basket() {
     pos={show.pos}
     />
     </div>
+            <div>
+                <Suggestions
+                itemList={itemList}/>
+            </div>
     </div>
 )
 }
@@ -231,5 +236,54 @@ function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: n
         );
     else
         return (<div></div>);
+}
+
+function Suggestions( {itemList}: {itemList:Item[]} ) {
+    let a : Array<Product> = [];
+    for(let i=0;i<itemList.length;i++){
+        let alreadyBought=false;
+            for(let j=0;j<itemList.length;j++){
+                if(itemList[j].product.id === itemList[i].product.upsellProductId){
+                    alreadyBought=true;
+                }
+            }
+        if(itemList[i].product.upsellProductId && !alreadyBought){
+            a.push(products[itemList[i].product.upsellProductId]);
+        }
+        if(a.length>=3){
+            break;
+        }
+    }
+
+    // Fills in the list of reccomendations
+    for(let p in products){
+        if(a.length>=3){
+            break;
+        }
+        let alreadyBought=false;
+        for(let j=0;j<itemList.length;j++){
+            if(itemList[j].product.id === products[p].id){
+                alreadyBought=true;
+            }
+        }
+        if(!alreadyBought){
+            a.push(products[p]);
+        }
+    }
+
+
+    return (
+        <div>
+            <h2>You might also like</h2>
+
+            <div>
+            {a.map((item) => (
+                <div>
+                    {item.name}
+                </div>
+            ))}
+            </div>
+        </div>
+    );
 }
 

@@ -57,7 +57,7 @@ export function Delivery() {
     </li>
     <li>
     <label key="phone">Phone: </label>
-    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="00 00 00 00" required={true}  />
+    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true}  />
     </li>
     <li>
     <label key="email">E-mail: </label>
@@ -76,11 +76,11 @@ export function Delivery() {
     </li>
     <li>
     <label key="city">City: </label>
-    <input type="text" id="city" name="city" placeholder="City" required={true}/>
+    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true}/>
     </li>
     <li>
     <label key="country">Country: </label>
-    <input type="text" id="country" name="country" placeholder="Country" required={true}/>
+    <input type="text" id="country" name="country" value="Denmark" readOnly={true} required={true}/>
     </li>
     <li>
     <label key="Company Name">Comapany: </label>
