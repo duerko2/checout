@@ -157,6 +157,17 @@ textarea {
 .delivery-form #checkbox{
   width:auto;
 }
+.delivery-form button{
+  border: 1px solid #ccc;
+  border-radius: 1em;
+  background-color: #1a1a1a;
+}
+.delivery-form button:hover{
+  cursor: pointer;
+  background-color: #0ab100;
+  border-color:#535bf2;
+}
+
 #validZip{
   display:none;
 }
@@ -173,9 +184,11 @@ display: grid;
   border: 1px solid #ccc;
   border-radius: 1em;
   display:block;
+  background-color: #1a1a1a;
 }
 .suggestion-card:hover{
-  background-color: #004444;
+  background-color: #0ab100;
+  border-color:#535bf2;
   cursor: pointer;
 }
 .suggestions{
