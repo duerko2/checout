@@ -11,8 +11,7 @@ export function Basket() {
 
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
-    const [itemList,setItems] = useState<Item[]>([]);
-    const [order,setOrder] = useState<Order>({itemList:itemList,recurring:false});
+    const [order,setOrder] = useState<Order>({itemList:[],recurring:false});
 
 
     if (!loaded) {
@@ -42,14 +41,14 @@ export function Basket() {
             {product: products["trimmer"], quantity: 1, giftWrap: false},
             {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
         ];
-        setItems(basket);
+        setOrder({itemList: basket, recurring: false});
     }
 
     function getTotal() {
 
         let total: number = 0;
         let total2: number = 0;
-        itemList.forEach( p => {if(p.quantity>p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
+        order.itemList.forEach( p => {if(p.quantity>p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
         else {total += p.product.price * p.quantity;}
             if (total > 300) {
                 total2 = total * 0.9;
@@ -61,13 +60,13 @@ export function Basket() {
 
     function changeRecurringOrder() {
         if (order.recurring) {
-            setOrder({itemList: itemList, recurring: false})
+            setOrder({itemList: order.itemList, recurring: false})
         } else {
-            setOrder({itemList: itemList, recurring: true})
+            setOrder({itemList: order.itemList, recurring: true})
         }
     }
 
-    if (itemList.length === 0) {
+    if (order.itemList.length === 0) {
         return <div>
             <p>Basket is empty</p>
         </div>
@@ -75,8 +74,8 @@ export function Basket() {
         <div>
             <h2>Basket</h2>
         <BasketGrid
-    itemList={itemList}
-    setItems={setItems}
+    order={order}
+    setOrder={setOrder}
     show={show}
     setShowRebate={setShowRebate}
     />
@@ -87,7 +86,7 @@ export function Basket() {
     </div>
     <div className="grand-total">
 
-        <h2>GRAND TOTAL: {getTotal().toFixed(2)} {itemList[0]?.product.currency}</h2>
+        <h2>GRAND TOTAL: {getTotal().toFixed(2)} {order.itemList[0]?.product.currency}</h2>
     </div>
 
     <div className="recurring-order">
@@ -105,15 +104,15 @@ export function Basket() {
     </div>
             <div>
                 <Suggestions
-                itemList={itemList}
-                setItems = {setItems}
+                order={order}
+                setOrder = {setOrder}
                 />
             </div>
     </div>
 )
 }
 
-function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],setItems:(items:Item[])=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
+function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
 
     function calculateRebate(item: Item) {
         if (item.quantity >= item.product.rebateQuantity && item.product.rebateQuantity != 0) {
@@ -122,38 +121,38 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
     }
 
     function changeGiftWrapped(item: Item) {
-        let newItems = itemList.map(e => e);
-        for (let i = 0; i < itemList.length; i++) {
-            if (itemList[i].product.id === item.product.id) {
+        let newItems = order.itemList.map(e => e);
+        for (let i = 0; i < order.itemList.length; i++) {
+            if (order.itemList[i].product.id === item.product.id) {
                 newItems[i].giftWrap = !newItems[i].giftWrap
             }
         }
-        setItems(newItems);
+        setOrder({itemList:newItems,recurring:order.recurring});
     }
 
     function less(item: Item) {
-        let newItems = itemList.map(e => e);
-        for (let i = 0; i < itemList.length; i++) {
-            if (itemList[i].product.id === item.product.id && itemList[i].quantity > 0) {
+        let newItems = order.itemList.map(e => e);
+        for (let i = 0; i < order.itemList.length; i++) {
+            if (order.itemList[i].product.id === item.product.id && order.itemList[i].quantity > 0) {
                 newItems[i].quantity--;
             }
         }
-        setItems(newItems);
+        setOrder({itemList:newItems,recurring:order.recurring});
     }
 
     function more(item: Item) {
-        let newItems = itemList.map(e => e);
-        for (let i = 0; i < itemList.length; i++) {
-            if (itemList[i].product.id === item.product.id) {
+        let newItems = order.itemList.map(e => e);
+        for (let i = 0; i < order.itemList.length; i++) {
+            if (order.itemList[i].product.id === item.product.id) {
                 newItems[i].quantity++;
             }
         }
-        setItems(newItems);
+        setOrder({itemList:newItems,recurring:order.recurring});
     }
     function removeItem(item: Item) {
-        let newItems = itemList.map(e => e);
-        for (let i = 0; i < itemList.length; i++) {
-            if (itemList[i].product.id === item.product.id) {
+        let newItems = order.itemList.map(e => e);
+        for (let i = 0; i < order.itemList.length; i++) {
+            if (order.itemList[i].product.id === item.product.id) {
                 if (i === 0) {
                     newItems.shift();
                 } else {
@@ -161,7 +160,7 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
                 }
             }
         }
-        setItems(newItems);
+        setOrder({itemList:newItems,recurring:order.recurring});
     }
 
     function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
@@ -191,7 +190,7 @@ function BasketGrid({itemList,setItems,show,setShowRebate}: {itemList:Item[],set
                 <div className="grid-title">Total Price</div>
                 <div className="grid-title">Gift Wrapped</div>
             </div>
-            {itemList.map((item) => (
+            {order.itemList.map((item) => (
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
@@ -242,17 +241,18 @@ function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: n
         return (<div></div>);
 }
 
-function Suggestions( {itemList, setItems}: {itemList:Item[], setItems:(items:Item[])=>void} ) {
+
+function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void} ) {
     let a : Array<Product> = [];
-    for(let i=0;i<itemList.length;i++){
+    for(let i=0;i<order.itemList.length;i++){
         let alreadyBought=false;
-            for(let j=0;j<itemList.length;j++){
-                if(itemList[j].product.id === itemList[i].product.upsellProductId){
+            for(let j=0;j<order.itemList.length;j++){
+                if(order.itemList[j].product.id === order.itemList[i].product.upsellProductId){
                     alreadyBought=true;
                 }
             }
-        if(itemList[i].product.upsellProductId && !alreadyBought){
-            a.push(products[itemList[i].product.upsellProductId]);
+        if(order.itemList[i].product.upsellProductId && !alreadyBought){
+            a.push(products[order.itemList[i].product.upsellProductId]);
         }
         if(a.length>=3){
             break;
@@ -265,8 +265,8 @@ function Suggestions( {itemList, setItems}: {itemList:Item[], setItems:(items:It
             break;
         }
         let alreadyBought=false;
-        for(let j=0;j<itemList.length;j++){
-            if(itemList[j].product.id === products[p].id){
+        for(let j=0;j<order.itemList.length;j++){
+            if(order.itemList[j].product.id === products[p].id){
                 alreadyBought=true;
             }
         }
@@ -277,7 +277,7 @@ function Suggestions( {itemList, setItems}: {itemList:Item[], setItems:(items:It
 
 
     function addToOrder(p: Product) {
-        setItems([...itemList, {product: p, quantity: 1, giftWrap: false}]);
+        setOrder({itemList:[...order.itemList, {product: p, quantity: 1, giftWrap: false}],recurring:order.recurring});
     }
     return (
         <div className="suggestions">
