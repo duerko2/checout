@@ -4,22 +4,23 @@ import React from "react";
 
 let zipcodes: Array<Zipcode>;
 let cityName: String;
+let zipVisible: String;
 
 
 function checkZip(Inputzip: string) {
     var label = document.getElementById("validZip");
     var cityText = document.getElementById("city") as HTMLInputElement;
-    if (label != null && cityName != null) {
+    if (cityName != null) {
         if (Inputzip === "") {
-            label.style.display = "none";
+            zipVisible = "none";
         } else {
             for (var zipcode of zipcodes) {
                 if (Inputzip === zipcode.nr) {
                     cityName = zipcode.navn;
-                    label.style.display = "none";
+                    zipVisible = "none";
                     break;
                 } else {
-                    label.style.display = "block";
+                    zipVisible = "block";
                 }
             }
         }
@@ -73,8 +74,8 @@ export function Delivery() {
                     <label key="zip">Zip: </label>
                     <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
                            pattern="[0-9]{4}" required={true}/>
-                    <label id="validZip">Ikke en zip</label>
-                </li>
+                    <label id="validZip" style="display:"{zipVisible}>Ikke en zip</label>
+                </li>np
                 <li>
                     <label key="city">City: </label>
                     <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true} value={cityName}/>
