@@ -137,9 +137,7 @@
 .delivery-form label {
   /* Uniform size & alignment */
   display: inline-block;
-  width: 80px;
   text-align: left;
-
 }
 .delivery-form input,
 textarea {
@@ -155,6 +153,30 @@ textarea {
   /* Match form field borders */
   border: 1px solid #999;
 }
+.delivery-form #checkbox{
+  width:auto;
+}
 #validZip{
   display:none;
+}
+
+
+.suggestion-grid{
+display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+.suggestion-card{
+  /* Form outline */
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+  display:block;
+}
+.suggestion-card:hover{
+  background-color: #004444;
+  cursor: pointer;
+}
+.suggestions{
+  padding: 10px;
 }

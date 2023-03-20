@@ -38,8 +38,8 @@ export function Basket() {
         // TODO: async kald til backend for at hente indkøbskurv
 
         let basket = [
-            {product: products["coffeebeans-organic-500g"], quantity: 1, giftWrap: false},
-            {product: products["coffee-grinder-pro"], quantity: 1, giftWrap: false},
+            {product: products["vitamin-c-500-250"], quantity: 1, giftWrap: false},
+            {product: products["trimmer"], quantity: 1, giftWrap: false},
             {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
         ];
         setItems(basket);
@@ -103,7 +103,9 @@ export function Basket() {
     </div>
             <div>
                 <Suggestions
-                itemList={itemList}/>
+                itemList={itemList}
+                setItems = {setItems}
+                />
             </div>
     </div>
 )
@@ -238,7 +240,7 @@ function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: n
         return (<div></div>);
 }
 
-function Suggestions( {itemList}: {itemList:Item[]} ) {
+function Suggestions( {itemList, setItems}: {itemList:Item[], setItems:(items:Item[])=>void} ) {
     let a : Array<Product> = [];
     for(let i=0;i<itemList.length;i++){
         let alreadyBought=false;
@@ -255,7 +257,7 @@ function Suggestions( {itemList}: {itemList:Item[]} ) {
         }
     }
 
-    // Fills in the list of reccomendations
+    // Fills in the list of recommendations
     for(let p in products){
         if(a.length>=3){
             break;
@@ -272,15 +274,20 @@ function Suggestions( {itemList}: {itemList:Item[]} ) {
     }
 
 
+    function addToOrder(p: Product) {
+        setItems([...itemList, {product: p, quantity: 1, giftWrap: false}]);
+    }
     return (
-        <div>
+        <div className="suggestions">
             <h2>You might also like</h2>
 
-            <div>
+            <div className="suggestion-grid">
             {a.map((item) => (
-                <div>
-                    {item.name}
+                <div className="suggestion-card" onClick={()=>addToOrder(item)}>
+                    <p>{item.name}</p>
+                    <p>{item.price} {item.currency}</p>
                 </div>
+
             ))}
             </div>
         </div>
