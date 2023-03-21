@@ -1,5 +1,5 @@
 import {Zipcode} from "./types";
-import React from "react";
+import React, {useState} from "react";
 
 
 let zipcodes: Array<Zipcode>;
@@ -10,17 +10,17 @@ let zipVisible: String;
 function checkZip(Inputzip: string) {
     var label = document.getElementById("validZip");
     var cityText = document.getElementById("city") as HTMLInputElement;
-    if (cityName != null) {
+    if (cityText != null && label != null) {
         if (Inputzip === "") {
-            zipVisible = "none";
+            label.style.display = "none";
         } else {
             for (var zipcode of zipcodes) {
                 if (Inputzip === zipcode.nr) {
-                    cityName = zipcode.navn;
-                    zipVisible = "none";
+                    cityText.value = zipcode.navn;
+                    label.style.display = "none";
                     break;
                 } else {
-                    zipVisible = "block";
+                    label.style.display = "block";
                 }
             }
         }
@@ -33,6 +33,8 @@ function checkZip(Inputzip: string) {
  * @constructor
  */
 export function Delivery() {
+    const [separateBilling, setSeparateBilling] = useState<Boolean>(false);
+
     fetchZip();
 
     async function fetchZip() {
@@ -46,12 +48,9 @@ export function Delivery() {
         }
     }
 
-    function separateBilling() {
-
-    }
-
     return (<div className="delivery-form">
         <form>
+            <h2>Delivery information</h2>
             <ul>
                 <li>
                     <label key="name">Name: </label>
@@ -78,7 +77,7 @@ export function Delivery() {
                 </li>
                 <li>
                     <label key="city">City: </label>
-                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true} value={cityName}/>
+                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true}/>
                 </li>
                 <li>
                     <label key="country">Country: </label>
@@ -88,14 +87,52 @@ export function Delivery() {
                     <label key="Company Name">Company: </label>
                     <input type="text" id="company" name="company" placeholder="Company"/>
                 </li>
-                <li>
-                    <label key="VAT">VAT: </label>
-                    <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
-                </li>
                 <li style={{display:"flex"}}>
                     <label key="seperatebilling">Seperate Billing Address: </label>
-                    <input type="checkbox" id="checkbox" onChange={()=>separateBilling()}/>
+                    <input type="checkbox" id="checkbox" onChange={()=>setSeparateBilling(!separateBilling)}/>
                 </li>
+                <div style={{display: separateBilling ? "block" : "none"}}>
+                    <h3>Billing Address</h3>
+                    <li>
+                        <label key="billingname">Name: </label>
+                        <input type="text" id="name" name="billingname" placeholder="Name" required={true}/>
+                    </li>
+                    <li>
+                        <label key="billingphone">Phone: </label>
+                        <input type="text" id="tel" name="billingphone" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
+                    </li>
+                    <li>
+                        <label key="billingemail">E-mail: </label>
+                        <input type="email" id="email" name="billingemail" placeholder="eksempel@eksempel.dk" required={true}/>
+                    </li>
+                    <li>
+                        <label key="billingaddress">Address: </label>
+                        <input type="text" id="address" name="billingaddress" placeholder="Address" required={true}/>
+                        <input type="text" id="address" name="billingaddress" placeholder="Address 2nd line "/>
+                    </li>
+                    <li>
+                        <label key="billingzip">Zip: </label>
+                        <input type="text" id="zip" name="billingzip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
+                               pattern="[0-9]{4}" required={true}/>
+                        <label id="validZip">Ikke en zip</label>
+                    </li>
+                    <li>
+                        <label key="billingcity">City: </label>
+                        <input type="text" id="city" name="billingcity" placeholder="City" readOnly={true} required={true}/>
+                    </li>
+                    <li>
+                        <label key="billingcountry">Country: </label>
+                        <input type="text" id="country" name="billingcountry" value="Denmark" readOnly={true} required={true}/>
+                    </li>
+                    <li>
+                        <label key="billingCompanyName">Company: </label>
+                        <input type="text" id="company" name="billingCompanyName" placeholder="Company"/>
+                    </li>
+                    <li>
+                        <label key="BillingVAT">VAT: </label>
+                        <input type="text" id="vat" name="BillingVAT" placeholder="00000000" pattern={"[0-9]{8}"}/>
+                    </li>
+                </div>
                 <li className="button">
                     <button type="submit">Go to payment</button>
                 </li>
