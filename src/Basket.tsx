@@ -73,6 +73,7 @@ export function Basket() {
         </div>
     } else return (
         <div>
+            <div className="background-box">
             <h2>Basket</h2>
         <BasketGrid
     order={order}
@@ -95,6 +96,7 @@ export function Basket() {
             <h2>Monthly recurring order: <input type="checkbox" onChange={() => changeRecurringOrder()}/></h2>
     </label>
     </div>
+            </div>
 
     <div>
     <ShowRebate
@@ -103,7 +105,7 @@ export function Basket() {
     pos={show.pos}
     />
     </div>
-            <div>
+            <div className="background-box">
                 <Suggestions
                 order={order}
                 setOrder = {setOrder}
@@ -181,7 +183,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
         }
     }
 
-    return (<div>
+    return (<div >
             <div className="product-grid">
                 <div className="grid-title"></div>
                 <div className="grid-title">Product Name</div>

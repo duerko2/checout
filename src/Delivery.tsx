@@ -50,7 +50,7 @@ export function Delivery() {
 
     return (<div className="delivery-form">
         <form>
-            <h2>Delivery information</h2>
+            <h3>Delivery information</h3>
             <ul>
                 <li>
                     <label key="name">Name: </label>
