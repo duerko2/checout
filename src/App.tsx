@@ -14,18 +14,20 @@ function App() {
             <img src={Logo} width="250px"/>
 
         </div>
-        <div className="page-grid">
-            <div className="basket">
-                <Basket
-                order={order}
-                setOrder={setOrder}/>
-            </div>
-            <div className="delivery">
-                <Delivery
-                    order={order}
-                    setOrder={setOrder}/>
-            </div>
-        </div>
+<div className="content">
+                <div className="page-grid">
+                    <div className="basket">
+                        <Basket
+                        order={order}
+                        setOrder={setOrder}/>
+                    </div>
+                    <div className="delivery">
+                        <Delivery
+                            order={order}
+                            setOrder={setOrder}/>
+                    </div>
+                </div>
+</div>
         </div>
 
     )

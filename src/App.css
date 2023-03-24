@@ -42,8 +42,15 @@
 .read-the-docs {
   color: #888;
 }
+.content {
+  display:flex;
+  margin:0 auto;
+  width:100%;
+  padding-top:105px;
+}
 .page-grid{
   display: grid;
+  margin: 0 auto;
   grid: auto-flow / 4fr 2fr;
   background-color: var(--background-color-dark);
   padding: 1em;
@@ -234,8 +241,9 @@ display: flex;
     }
 }
 .header-logo{
-  position:sticky;
+  position:fixed;
   top:0px;
   background-color: #1a1a1a;
   z-index: 100;
+  width: 100%;
 }
