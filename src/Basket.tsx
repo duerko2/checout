@@ -6,12 +6,11 @@ import question from "./assets/question-mark.png";
 // Dictionary of products
 let products: { [id: string] : Product } = {};
 
-export function Basket() {
+export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
 
 
     const [loaded,setLoaded] = useState<Boolean>(false);
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
-    const [order,setOrder] = useState<Order>({itemList:[],recurring:false});
 
 
     if (!loaded) {

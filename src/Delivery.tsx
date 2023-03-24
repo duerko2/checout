@@ -1,5 +1,6 @@
-import {Zipcode} from "./types";
+import {Item, Order, Product, Zipcode} from "./types";
 import React, {useState} from "react";
+import {Basket} from "./Basket";
 
 
 let zipcodes: Array<Zipcode>;
@@ -32,7 +33,7 @@ function checkZip(Inputzip: string) {
  * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
  * @constructor
  */
-export function Delivery() {
+export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
     const [separateBilling, setSeparateBilling] = useState<Boolean>(false);
 
     fetchZip();
@@ -48,6 +49,14 @@ export function Delivery() {
         }
     }
 
+
+
+    async function postOrder() {
+        const URL = "https://eowdxi3ymnvlrmg.m.pipedream.net"
+        await fetch(URL, {
+            method: "POST", headers: {"content-type": "application/Json"}, body: JSON.stringify (order)});
+    }
+
     return (<div className="delivery-form">
         <form>
             <h3>Delivery information</h3>
@@ -58,7 +67,8 @@ export function Delivery() {
                 </li>
                 <li>
                     <label key="phone">Phone: </label>
-                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
+                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true}
+                           title="Please enter valid phone number"/>
                 </li>
                 <li>
                     <label key="email">E-mail: </label>
@@ -87,9 +97,14 @@ export function Delivery() {
                     <label key="Company Name">Company: </label>
                     <input type="text" id="company" name="company" placeholder="Company"/>
                 </li>
+                <li>
+                    <label key="VAT">VAT: </label>
+                    <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
+                </li>
                 <li style={{display:"flex"}}>
-                    <label key="seperatebilling">Seperate Billing Address: </label>
                     <input type="checkbox" id="checkbox" onChange={()=>setSeparateBilling(!separateBilling)}/>
+                    <label key="seperatebilling">Seperate Billing Address: </label>
+
                 </li>
                 <div style={{display: separateBilling ? "block" : "none"}}>
                     <h3>Billing Address</h3>
@@ -133,10 +148,23 @@ export function Delivery() {
                         <input type="text" id="vat" name="BillingVAT" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </li>
                 </div>
+                <li className="accept-condition">
+                    <input type="checkbox" id="checkbox" required={true}/>
+                    <label key="terms&conditions">I accept terms & conditions</label>
+                </li>
+                <li className="accept-condition">
+                    <input type="checkbox" id="checkbox"/>
+                    <label key="marketingemails">I accept to receive marketing emails</label>
+                </li>
+                <li>
+                    <label key="comment">Comment</label>
+
+                </li>
+
                 <li className="button">
-                    <button type="submit">Go to payment</button>
+                    <button type="submit" onClick={postOrder}>Go to payment</button>
                 </li>
             </ul>
         </form>
-    </div>);
+    </div>)
 }

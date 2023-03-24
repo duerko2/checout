@@ -28,3 +28,5 @@ type Zipcode = {
 
 type Item ={ product: Product; quantity: number; giftWrap: boolean };
 type Order = { itemList:Item[]; recurring: boolean };
+
+type PurchaseInfo ={orderList:Order[]; }

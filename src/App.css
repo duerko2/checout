@@ -203,6 +203,10 @@ display: grid;
   padding: 10px;
 }
 
+.accept-condition{
+display: flex;
+}
+
 .background-box{
   background-color: var(--card-color-dark);
   border-radius: 1em;

@@ -3,9 +3,11 @@ import './App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
+import {Order, } from "./types";
 
 
 function App() {
+    const [order,setOrder] = useState<Order>({itemList:[],recurring:false});
     return (
         <div>
         <div className= "header-logo">
@@ -14,10 +16,14 @@ function App() {
         </div>
         <div className="page-grid">
             <div className="basket">
-                <Basket/>
+                <Basket
+                order={order}
+                setOrder={setOrder}/>
             </div>
             <div className="delivery">
-                <Delivery/>
+                <Delivery
+                    order={order}
+                    setOrder={setOrder}/>
             </div>
         </div>
         </div>
