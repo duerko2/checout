@@ -9,7 +9,7 @@ let zipcodes: Array<Zipcode>;
  * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
  * @constructor
  */
-export function Delivery() {
+export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
     const [separateBilling, setSeparateBilling] = useState<Boolean>(false);
     const [cityText, setCityText] = useState<String>("");
     const [zipVisible, setZipVisible] = useState<Boolean>(false);
