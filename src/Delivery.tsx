@@ -4,38 +4,31 @@ import {Basket} from "./Basket";
 
 
 let zipcodes: Array<Zipcode>;
-let cityName: String;
-let zipVisible: String;
-
-
-function checkZip(Inputzip: string) {
-    var label = document.getElementById("validZip");
-    var cityText = document.getElementById("city") as HTMLInputElement;
-    if (cityText != null && label != null) {
-        if (Inputzip === "") {
-            label.style.display = "none";
-        } else {
-            for (var zipcode of zipcodes) {
-                if (Inputzip === zipcode.nr) {
-                    cityText.value = zipcode.navn;
-                    label.style.display = "none";
-                    break;
-                } else {
-                    label.style.display = "block";
-                }
-            }
-        }
-    }
-}
-
 
 /**
  * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
  * @constructor
  */
-export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
+export function Delivery() {
     const [separateBilling, setSeparateBilling] = useState<Boolean>(false);
+    const [cityText, setCityText] = useState<String>("");
+    const [zipVisible, setZipVisible] = useState<Boolean>(false);
 
+    function checkZip(Inputzip: string) {
+            if (Inputzip === "") {
+                setZipVisible(false);
+            } else {
+                for (var zipcode of zipcodes) {
+                    if (Inputzip === zipcode.nr) {
+                        setCityText(zipcode.navn);
+                        setZipVisible(false);
+                        break;
+                    } else {
+                        setZipVisible(true);
+                    }
+                }
+            }
+    }
     fetchZip();
 
     async function fetchZip() {
@@ -83,11 +76,11 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                     <label key="zip">Zip: </label>
                     <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
                            pattern="[0-9]{4}" required={true}/>
-                    <label id="validZip">Ikke en zip</label>
+                    <label id="validZip" style={{display: zipVisible ? "block" : "none"}}>Ikke en zip</label>
                 </li>
                 <li>
                     <label key="city">City: </label>
-                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true}/>
+                    <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true} value={cityText.valueOf()}/>
                 </li>
                 <li>
                     <label key="country">Country: </label>
