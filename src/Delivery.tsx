@@ -222,12 +222,11 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                     </li>
                 </div>
                 <li className="accept-condition" style={{marginTop: "1em"}}>
-                    <label htmlFor="termsConditions">
-                    <input name="termsConditions" type="checkbox" id="termsConditions" required={true}/>
-                    I accept terms & conditions</label>
+                    <input name="termsConditions" type="checkbox" id="checkbox" required={true}/>
+                    <label htmlFor="termsConditions">I accept terms & conditions</label>
                 </li>
                 <li className="accept-condition">
-                    <input name="marketingEmails" type="checkbox" id="marketingEmails"/>
+                    <input name="marketingEmails" type="checkbox" id="checkbox"/>
                     <label htmlFor="marketingEmails">I accept to receive marketing emails</label>
                 </li>
                 <li>

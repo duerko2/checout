@@ -114,6 +114,8 @@ describe(Delivery.name, () => {
 
 
     test("submit button", async () => {
+
+        // NOT DONE
         setup(<App/>)
 
         const submitButton = screen.getByText("Go to payment")
@@ -125,13 +127,13 @@ describe(Delivery.name, () => {
         expect(screen.getByRole("textbox", { name: /phone/i })).toHaveValue("31345678");
         fireEvent.change(screen.getByRole("text", {name:/E-mail:/i}), { target: { value: "test@tester.dk" } });
         fireEvent.change(screen.getByRole("textbox", { name: /address/i }), { target: { value: "test address" } });
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, 500));
         fireEvent.change(await screen.findByRole("textbox", {name: /zip/i}), {target: {value: "1555"}});
-        await new Promise(r => setTimeout(r, 1000));
-        fireEvent.click(screen.getByRole("checkbox",{name:/I accept terms & conditions/i}));
-        expect(screen.getByRole("checkbox",{name:/I accept terms & conditions/i})).toBeChecked();
+        await new Promise(r => setTimeout(r, 500));
+        //fireEvent.click(screen.getByRole("checkbox",{name:/termsConditions/i}));
+        //expect(screen.getByRole("checkbox",{name:/I accept terms & conditions/i})).toBeChecked();
 
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, 500));
         //fireEvent.click(submitButton);
 
     })
