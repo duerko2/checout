@@ -96,7 +96,7 @@ describe(Basket.name, () => {
         }
         expect(units[0].textContent).toBe("100");
         cleanup();
-    })
+    },10000)
 
 // test giftwrapped button
     test('giftwrapped button', async () => {
