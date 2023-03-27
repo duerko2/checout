@@ -36,7 +36,7 @@ test('plus-minus item units', async () => {
     expect(units[0].textContent).toBe("0");
 
     // test max value for units (100)
-    for (let i = 0; i < 101; i++) {
+    for (let i = 0; i < 102; i++) {
         await user.click(plusButtons[0]);
     }
     expect(units[0].textContent).toBe("100");
