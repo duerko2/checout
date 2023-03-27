@@ -59,6 +59,7 @@ describe(Basket.name, () => {
     })
 
 // Test remove item
+    // This test works when run alone, but not when run together with all the others.
     test('remove item', async () => {
         const {user} = setup(<App/>)
         const firstItem: HTMLElement = (await screen.findAllByTitle("itemName"))[0];
@@ -67,14 +68,16 @@ describe(Basket.name, () => {
 
         // Remove the first item
         await user.click((await screen.findAllByTitle("removeItem"))[0]);
-        await setTimeout(async () => {
-                // Get all items
-                const items: HTMLElement[] = (await screen.findAllByTitle("itemName"));
-                // Check the item has been removed from the list of items now displayed.
-                for (let item of items) {
-                    expect(item.textContent).not.toBe(firstItemName);
-                }
-            }, 500);
+
+
+        await new Promise(r => setTimeout(r, 1000));
+
+        // Get all items
+        const items: HTMLElement[] = (await screen.findAllByTitle("itemName"));
+        // Check the item has been removed from the list of items now displayed.
+        for (let item of items) {
+            expect(item.textContent).not.toBe(firstItemName);
+        }
 
         /*
         // Get all items
@@ -93,10 +96,9 @@ describe(Basket.name, () => {
         for (let i = 0; i < removeButtons.length; i++) {
             await user.click(removeButtons[0]);
         }
+        await new Promise(r => setTimeout(r, 1000));
 
-        await setTimeout(()=>{
-            expect(screen.getByText("Basket is empty")).toBeInTheDocument();
-        }, 500);
+        expect(screen.getByText("Basket is empty")).toBeInTheDocument();
 
         // should state that there are no items in the basket
         cleanup()

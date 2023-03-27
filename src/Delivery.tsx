@@ -101,14 +101,13 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 </li>
                 <li>
                     <label htmlFor="address">Address: </label>
-                    <input type="text" id="address" name="address" placeholder="Address" required={true}/>
-                    <input type="text" id="address" name="address" placeholder="Address 2nd line "/>
+                    <textarea name="address" aria-label="address" rows={2} required={true} placeholder="Address"></textarea>
                 </li>
                 <li>
                     <label htmlFor="zip">Zip: </label>
                     <input type="text" id="zip" name="zip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
                            pattern="[0-9]{4}" required={true}/>
-                    <label id="validZip" style={{display: zipVisible ? "block" : "none"}}>Ikke en zip</label>
+                    <label id="validZip" style={{display: zipVisible ? "block" : "none"}}>Not a valid zip</label>
                 </li>
                 <li>
                     <label htmlFor="city">City: </label>
