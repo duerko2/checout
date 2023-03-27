@@ -147,8 +147,12 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
         for (let i = 0; i < order.itemList.length; i++) {
             if (order.itemList[i].product.id === item.product.id) {
                 newItems[i].quantity++;
+                if(newItems[i].quantity>100){
+                    newItems[i].quantity=100;
+                }
             }
         }
+
         setOrder({itemList:newItems,recurring:order.recurring});
     }
     function removeItem(item: Item) {
@@ -210,7 +214,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                         </div>
                         <div className="grid-item" style={{display:"flex"}}>
                             <button className="unit-button" onClick={() => less(item)}>-</button>
-                            <p style={{margin: "5px"}}>{item.quantity}</p>
+                            <p title="units" style={{margin: "5px"}} >{item.quantity}</p>
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
                         <div
