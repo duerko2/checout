@@ -200,11 +200,11 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <button onClick={() => removeItem(item)} className="minus-button"><img src={minus}
+                            <button title="removeItem" onClick={() => removeItem(item)} className="minus-button"><img src={minus}
                                                                                                    height="25"
                                                                                                    width="25"/></button>
                         </div>
-                        <div className="grid-item">{item.product.name}</div>
+                        <div title="itemName" className="grid-item">{item.product.name}</div>
                         <div className="grid-item">{item.product.price} {item.product.currency}</div>
                         <div className="grid-item">{calculateRebate(item)}%
                             <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
@@ -221,7 +221,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                             className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
                         <div className="grid-item" style={{placeSelf: "center"}}>
                             <label>
-                                <input type="checkbox" onChange={() => changeGiftWrapped(item)}/>
+                                <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
                             </label>
                         </div>
                     </div>

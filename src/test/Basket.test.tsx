@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import {describe, expect, it, test} from "vitest";
-import React from "react";
+import React, {HTMLInputTypeAttribute} from "react";
 import userEvent from '@testing-library/user-event'
 import App from "../App";
 
@@ -43,4 +43,45 @@ test('plus-minus item units', async () => {
 
 
 
+})
+
+// test giftwrapped button
+test('giftwrapped button', async () => {
+    const {user} = setup(<App/>)
+
+    const giftwrappedButtons:HTMLInputElement[] = await screen.findAllByTitle("giftwrapped");
+
+    expect(giftwrappedButtons[0].checked).toBe(false);
+    await user.click(giftwrappedButtons[0]);
+    expect(giftwrappedButtons[0].checked).toBe(true);
+
+})
+
+// Test remove item
+test('remove item', async () => {
+    const {user} = setup(<App/>)
+    const firstItem:HTMLElement = (await screen.findAllByTitle("itemName"))[0];
+    const firstItemName= firstItem.textContent;
+
+    await user.click((await screen.findAllByTitle("removeItem"))[0]);
+
+    const items:HTMLElement[] = (await screen.findAllByTitle("itemName"));
+
+
+    // Check the item has been removed from the list of items now displayed.
+    for(let item of items) {
+        expect(item.textContent).not.toBe(firstItemName);
+    }
+
+    // minus buttons
+    const minusButtons:HTMLInputElement[] = await screen.findAllByTitle("removeItem")
+
+    // remove all items
+    for (let i = 0; i < minusButtons.length ; i++) {
+        await user.click(minusButtons[0]);
+    }
+
+    // should state that there are no items in the basket
+    expect(screen.getByText("Basket is empty"
+    )).toBeInTheDocument();
 })
