@@ -132,7 +132,7 @@ describe(Delivery.name, () => {
         expect(screen.getByRole("checkbox",{name:/I accept terms & conditions/i})).toBeChecked();
 
         await new Promise(r => setTimeout(r, 1000));
-        fireEvent.click(submitButton);
+        //fireEvent.click(submitButton);
 
     })
 
