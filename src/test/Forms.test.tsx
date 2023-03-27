@@ -1,11 +1,18 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {render, fireEvent, waitFor, screen} from "@testing-library/react";
 import {describe, expect, it, test} from "vitest";
 import React, {Component, HTMLInputTypeAttribute} from "react";
 import userEvent from '@testing-library/user-event'
 import {Delivery} from "../Delivery";
 import App from "../App";
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
+import{beforeAll,afterAll,afterEach} from "vitest";
+
+import server from "../mocks/server";
+import {RequestHandler, rest, restContext, RestHandler} from "msw";
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
 
 function setup(jsx: React.ReactElement) {
     return {
@@ -13,6 +20,7 @@ function setup(jsx: React.ReactElement) {
         ...render(jsx),
     }
 }
+
 
 describe(Delivery.name, () => {
     test('name validation test', async () => {
@@ -102,6 +110,31 @@ describe(Delivery.name, () => {
 
 
     },10000)
+
+
+
+    test("submit button", async () => {
+        setup(<App/>)
+
+        const submitButton = screen.getByText("Go to payment")
+
+
+
+        fireEvent.change(screen.getByRole("textbox", { name: /name/i }), { target: { value: "testName" } });
+        fireEvent.change(screen.getByRole("textbox", { name: /Phone:/i }), { target: { value: "31345678" } });
+        expect(screen.getByRole("textbox", { name: /phone/i })).toHaveValue("31345678");
+        fireEvent.change(screen.getByRole("text", {name:/E-mail:/i}), { target: { value: "test@tester.dk" } });
+        fireEvent.change(screen.getByRole("textbox", { name: /address/i }), { target: { value: "test address" } });
+        await new Promise(r => setTimeout(r, 1000));
+        fireEvent.change(await screen.findByRole("textbox", {name: /zip/i}), {target: {value: "1555"}});
+        await new Promise(r => setTimeout(r, 1000));
+        fireEvent.click(screen.getByRole("checkbox",{name:/I accept terms & conditions/i}));
+        expect(screen.getByRole("checkbox",{name:/I accept terms & conditions/i})).toBeChecked();
+
+        await new Promise(r => setTimeout(r, 1000));
+        fireEvent.click(submitButton);
+
+    })
 
 
 })

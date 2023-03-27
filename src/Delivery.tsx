@@ -11,7 +11,7 @@ let zipcodes: Array<Zipcode>;
  * @constructor
  */
 export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
-    const [separateBilling, setSeparateBilling] = useState<Boolean>(false);
+    const [separateBilling, setSeparateBilling] = useState<boolean>(false);
     const [cityText, setCityText] = useState<String>("");
     const [zipVisible, setZipVisible] = useState<Boolean>(false);
 
@@ -42,53 +42,104 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
             console.log(e)
         }
     }
+    function getTotal() {
 
+        let total: number = 0;
+        let total2: number = 0;
+        order.itemList.forEach( p => {if(p.quantity>=p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
+        else {total += p.product.price * p.quantity;}
+            total2=total
+            if (total2 > 300) {
+                total2 = total * 0.9;
+            }
+        })
+        return total2;
 
-
-    async function postOrder() {
-        const URL = "https://eowdxi3ymnvlrmg.m.pipedream.net"
-        await fetch(URL, {
-            method: "POST", headers: {"content-type": "application/Json"}, body: JSON.stringify(purchaseInfo)
-        });
     }
 
-    const [purchaseInfo] = useState<PurchaseInfo>({
-        VAT: "",
-        address: "",
-        billingAddress: "",
-        billingCity: "",
-        billingCompany: "",
-        billingCountry: "",
-        billingEmail: "",
-        billingName: "",
-        billingPhone: "",
-        billingVAT: "",
-        billingZip: "",
-        city: "",
-        comment: "",
-        company: "",
-        country: "",
-        email: "",
-        marketingEmails: false,
-        name: "",
-        order: order,
-        phone: "",
-        price: 0,
-        termsAndConditions: false,
-        zip: ""
-    })
+
+
+    async function postOrder(e: FormEvent) {
+        e.preventDefault();
+        const target = e.target as typeof e.target & {
+            name: { value: string };
+            phone: { value: string };
+            email: { value: string };
+            address: { value: string };
+            zip: { value: string };
+            city: { value: string };
+            country: { value: string };
+            company?: { value: string };
+            VAT?: { value: string };
+            comment?: { value: string };
+            termsConditions: { checked: boolean };
+            marketingEmails: { checked: boolean };
+            billingAddress?: { value: string },
+            billingCity?: { value: string },
+            billingCompany?: { value: string },
+            billingCountry?: { value: string },
+            billingEmail?: { value: string },
+            billingName?: { value: string },
+            billingPhone?: { value: string },
+            billingVAT?: { value: string },
+            billingZip?: { value: string },
+        }
+        console.log(e);
+        console.log(target.name.value);
+
+
+
+        const purchaseInfo = {
+            name: target.name.value,
+            phone: target.phone.value,
+            email: target.email.value,
+            address: target.address.value,
+            zip: target.zip.value,
+            city: target.city.value,
+            country: target.country.value,
+            company: target.company?.value,
+            VAT: target.VAT?.value,
+            comment: target.comment?.value,
+            termsAndConditions: target.termsConditions.checked,
+            marketingEmails: target.marketingEmails.checked,
+
+            billingAddress: target.billingAddress?.value,
+            billingCity: target.billingCity?.value,
+            billingCompany: target.billingCompany?.value,
+            billingCountry: target.billingCountry?.value,
+            billingEmail: target.billingEmail?.value,
+            billingName: target.billingName?.value,
+            billingPhone: target.billingPhone?.value,
+            billingVAT: target.billingVAT?.value,
+            billingZip: target.billingZip?.value,
+            order: order,
+            totalPrice : getTotal()
+        }
+
+
+        const body=JSON.stringify(purchaseInfo);
+        console.log(body);
+
+        const URL = "https://eowdxi3ymnvlrmg.m.pipedream.net"
+        const response = await fetch(URL, {
+            method: "POST", headers: {"content-type": "application/Json"}, body: body
+        });
+        console.log(response);
+        console.log(response.json())
+    }
 
 
 
 
 
     return (<div className="delivery-form">
-        <form>
+        <form onSubmit={postOrder}>
             <h3>Delivery information</h3>
             <ul>
                 <li>
-                    <label htmlFor="name">Name: </label>
+                    <label htmlFor="name">Name:
                     <input type="text" id="name" name="name" placeholder="Name" required={true}/>
+                    </label>
                 </li>
                 <li>
                     <label htmlFor="phone">Phone: </label>
@@ -126,58 +177,58 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                     <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
                 </li>
                 <li className="accept-condition">
-                    <input type="checkbox" id="checkbox" onChange={()=>setSeparateBilling(!separateBilling)}/>
-                    <label htmlFor="seperatebilling">Seperate Billing Address: </label>
+                    <input type="checkbox" id="checkbox" name="separateBilling"onChange={()=>setSeparateBilling(!separateBilling)}/>
+                    <label htmlFor="separateBilling">Seperate Billing Address: </label>
                 </li>
                 <div style={{display: separateBilling ? "block" : "none"}}>
                     <h3>Billing Address</h3>
                     <li>
-                        <label htmlFor="billingname">Name: </label>
-                        <input type="text" id="name" name="billingname" placeholder="Name" required={true}/>
+                        <label htmlFor="billingName">Name: </label>
+                        <input type="text" id="billingName" name="billingName" placeholder="Name" required={separateBilling}/>
                     </li>
                     <li>
-                        <label htmlFor="billingphone">Phone: </label>
-                        <input type="text" id="billingphone" name="billingphone" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
+                        <label htmlFor="billingPhone">Phone: </label>
+                        <input type="text" id="billingPhone" name="billingPhone" pattern="[0-9]{8}" placeholder="0000000" required={separateBilling} title="Please enter valid phone number"/>
                     </li>
                     <li>
-                        <label htmlFor="billingemail">E-mail: </label>
-                        <input type="email" id="billingemail" name="billingemail" placeholder="eksempel@eksempel.dk" required={true}/>
+                        <label htmlFor="billingEmail">E-mail: </label>
+                        <input type="email" id="billingEmail" name="billingEmail" placeholder="eksempel@eksempel.dk" required={separateBilling}/>
                     </li>
                     <li>
-                        <label htmlFor="billingaddress">Address: </label>
-                        <input type="text" id="address" name="billingaddress" placeholder="Address" required={true}/>
-                        <input type="text" id="address" name="billingaddress" placeholder="Address 2nd line "/>
+                        <label htmlFor="billingAddress">Address: </label>
+                        <textarea name="billingAddress" aria-label="billingAddress" rows={2} required={separateBilling} placeholder="Address"></textarea>
                     </li>
                     <li>
-                        <label htmlFor="billingzip">Zip: </label>
+                        <label htmlFor="billingZip">Zip: </label>
                         <input type="text" id="zip" name="billingzip" placeholder="Zip" onChange={(e) => checkZip(e.target.value)}
-                               pattern="[0-9]{4}" required={true}/>
+                               pattern="[0-9]{4}" required={separateBilling}/>
                         <label id="validZip">Ikke en zip</label>
                     </li>
                     <li>
-                        <label htmlFor="billingcity">City: </label>
-                        <input type="text" id="city" name="billingcity" placeholder="City" readOnly={true} required={true}/>
+                        <label htmlFor="billingCity">City: </label>
+                        <input type="text" id="city" name="billingcity" placeholder="City" readOnly={true} required={separateBilling}/>
                     </li>
                     <li>
-                        <label htmlFor="billingcountry">Country: </label>
-                        <input type="text" id="country" name="billingcountry" value="Denmark" readOnly={true} required={true}/>
+                        <label htmlFor="billingCountry">Country: </label>
+                        <input type="text" id="country" name="billingcountry" value="Denmark" readOnly={true} required={separateBilling}/>
                     </li>
                     <li>
                         <label htmlFor="billingCompanyName">Company: </label>
                         <input type="text" id="company" name="billingCompanyName" placeholder="Company"/>
                     </li>
                     <li>
-                        <label htmlFor="BillingVAT">VAT: </label>
-                        <input type="text" id="vat" name="BillingVAT" placeholder="00000000" pattern={"[0-9]{8}"}/>
+                        <label htmlFor="billingVAT">VAT: </label>
+                        <input type="text" id="vat" name="billingVAT" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </li>
                 </div>
                 <li className="accept-condition" style={{marginTop: "1em"}}>
-                    <input name="terms&conditions" type="checkbox" id="checkbox" required={true}/>
-                    <label htmlFor="terms&conditions">I accept terms & conditions</label>
+                    <label htmlFor="termsConditions">
+                    <input name="termsConditions" type="checkbox" id="termsConditions" required={true}/>
+                    I accept terms & conditions</label>
                 </li>
                 <li className="accept-condition">
-                    <input name="marketingemails" type="checkbox" id="checkbox"/>
-                    <label htmlFor="marketingemails">I accept to receive marketing emails</label>
+                    <input name="marketingEmails" type="checkbox" id="marketingEmails"/>
+                    <label htmlFor="marketingEmails">I accept to receive marketing emails</label>
                 </li>
                 <li>
                     <label htmlFor="comment">Comment</label>
@@ -186,7 +237,7 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 </li>
 
                 <li className="button">
-                    <button type="submit" onClick={postOrder}>Go to payment</button>
+                    <button type="submit" name="submit">Go to payment</button>
                 </li>
             </ul>
         </form>
