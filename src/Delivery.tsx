@@ -94,10 +94,9 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                     <label key="VAT">VAT: </label>
                     <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
                 </li>
-                <li style={{display:"flex"}}>
+                <li className="accept-condition">
                     <input type="checkbox" id="checkbox" onChange={()=>setSeparateBilling(!separateBilling)}/>
                     <label key="seperatebilling">Seperate Billing Address: </label>
-
                 </li>
                 <div style={{display: separateBilling ? "block" : "none"}}>
                     <h3>Billing Address</h3>
@@ -141,20 +140,18 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                         <input type="text" id="vat" name="BillingVAT" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </li>
                 </div>
-                <li className="accept-condition">
-                    <input type="checkbox" id="checkbox" required={true}/>
+                <li className="accept-condition" style={{marginTop: "1em"}}>
+                    <input name="terms&conditions" type="checkbox" id="checkbox" required={true}/>
                     <label key="terms&conditions">I accept terms & conditions</label>
                 </li>
                 <li className="accept-condition">
-                    <input type="checkbox" id="checkbox"/>
+                    <input name="marketingemails" type="checkbox" id="checkbox"/>
                     <label key="marketingemails">I accept to receive marketing emails</label>
                 </li>
                 <li>
                     <label key="comment">Comment</label>
                     <textarea name="comment" rows={4}>
                     </textarea>
-
-
                 </li>
 
                 <li className="button">
