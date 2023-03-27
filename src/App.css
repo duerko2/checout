@@ -64,7 +64,6 @@
 .delivery{
   position: sticky;
   top: 15px;
-  height: 100vh;
   box-sizing: border-box;
   justify-self: right;
 }
