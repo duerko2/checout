@@ -92,12 +92,12 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 </li>
                 <li>
                     <label htmlFor="phone">Phone: </label>
-                    <input type="text" id="tel" name="tel" pattern="[0-9]{8}" placeholder="0000000" required={true}
+                    <input type="text" id="phone" name="phone" pattern="[0-9]{8}" placeholder="0000000" required={true}
                            title="Please enter valid phone number"/>
                 </li>
                 <li>
                     <label htmlFor="email">E-mail: </label>
-                    <input type="email" id="email" name="email" placeholder="eksempel@eksempel.dk" required={true}/>
+                    <input role="text" type="email" id="email" name="email" placeholder="eksempel@eksempel.dk" required={true}/>
                 </li>
                 <li>
                     <label htmlFor="address">Address: </label>
@@ -138,11 +138,11 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                     </li>
                     <li>
                         <label htmlFor="billingphone">Phone: </label>
-                        <input type="text" id="tel" name="billingphone" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
+                        <input type="text" id="billingphone" name="billingphone" pattern="[0-9]{8}" placeholder="0000000" required={true} title="Please enter valid phone number"/>
                     </li>
                     <li>
                         <label htmlFor="billingemail">E-mail: </label>
-                        <input type="email" id="email" name="billingemail" placeholder="eksempel@eksempel.dk" required={true}/>
+                        <input type="email" id="billingemail" name="billingemail" placeholder="eksempel@eksempel.dk" required={true}/>
                     </li>
                     <li>
                         <label htmlFor="billingaddress">Address: </label>
