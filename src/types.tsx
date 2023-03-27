@@ -1,4 +1,4 @@
-export type {Product,Zipcode,Item,Order};
+export type {Product, Zipcode, Item, Order, PurchaseInfo};
 
 type Product = {
     id: string;
@@ -17,7 +17,7 @@ type Zipcode = {
     bigreceiver: string;
     bbox: Array<number>;
     visual: Array<number>;
-    commune: { [key: string]: string};
+    commune: { [key: string]: string };
     changedDate: string;
     locationChangedDate: string;
     locationVersion: number;
@@ -26,7 +26,31 @@ type Zipcode = {
 
 }
 
-type Item ={ product: Product; quantity: number; giftWrap: boolean };
-type Order = { itemList:Item[]; recurring: boolean };
+type Item = { product: Product; quantity: number; giftWrap: boolean };
+type Order = { itemList: Item[]; recurring: boolean };
 
-type PurchaseInfo ={orderList:Order[]; }
+type PurchaseInfo = {
+    order: Order;
+    price: number
+    name: String;
+    phone: string;
+    email: string;
+    address: string;
+    zip: string;
+    city: string;
+    country: string;
+    company: string;
+    VAT: string
+    billingName: string;
+    billingPhone: string;
+    billingEmail: string;
+    billingAddress: string;
+    billingZip: string;
+    billingCity: string;
+    billingCountry: string;
+    billingCompany: string;
+    billingVAT: string;
+    termsAndConditions: Boolean;
+    marketingEmails: Boolean;
+    comment: string;
+}
