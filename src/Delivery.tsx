@@ -151,7 +151,9 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 </li>
                 <li>
                     <label key="comment">Comment</label>
-                    <input type="text" id="comment"/>
+                    <textarea name="comment" rows={4}>
+                    </textarea>
+
 
                 </li>
 
