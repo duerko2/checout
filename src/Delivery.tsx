@@ -1,6 +1,7 @@
-import {Item, Order, Product, Zipcode} from "./types";
-import React, {useState} from "react";
+import {Item, Order, Product, Zipcode, PurchaseInfo} from "./types";
+import React, {FormEvent, useState} from "react";
 import {Basket} from "./Basket";
+import {getAllByLabelText} from "@testing-library/react";
 
 
 let zipcodes: Array<Zipcode>;
@@ -47,8 +48,39 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
     async function postOrder() {
         const URL = "https://eowdxi3ymnvlrmg.m.pipedream.net"
         await fetch(URL, {
-            method: "POST", headers: {"content-type": "application/Json"}, body: JSON.stringify (order)});
+            method: "POST", headers: {"content-type": "application/Json"}, body: JSON.stringify(purchaseInfo)
+        });
     }
+
+    const [purchaseInfo] = useState<PurchaseInfo>({
+        VAT: "",
+        address: "",
+        billingAddress: "",
+        billingCity: "",
+        billingCompany: "",
+        billingCountry: "",
+        billingEmail: "",
+        billingName: "",
+        billingPhone: "",
+        billingVAT: "",
+        billingZip: "",
+        city: "",
+        comment: "",
+        company: "",
+        country: "",
+        email: "",
+        marketingEmails: false,
+        name: "",
+        order: order,
+        phone: "",
+        price: 0,
+        termsAndConditions: false,
+        zip: ""
+    })
+
+
+
+
 
     return (<div className="delivery-form">
         <form>
