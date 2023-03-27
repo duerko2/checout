@@ -1,9 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import {describe, expect, it, test} from "vitest";
-import React, {HTMLInputTypeAttribute} from "react";
+import React, {Component, HTMLInputTypeAttribute} from "react";
 import userEvent from '@testing-library/user-event'
 import {Delivery} from "../Delivery";
 import App from "../App";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 function setup(jsx: React.ReactElement) {
     return {
@@ -13,15 +15,17 @@ function setup(jsx: React.ReactElement) {
 }
 
 describe(Delivery.name, () => {
-    test('plus-minus item units', async () => {
+    test('Form validation test', async () => {
         setup(<App/>)
 
+        const input = screen.getByRole("textbox", { name: /name/i });
+        fireEvent.change(input, { target: { value: "test" } });
+        expect(input).toHaveValue("test");
 
-        const paymentButton: HTMLInputElement[] = await screen.findAllByTitle("name");
-        // const forms: HTMLElement[] = await screen.findAllByRole("forms", {name: "Go to payment"});
-        const nameForm: HTMLFormElement[] = await screen.findByLabelText("name");
 
-        expect()
 
-    })
+
+        })
+
+
 })

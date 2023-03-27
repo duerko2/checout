@@ -12,12 +12,6 @@ describe(Delivery.name, () => {
             { name: /Go To Payment/i }
         )).toBeInTheDocument();
     });
-    test("should render", () => {
-        render(<Delivery/>)
-        const input = screen.getByRole("textbox", { name: /name/i });
-        fireEvent.change(input, { target: { value: "test" } });
-        expect(input).toHaveValue("test");
 
-    })
 });
 
