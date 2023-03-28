@@ -1,13 +1,12 @@
 import {render, fireEvent, waitFor, screen} from "@testing-library/react";
 import {describe, expect, it, test} from "vitest";
-import React, {Component, HTMLInputTypeAttribute} from "react";
+import React from "react";
 import userEvent from '@testing-library/user-event'
 import {Delivery} from "../Delivery";
 import App from "../App";
 import{beforeAll,afterAll,afterEach} from "vitest";
 
 import server from "../mocks/server";
-import {RequestHandler, rest, restContext, RestHandler} from "msw";
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -81,7 +80,7 @@ describe(Delivery.name, () => {
     })
 
     test("zip og city input", async () => {
-        setup(<App/>)
+        const {user} = setup(<App/>)
         const zipInput: HTMLInputElement = screen.getByRole("textbox", {name: /zip/i});
         const cityInput: HTMLInputElement = screen.getByRole("textbox", {name: /city/i});
 
@@ -89,7 +88,7 @@ describe(Delivery.name, () => {
 
         // Test readonly
         expect(cityInput).toHaveAttribute("readonly");
-        fireEvent.change(cityInput, { target: { value: "test city" } });
+        user.type(cityInput, "test city");
         expect(cityInput).toHaveValue("");
 
         // Test empty input
