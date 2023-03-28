@@ -158,7 +158,7 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
     }
 
     return (<div className="delivery-form">
-        <form onSubmit={postOrder}>
+        <form aria-label="delivery" onSubmit={postOrder}>
             <h3>Delivery information</h3>
             <ul>
                 <li>
@@ -263,7 +263,7 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 </div>
                 <li className="accept-condition" style={{marginTop: "1em"}}>
                     <label htmlFor="termsConditions">
-                    <input name="termsConditions" type="checkbox" id="checkbox" required={true}/>
+                    <input name="termsConditions" aria-label="termsConditions" type="checkbox" id="checkbox" required={true}/>
                     I accept terms & conditions</label>
                 </li>
                 <li className="accept-condition">
