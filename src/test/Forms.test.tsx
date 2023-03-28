@@ -99,6 +99,7 @@ describe(Delivery.name, () => {
         // Test invalid input
         fireEvent.change(zipInput, { target: { value: "1500" } });
         expect(zipInput).toHaveValue("1500");
+        await new Promise (r => setTimeout(r, 200));
         expect(screen.getAllByText("Not a valid zip")[0]).toBeInTheDocument();
         expect(cityInput).toHaveValue("");
 
@@ -107,6 +108,10 @@ describe(Delivery.name, () => {
         expect(zipInput).toHaveValue("1555");
         expect(cityInput).toHaveValue("København V");
 
+        // Test remove input
+        fireEvent.change(zipInput, {target: {value: ""}});
+        expect(zipInput).toHaveValue("");
+        expect(cityInput).toHaveValue("");
 
     },10000)
 })
