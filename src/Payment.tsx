@@ -20,9 +20,9 @@ export function Payment({orderInfo}: {orderInfo:OrderInfo}) {
                 cardNumber: target.cardNumber.value,
                 expirationDate: target.expirationDate.value,
                 securityCode: target.securityCode.value
-            }
+            },
         }
-        const body = JSON.stringify(paymentInformation);
+        const body = JSON.stringify({paymentInformation:paymentInformation,orderInfo:orderInfo});
 
         const URL = "https://eoyy8shk0uki1al.m.pipedream.net/"
         const response = await fetch(URL, {
