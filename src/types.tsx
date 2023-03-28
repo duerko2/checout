@@ -1,4 +1,4 @@
-export type {Product, Zipcode, Item, Order, PurchaseInfo};
+export type {Product, Zipcode, Item, Order, PurchaseInfo, OrderInfo};
 
 type Product = {
     id: string;
@@ -53,4 +53,35 @@ type PurchaseInfo = {
     termsAndConditions: Boolean;
     marketingEmails: Boolean;
     comment: string;
+}
+
+type OrderInfo= {
+    delivery: {
+        name: string;
+        phone: string;
+        email: string;
+        address: string;
+        zip: string;
+        city: string;
+        country: string;
+        company: string;
+        VAT: string;
+    };
+    separateBilling: boolean;
+    billing: {
+        billingAddress: string;
+        billingCity: string;
+        billingCompany: string;
+        billingCountry: string;
+        billingEmail: string;
+        billingName: string;
+        billingPhone: string;
+        billingVAT: string;
+        billingZip: string;
+    };
+    comment: string;
+    termsAndConditions: boolean;
+    marketingEmails: boolean;
+    order: Order;
+    totalPrice: number;
 }

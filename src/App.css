@@ -130,7 +130,7 @@
   position: absolute;
   display: block;
 }
-.delivery-form{
+.right-side-form{
   background-color: var(--card-color-dark);
   border-radius: 1em;
   padding: 1em;
@@ -139,21 +139,21 @@
   width: 400px;
   /* Form outline */
 }
-.delivery-form ul {
+.right-side-form ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.delivery-form li + li{
+.right-side-form li + li{
   margin-top: 1em;
   list-style-type: none;
 }
-.delivery-form label {
+.right-side-form label {
   /* Uniform size & alignment */
   display: contents;
   text-align: left;
 }
-.delivery-form input,
+.right-side-form input,
 textarea {
   display: flex;
   /* To make sure that all text fields have the same font settings
@@ -168,15 +168,15 @@ textarea {
   border: 1px solid #999;
 }
 
-.delivery-form #checkbox{
+.right-side-form #checkbox{
   width:auto;
 }
-.delivery-form button{
+.right-side-form button{
   border: 1px solid #ccc;
   border-radius: 1em;
   background-color: var(--card-color-dark);
 }
-.delivery-form button:hover{
+.right-side-form button:hover{
   cursor: pointer;
   background-color: #0ab100;
   border-color:#535bf2;
@@ -231,10 +231,10 @@ display: flex;
 }
 
 @media (prefers-color-scheme: light) {
-    .delivery-form{
+    .right-side-form{
         background-color: var(--card-color);
     }
-    .delivery-form button{
+    .right-side-form button{
         border: 1px solid #ccc;
         background-color: var(--card-color);
     }

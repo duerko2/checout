@@ -1,15 +1,10 @@
-import {Item, Order, Product, Zipcode, PurchaseInfo} from "./types";
+import {Item, Order, Product, Zipcode, PurchaseInfo, OrderInfo} from "./types";
 import React, {FormEvent, useEffect, useState} from "react";
 
 
 
-//let zipcodes: Array<Zipcode>;
 
-/**
- * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
- * @constructor
- */
-export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number}) {
+export function Delivery({order,setOrder,getTotal,setOrderInfo,navigateToPayment}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number,setOrderInfo:(orderInfo:OrderInfo)=>void,navigateToPayment: ()=> void}) {
     const [zipcodes,setZipcodes] = useState<Zipcode[]>([]);
     const [separateBilling, setSeparateBilling] = useState<boolean>(false);
     const [cityText, setCityText] = useState<String>("");
@@ -83,7 +78,7 @@ export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recur
 
 
 
-        const purchaseInfo = {
+        setOrderInfo ({
             delivery: {
                 name: target.name.value,
                 phone: target.phone.value,
@@ -92,29 +87,29 @@ export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recur
                 zip: target.zip.value,
                 city: target.city.value,
                 country: target.country.value,
-                company: target.company?.value,
-                VAT: target.VAT?.value,
+                company: target.company?.value ?? "",
+                VAT: target.VAT?.value ?? "",
             },
             separateBilling: target.separateBilling.checked,
             billing : {
-                billingAddress: target.billingAddress?.value,
-                billingCity: target.billingCity?.value,
-                billingCompany: target.billingCompany?.value,
-                billingCountry: target.billingCountry?.value,
-                billingEmail: target.billingEmail?.value,
-                billingName: target.billingName?.value,
-                billingPhone: target.billingPhone?.value,
-                billingVAT: target.billingVAT?.value,
-                billingZip: target.billingZip?.value,
+                billingAddress: target.billingAddress?.value ?? "",
+                billingCity: target.billingCity?.value ?? "",
+                billingCompany: target.billingCompany?.value ?? "",
+                billingCountry: target.billingCountry?.value ?? "",
+                billingEmail: target.billingEmail?.value ?? "",
+                billingName: target.billingName?.value ?? "",
+                billingPhone: target.billingPhone?.value ?? "",
+                billingVAT: target.billingVAT?.value ?? "",
+                billingZip: target.billingZip?.value ?? "",
             },
-            comment: target.comment?.value,
+            comment: target.comment?.value ?? "",
             termsAndConditions: target.termsConditions.checked,
             marketingEmails: target.marketingEmails.checked,
             order: order,
             totalPrice : getTotal()
-        }
-
-
+        });
+        navigateToPayment()
+/*
         const body =JSON.stringify(purchaseInfo);
         console.log(body);
 
@@ -124,6 +119,8 @@ export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recur
         });
         console.log(response);
         console.log(response.json())
+
+ */
     }
 
 
@@ -145,7 +142,7 @@ export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recur
         }
     }
 
-    return (<div className="delivery-form">
+    return (<div className="right-side-form">
         <form aria-label="deliveryForm" name="delivery" onSubmit={postOrder}>
             <h3>Delivery information</h3>
             <ul>
