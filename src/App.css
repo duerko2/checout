@@ -150,7 +150,7 @@
 }
 .delivery-form label {
   /* Uniform size & alignment */
-  display: inline-block;
+  display: contents;
   text-align: left;
 }
 .delivery-form input,

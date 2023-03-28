@@ -100,7 +100,7 @@ describe(Delivery.name, () => {
         // Test invalid input
         fireEvent.change(zipInput, { target: { value: "1500" } });
         expect(zipInput).toHaveValue("1500");
-        expect(screen.getByText("Not a valid zip")).toBeInTheDocument();
+        expect(screen.getAllByText("Not a valid zip")[0]).toBeInTheDocument();
         expect(cityInput).toHaveValue("");
 
         // Test valid input
