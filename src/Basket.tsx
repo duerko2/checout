@@ -44,6 +44,14 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
         }
     }
 
+    function calculateSubtotal() {
+        let subtotal : number = 0;
+        order.itemList.map(
+            (item) => (subtotal += (item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity))
+        )
+        return subtotal;
+    }
+
     if (order.itemList.length === 0) {
         return <div>
             <p>Basket is empty</p>
@@ -63,9 +71,16 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
         All orders over 300 DKK have a 10% discount
     </p>
     </div>
-    <div className="grand-total">
-
+    <div>
+        <div className="grand-total">
+        <p>Sub total: {calculateSubtotal().toFixed(2)} {order.itemList[0]?.product.currency}</p>
+        </div>
+        <div className="grand-total">
+        <p>Discount: {(calculateSubtotal()-getTotal()).toFixed(2)} {order.itemList[0]?.product.currency}</p>
+        </div>
+        <div className="grand-total">
         <h2>GRAND TOTAL: {getTotal().toFixed(2)} {order.itemList[0]?.product.currency}</h2>
+        </div>
     </div>
 
     <div className="recurring-order">
@@ -94,11 +109,7 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
 
 function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
 
-    function calculateRebate(item: Item) {
-        if (item.quantity >= item.product.rebateQuantity && item.product.rebateQuantity != 0) {
-            return item.product.rebatePercent;
-        } else return 0;
-    }
+
 
     function changeGiftWrapped(item: Item) {
         let newItems = order.itemList.map(e => e);
@@ -280,3 +291,8 @@ function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boole
     );
 }
 
+function calculateRebate(item: Item) {
+    if (item.quantity >= item.product.rebateQuantity && item.product.rebateQuantity != 0) {
+        return item.product.rebatePercent;
+    } else return 0;
+}
