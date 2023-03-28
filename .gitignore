@@ -15,6 +15,9 @@ dist-ssr
 #Coverage
 coverage
 
+#Vitestpreview
+.vitest-preview
+
 
 # Editor directories and files
 .vscode/*
