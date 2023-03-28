@@ -72,7 +72,10 @@
 
 .product-grid{
   display: grid;
-  grid-template-columns: 30px 3fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: auto 4fr 1fr 1fr 1fr 1fr;
+}
+.grid-item{
+  align-self:center;
 }
 .product-card{
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -100,16 +103,12 @@
   display: flex;
 }
 .minus-button{
-  width: 25px;
-  height: 25px;
-  padding:0px;
-  margin:0px;
-  border:0px;
+  width: max-content;
   cursor:pointer;
-  background-color: transparent;
+  color: var(--header-color);
 }
 #minus-thing{
-  cursor:pointer;
+  margin: 0 10px;
 }
 .minus-button:hover{
   cursor: pointer;
@@ -250,4 +249,7 @@ display: flex;
     .header-logo{
         background-color: var(--header-color);
     }
+  .product-card {
+    border-bottom: 1px solid var(--header-color)
+  }
 }

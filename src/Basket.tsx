@@ -11,13 +11,14 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
 
     useEffect( () => {
             async function fetchProducts() {
-                const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product.json";
+                const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product-v2.json";
                 try {
                     const response = await fetch(URL);
                     const result = (await response.json()) as Product[];
                     result.map(
                         (p) => (products[p.id] = p)
                     );
+                    console.log(result);
                 } catch (e) {
                     console.log(e)
                 }
@@ -26,7 +27,7 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
                 // TODO: async kald til backend for at hente indkøbskurv
 
                 let basket = [
-                    {product: products["vitamin-c-500-250"], quantity: 1, giftWrap: false},
+                    {product: products["vitamin-c-500-200"], quantity: 1, giftWrap: false},
                     {product: products["trimmer"], quantity: 1, giftWrap: false},
                     {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
                 ];
@@ -176,25 +177,40 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
     }
 
     return (<div >
+            <div className="product-card">
             <div className="product-grid">
-                <div className="grid-title"></div>
+                <div className="grid-title" style={{width:"140px"}}> </div>
                 <div className="grid-title">Product Name</div>
-                <div className="grid-title">Unit Price</div>
                 <div className="grid-title">Discount</div>
                 <div className="grid-title">Units</div>
-                <div className="grid-title">Total Price</div>
+                <div className="grid-title">Line price</div>
                 <div className="grid-title">Gift Wrapped</div>
             </div>
+            </div>
+
             {order.itemList.map((item) => (
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <button title="removeItem" onClick={() => removeItem(item)} className="minus-button"><img src={minus}
-                                                                                                   height="25"
-                                                                                                   width="25"/></button>
+                            <img src={item.product.imageUrl} height={120} width={120} />
                         </div>
-                        <div title="itemName" className="grid-item">{item.product.name}</div>
-                        <div className="grid-item">{item.product.price} {item.product.currency}</div>
+                        <div title="itemName"     style={{display: "grid",alignContent:"space-between"}} >
+                            <div>
+                            <div>
+                                <p><b>{item.product.name}</b></p>
+                            </div>
+                            <div>
+                                <p>Unit price: {item.product.price} {item.product.currency}</p>
+                            </div>
+                            <div>
+                                <p>{item.product.rebateQuantity>0 && <div>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}% discount
+                                </div>}</p>
+                            </div>
+                            </div>
+                            <div>
+                                <p className="minus-button" onClick={()=>removeItem(item)}>Remove Item</p>
+                            </div>
+                        </div>
                         <div className="grid-item">{calculateRebate(item)}%
                             <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
                                  onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
@@ -208,7 +224,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                         </div>
                         <div
                             className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
-                        <div className="grid-item" style={{placeSelf: "center"}}>
+                        <div className="grid-item" style={{justifySelf:"center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
                             </label>

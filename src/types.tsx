@@ -8,6 +8,7 @@ type Product = {
     rebateQuantity: number;
     rebatePercent: number;
     upsellProductId: string;
+    imageUrl: string;
 };
 
 type Zipcode = {
