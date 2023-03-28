@@ -198,7 +198,7 @@ display: grid;
   border-radius: 1em;
   display:block;
   background-color: var(--card-color-dark);
-  width: 15em;
+  width: 17em;
   justify-self: center;
 }
 .suggestion-card:hover{

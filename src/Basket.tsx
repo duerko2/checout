@@ -296,9 +296,15 @@ function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boole
 
             <div className="suggestion-grid">
             {a.map((item) => (
+                <div>
+
                 <div title="suggestion" className="suggestion-card" onClick={()=>addToOrder(item)}>
+                    <div style={{textAlign:"center"}}>
+                        <img src={item.imageUrl} height={120} width={120} />
+                    </div>
                     <p title="suggestion-name">{item.name}</p>
                     <p>{item.price} {item.currency}</p>
+                </div>
                 </div>
 
             ))}
