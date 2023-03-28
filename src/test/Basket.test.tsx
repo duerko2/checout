@@ -4,7 +4,6 @@ import React, {HTMLInputTypeAttribute} from "react";
 import userEvent from '@testing-library/user-event'
 import App from "../App";
 import {Basket} from "../Basket";
-import {b} from "vitest/dist/types-7cd96283";
 
 
 function setup(jsx: React.ReactElement) {

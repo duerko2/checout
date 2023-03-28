@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Product, Zipcode, Item, Order} from "./types";
 import minus from "./assets/trashCan.png";
 import question from "./assets/question-mark.png";
@@ -6,57 +6,35 @@ import question from "./assets/question-mark.png";
 // Dictionary of products
 let products: { [id: string] : Product } = {};
 
-export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
-
-
-    const [loaded,setLoaded] = useState<Boolean>(false);
+export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number}) {
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
 
-
-    if (!loaded) {
-        fetchProducts().then(fetchBasket).then(() => setLoaded(true));
-    }
-
-    async function fetchProducts() {
-        const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product.json";
-        try {
-            const response = await fetch(URL);
-            const result = (await response.json()) as Product[];
-            result.map(
-                (p) => (products[p.id] = p)
-            );
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-
-
-    async function fetchBasket() {
-        // TODO: async kald til backend for at hente indkøbskurv
-
-        let basket = [
-            {product: products["vitamin-c-500-250"], quantity: 1, giftWrap: false},
-            {product: products["trimmer"], quantity: 1, giftWrap: false},
-            {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
-        ];
-        setOrder({itemList: basket, recurring: false});
-    }
-
-    function getTotal() {
-
-        let total: number = 0;
-        let total2: number = 0;
-        order.itemList.forEach( p => {if(p.quantity>=p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
-        else {total += p.product.price * p.quantity;}
-        total2=total
-            if (total2 > 300) {
-                total2 = total * 0.9;
+    useEffect( () => {
+            async function fetchProducts() {
+                const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product.json";
+                try {
+                    const response = await fetch(URL);
+                    const result = (await response.json()) as Product[];
+                    result.map(
+                        (p) => (products[p.id] = p)
+                    );
+                } catch (e) {
+                    console.log(e)
+                }
             }
-        })
-        return total2;
+            async function fetchBasket() {
+                // TODO: async kald til backend for at hente indkøbskurv
 
-    }
+                let basket = [
+                    {product: products["vitamin-c-500-250"], quantity: 1, giftWrap: false},
+                    {product: products["trimmer"], quantity: 1, giftWrap: false},
+                    {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
+                ];
+                setOrder({itemList: basket, recurring: false});
+            }
+            fetchProducts().then(fetchBasket);
+        }, []
+    )
 
     function changeRecurringOrder() {
         if (order.recurring) {

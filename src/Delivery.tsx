@@ -1,16 +1,16 @@
 import {Item, Order, Product, Zipcode, PurchaseInfo} from "./types";
-import React, {FormEvent, useState} from "react";
-import {Basket} from "./Basket";
-import {getAllByLabelText} from "@testing-library/react";
+import React, {FormEvent, useEffect, useState} from "react";
 
 
-let zipcodes: Array<Zipcode>;
+
+//let zipcodes: Array<Zipcode>;
 
 /**
  * TODO mangler onClick i submit knappen, for at kunne validere zipcode med checkZip for at gå videre
  * @constructor
  */
-export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
+export function Delivery({order,setOrder,getTotal}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number}) {
+    const [zipcodes,setZipcodes] = useState<Zipcode[]>([]);
     const [separateBilling, setSeparateBilling] = useState<boolean>(false);
     const [cityText, setCityText] = useState<String>("");
     const [billingCityText, setBillingCityText] = useState<String>("");
@@ -35,32 +35,20 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
                 }
             }
     }
-    fetchZip();
 
-    async function fetchZip() {
-        const URL = "https://api.dataforsyningen.dk/postnumre";
-        try {
-            const response = await fetch(URL);
-            const result = (await response.json()) as Zipcode[];
-            zipcodes = result;
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    function getTotal() {
-
-        let total: number = 0;
-        let total2: number = 0;
-        order.itemList.forEach( p => {if(p.quantity>=p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
-        else {total += p.product.price * p.quantity;}
-            total2=total
-            if (total2 > 300) {
-                total2 = total * 0.9;
+    useEffect(() => {
+        async function fetchZip() {
+            const URL = "https://api.dataforsyningen.dk/postnumre";
+            try {
+                const response = await fetch(URL);
+                const result = (await response.json()) as Zipcode[];
+                setZipcodes(result)
+            } catch (e) {
+                console.log(e)
             }
-        })
-        return total2;
-
-    }
+        }
+        fetchZip();
+    },[] );
 
 
 
@@ -158,7 +146,7 @@ export function Delivery({order,setOrder}:{order:{itemList:Item[],recurring:bool
     }
 
     return (<div className="delivery-form">
-        <form aria-label="delivery" onSubmit={postOrder}>
+        <form aria-label="deliveryForm" name="delivery" onSubmit={postOrder}>
             <h3>Delivery information</h3>
             <ul>
                 <li>
