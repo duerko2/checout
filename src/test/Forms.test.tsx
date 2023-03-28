@@ -110,4 +110,28 @@ describe(Delivery.name, () => {
         expect(cityInput).toHaveValue("");
         cleanup();
     },10000)
+
+
+    test("Go to Payment button", async () => {
+        // NOT DONE
+        const {user} = setup(<App/>)
+        await new Promise(r => setTimeout(r, 500));
+
+        await user.type(screen.getByRole("textbox", {name: /name/i}), "Marcus Jacobsen");
+        await user.type(screen.getByRole("textbox", {name: /phone/i}), "+4531729624");
+        expect(screen.getByRole("textbox", {name: /phone/i})).toHaveValue("+4531729624");
+        await user.type(screen.getByRole("text", {name: /E-mail:/i}), "marcusjacobsen1995@gmail.com");
+        await user.type(screen.getByRole("textbox", {name: /address/i}), "Peter Bangs Vej 177A\n2 TV");
+        await user.type(screen.getByRole("textbox", {name: /zip/i}), "2500");
+        await user.click(screen.getByRole("checkbox", {name: /termsConditions/i}))
+        expect(screen.getByRole("checkbox", {name: /termsConditions/i})).toBeChecked();
+/*
+        const form : HTMLFormElement= screen.getByRole("form", {name: /deliveryForm/i});
+        fireEvent.submit(form);
+        await new Promise(r => setTimeout(r, 500));
+        expect(screen.getByText("Payment")).toBeInTheDocument();
+
+ */
+
+    })
 })

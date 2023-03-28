@@ -180,7 +180,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
             <div className="product-card">
             <div className="product-grid">
                 <div className="grid-title" style={{width:"140px"}}> </div>
-                <div className="grid-title">Product Name</div>
+                <div className="grid-title">Productn</div>
                 <div className="grid-title">Discount</div>
                 <div className="grid-title">Units</div>
                 <div className="grid-title">Line price</div>
