@@ -73,7 +73,7 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
     </div>
     <div>
         <div className="grand-total">
-        <p>Sub total: {calculateSubtotal().toFixed(2)} {order.itemList[0]?.product.currency}</p>
+        <p>Sub-total: {calculateSubtotal().toFixed(2)} {order.itemList[0]?.product.currency}</p>
         </div>
         <div className="grand-total">
         <p>Discount: {(calculateSubtotal()-getTotal()).toFixed(2)} {order.itemList[0]?.product.currency}</p>
