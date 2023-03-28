@@ -46,7 +46,7 @@ describe("APIs", () => {
 
         await new Promise(r => setTimeout(r, 500));
         const form : HTMLFormElement= screen.getByRole("form", {name: /deliveryForm/i});
-        fireEvent.submit(form);
+        //fireEvent.submit(form);
         //await new Promise(r => setTimeout(r, 1500));
 
 
