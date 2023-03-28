@@ -208,7 +208,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                             </div>
                             </div>
                             <div>
-                                <p className="minus-button" onClick={()=>removeItem(item)}>Remove Item</p>
+                                <p title="removeItem" className="minus-button" onClick={()=>removeItem(item)}>Remove Item</p>
                             </div>
                         </div>
                         <div className="grid-item">{calculateRebate(item)}%
