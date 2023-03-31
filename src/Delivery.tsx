@@ -110,17 +110,16 @@ export function Delivery({order,setOrder,getTotal,setOrderInfo,navigateToPayment
         });
         navigateToPayment()
 /*
-        const body =JSON.stringify(purchaseInfo);
+        const body =JSON.stringify(order);
         console.log(body);
 
-        const URL = "https://eoyy8shk0uki1al.m.pipedream.net/"
+        const URL = "https://eo81kffsyk5suvw.m.pipedream.net"
         const response = await fetch(URL, {
             method: "POST", headers: {"content-type": "application/Json"}, body: body
         });
         console.log(response);
         console.log(response.json())
-
- */
+      */
     }
 
 
