@@ -51,7 +51,7 @@ export function Payment({orderInfo}: {orderInfo:OrderInfo}) {
                     <li>
                 <label htmlFor="cardNumber">
                     Card number:
-                    <input type="text" name="cardNumber" required={true} />
+                    <input type="card" name="cardNumber" required={true} pattern="[0-9]{16}" />
                 </label>
                     </li>
                     <li>
@@ -63,7 +63,7 @@ export function Payment({orderInfo}: {orderInfo:OrderInfo}) {
                         <li>
                 <label htmlFor="securityCode">
                     Security code:
-                    <input type="text" name="securityCode" required={true} />
+                    <input type="text" name="securityCode" required={true} pattern="[0-9]{3}" />
                 </label>
                         </li>
                     <li className="button">
