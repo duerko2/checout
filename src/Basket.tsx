@@ -12,6 +12,7 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
     useEffect( () => {
             async function fetchProducts() {
                 const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product-v2.json";
+
                 try {
                     const response = await fetch(URL);
                     const result = (await response.json()) as Product[];
