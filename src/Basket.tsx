@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Product, Zipcode, Item, Order} from "./types";
-import {getRebate, getTotal, getSubtotal} from "./OrderUtilityFunctions";
-import minus from "./assets/trashCan.png";
+import {Item, Product} from "./types";
+import {getRebate} from "./OrderUtilityFunctions";
 import question from "./assets/question-mark.png";
 import {OrderSummary} from "./OrderSummary";
 
@@ -118,7 +117,7 @@ function BasketGrid({
 
     function less(item: Item) {
         // Guard clause
-        if(item.quantity === 0) return;
+        if (item.quantity === 0) return;
 
         const itemIndex = order.itemList.indexOf(item)
         const newItems = order.itemList.map(e => e);
@@ -129,7 +128,7 @@ function BasketGrid({
 
     function more(item: Item) {
         // Guard clause
-        if(item.quantity >= 100) return;
+        if (item.quantity >= 100) return;
 
         const itemIndex = order.itemList.indexOf(item)
         const newItems = order.itemList.map(e => e);
@@ -177,7 +176,7 @@ function BasketGrid({
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <img src={item.product.imageUrl} height={120} width={120}/>
+                            <img src={item.product.imageUrl} height={120} width={120} alt={item.product.name + " icon"}/>
                         </div>
                         <div title="itemName" style={{display: "grid", alignContent: "space-between"}}>
                             <div>
@@ -202,7 +201,7 @@ function BasketGrid({
                         <div className="grid-item">{getRebate(item)}%
                             <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
                                  onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
-                                                                                        className="question-img"/></div>
+                                                                                        className="question-img" alt={"buy "+item.product.rebateQuantity+" to get " +item.product.rebatePercent+"% discount"}/></div>
 
                         </div>
                         <div className="grid-item" style={{display: "flex"}}>
@@ -259,8 +258,8 @@ function Suggestions({
             }
         })
 
-        // If not there is an upsell product and it is not already in basket, add it to suggestions
-        if(item.product.upsellProductId && !alreadyBought){
+        // If not there is an upsell product, and it is not already in basket, add it to suggestions
+        if (item.product.upsellProductId && !alreadyBought) {
             suggestions.push(products[item.product.upsellProductId]);
         }
 
@@ -277,7 +276,7 @@ function Suggestions({
         }
         let alreadyBought = false;
         order.itemList.forEach((item) => {
-            if(item.product._id === products[p]._id) {
+            if (item.product._id === products[p]._id) {
                 alreadyBought = true;
             }
         })
@@ -304,7 +303,7 @@ function Suggestions({
 
                         <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
                             <div style={{textAlign: "center"}}>
-                                <img src={item.imageUrl} height={120} width={120}/>
+                                <img src={item.imageUrl} height={120} width={120} alt={"Order suggestion icon for product: "+item.name}/>
                             </div>
                             <p title="suggestion-name">{item.name}</p>
                             <p>{item.price} {item.currency}</p>

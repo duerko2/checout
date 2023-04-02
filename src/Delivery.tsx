@@ -21,7 +21,7 @@ export function Delivery({
             setZipVisible(false);
             setCityText("");
         } else {
-            for (var zipcode of zipcodes) {
+            for (let zipcode of zipcodes) {
                 if (Inputzip === zipcode.nr) {
                     setCityText(zipcode.navn);
                     setZipVisible(false);
@@ -130,7 +130,7 @@ export function Delivery({
             setBillingZipVisible(false);
             setBillingCityText("");
         } else {
-            for (var zipcode of zipcodes) {
+            for (let zipcode of zipcodes) {
                 if (inputZip === zipcode.nr) {
                     setBillingCityText(zipcode.navn);
                     setBillingZipVisible(false);
