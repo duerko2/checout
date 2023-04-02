@@ -1,16 +1,24 @@
 import React, {useEffect, useState} from "react";
 import {Product, Zipcode, Item, Order} from "./types";
-import {getRebate,getTotal,getSubtotal} from "./OrderUtilityFunctions";
+import {getRebate, getTotal, getSubtotal} from "./OrderUtilityFunctions";
 import minus from "./assets/trashCan.png";
 import question from "./assets/question-mark.png";
+import {OrderSummary} from "./OrderSummary";
 
 // Dictionary of products
-let products: { [id: string] : Product } = {};
+let products: { [id: string]: Product } = {};
 
-export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
-    const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
+export function Basket({
+                           order,
+                           setOrder
+                       }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void }) {
+    const [show, setShowRebate] = useState<{ showRebate: boolean; product?: Product; pos: { x: number; y: number } }>({
+        showRebate: false,
+        product: undefined,
+        pos: {x: 0, y: 0}
+    });
 
-    useEffect( () => {
+    useEffect(() => {
             async function fetchProducts() {
                 const URL = "http://130.225.170.79:8080/products";
 
@@ -25,6 +33,7 @@ export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolea
                     console.log(e)
                 }
             }
+
             async function fetchBasket() {
                 // TODO: async kald til backend for at hente indkøbskurv
 
@@ -35,6 +44,7 @@ export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolea
                 ];
                 setOrder({itemList: basket, recurring: false});
             }
+
             fetchProducts().then(fetchBasket);
         }, []
     )
@@ -48,7 +58,6 @@ export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolea
     }
 
 
-
     if (order.itemList.length === 0) {
         return <div>
             <p>Basket is empty</p>
@@ -56,56 +65,51 @@ export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolea
     } else return (
         <div>
             <div className="background-box">
-            <h2>Basket</h2>
-        <BasketGrid
-    order={order}
-    setOrder={setOrder}
-    show={show}
-    setShowRebate={setShowRebate}
-    />
-    <div>
-    <p>
-        All orders over 300 DKK have a 10% discount
-    </p>
-    </div>
-    <div>
-        <div className="grand-total">
-        <p>Sub-total: {getSubtotal(order).toFixed(2)} {order.itemList[0]?.product.currency}</p>
-        </div>
-        <div className="grand-total">
-        <p>Discount: {(getSubtotal(order)-getTotal(order)).toFixed(2)} {order.itemList[0]?.product.currency}</p>
-        </div>
-        <div className="grand-total">
-        <h2>GRAND TOTAL: {getTotal(order).toFixed(2)} {order.itemList[0]?.product.currency}</h2>
-        </div>
-    </div>
-
-    <div className="recurring-order">
-        <label>
-            <h2>Monthly recurring order: <input type="checkbox" onChange={() => changeRecurringOrder()}/></h2>
-    </label>
-    </div>
+                <h2>Basket</h2>
+                <BasketGrid
+                    order={order}
+                    setOrder={setOrder}
+                    show={show}
+                    setShowRebate={setShowRebate}
+                />
+                <div>
+                    <p>
+                        All orders over 300 DKK have a 10% discount
+                    </p>
+                </div>
+                <OrderSummary
+                    order={order}/>
+                <div className="recurring-order">
+                    <label>
+                        <h2>Monthly recurring order: <input type="checkbox" onChange={() => changeRecurringOrder()}/>
+                        </h2>
+                    </label>
+                </div>
             </div>
 
-    <div>
-    <ShowRebate
-        showRebate={show.showRebate}
-    product={show.product}
-    pos={show.pos}
-    />
-    </div>
-            <div className="background-box">
-                <Suggestions
-                order={order}
-                setOrder = {setOrder}
+            <div>
+                <ShowRebate
+                    showRebate={show.showRebate}
+                    product={show.product}
+                    pos={show.pos}
                 />
             </div>
-    </div>
-)
+            <div className="background-box">
+                <Suggestions
+                    order={order}
+                    setOrder={setOrder}
+                />
+            </div>
+        </div>
+    )
 }
 
-function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} },setShowRebate:(show:{ showRebate:boolean; product?:Product;pos:{x:number;y:number} })=>void}) {
-
+function BasketGrid({
+                        order,
+                        setOrder,
+                        show,
+                        setShowRebate
+                    }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void, show: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }, setShowRebate: (show: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }) => void }) {
 
 
     function changeGiftWrapped(item: Item) {
@@ -115,7 +119,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                 newItems[i].giftWrap = !newItems[i].giftWrap
             }
         }
-        setOrder({itemList:newItems,recurring:order.recurring});
+        setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function less(item: Item) {
@@ -125,7 +129,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                 newItems[i].quantity--;
             }
         }
-        setOrder({itemList:newItems,recurring:order.recurring});
+        setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function more(item: Item) {
@@ -133,14 +137,15 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
         for (let i = 0; i < order.itemList.length; i++) {
             if (order.itemList[i].product._id === item.product._id) {
                 newItems[i].quantity++;
-                if(newItems[i].quantity>100){
-                    newItems[i].quantity=100;
+                if (newItems[i].quantity > 100) {
+                    newItems[i].quantity = 100;
                 }
             }
         }
 
-        setOrder({itemList:newItems,recurring:order.recurring});
+        setOrder({itemList: newItems, recurring: order.recurring});
     }
+
     function removeItem(item: Item) {
         let newItems = order.itemList.map(e => e);
         for (let i = 0; i < order.itemList.length; i++) {
@@ -152,7 +157,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                 }
             }
         }
-        setOrder({itemList:newItems,recurring:order.recurring});
+        setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
@@ -172,39 +177,42 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
         }
     }
 
-    return (<div >
+    return (<div>
             <div className="product-card">
-            <div className="product-grid">
-                <div className="grid-title" style={{width:"140px"}}> </div>
-                <div className="grid-title">Product</div>
-                <div className="grid-title">Discount</div>
-                <div className="grid-title">Units</div>
-                <div className="grid-title">Line price</div>
-                <div className="grid-title">Gift Wrapped</div>
-            </div>
+                <div className="product-grid">
+                    <div className="grid-title" style={{width: "140px"}}></div>
+                    <div className="grid-title">Product</div>
+                    <div className="grid-title">Discount</div>
+                    <div className="grid-title">Units</div>
+                    <div className="grid-title">Line price</div>
+                    <div className="grid-title">Gift Wrapped</div>
+                </div>
             </div>
 
             {order.itemList.map((item) => (
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <img src={item.product.imageUrl} height={120} width={120} />
+                            <img src={item.product.imageUrl} height={120} width={120}/>
                         </div>
-                        <div title="itemName"     style={{display: "grid",alignContent:"space-between"}} >
+                        <div title="itemName" style={{display: "grid", alignContent: "space-between"}}>
                             <div>
-                            <div>
-                                <p><b>{item.product.name}</b></p>
+                                <div>
+                                    <p><b>{item.product.name}</b></p>
+                                </div>
+                                <div>
+                                    <p>Unit price: {item.product.price} {item.product.currency}</p>
+                                </div>
+                                <div>
+                                    <p>{item.product.rebateQuantity > 0 &&
+                                        <div>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}%
+                                            discount
+                                        </div>}</p>
+                                </div>
                             </div>
                             <div>
-                                <p>Unit price: {item.product.price} {item.product.currency}</p>
-                            </div>
-                            <div>
-                                <p>{item.product.rebateQuantity>0 && <div>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}% discount
-                                </div>}</p>
-                            </div>
-                            </div>
-                            <div>
-                                <p title="removeItem" className="minus-button" onClick={()=>removeItem(item)}>Remove Item</p>
+                                <p title="removeItem" className="minus-button" onClick={() => removeItem(item)}>Remove
+                                    Item</p>
                             </div>
                         </div>
                         <div className="grid-item">{getRebate(item)}%
@@ -213,14 +221,14 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                                                                                         className="question-img"/></div>
 
                         </div>
-                        <div className="grid-item" style={{display:"flex"}}>
+                        <div className="grid-item" style={{display: "flex"}}>
                             <button className="unit-button" onClick={() => less(item)}>-</button>
-                            <p title="units" style={{margin: "5px"}} >{item.quantity}</p>
+                            <p title="units" style={{margin: "5px"}}>{item.quantity}</p>
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
                         <div
                             className="grid-item">{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
-                        <div className="grid-item" style={{justifySelf:"center"}}>
+                        <div className="grid-item" style={{justifySelf: "center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
                             </label>
@@ -231,6 +239,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
         </div>
     )
 }
+
 function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }) {
     if (state.showRebate && state.product && state.product.rebatePercent === 0)
         return (
@@ -249,61 +258,68 @@ function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: n
 }
 
 
-function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void} ) {
-    let a : Array<Product> = [];
-    for(let i=0;i<order.itemList.length;i++){
-        let alreadyBought=false;
-            for(let j=0;j<order.itemList.length;j++){
-                if(order.itemList[j].product._id === order.itemList[i].product.upsellProductId){
-                    alreadyBought=true;
-                }
+function Suggestions({
+                         order,
+                         setOrder
+                     }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void }) {
+    let a: Array<Product> = [];
+    for (let i = 0; i < order.itemList.length; i++) {
+        let alreadyBought = false;
+        for (let j = 0; j < order.itemList.length; j++) {
+            if (order.itemList[j].product._id === order.itemList[i].product.upsellProductId) {
+                alreadyBought = true;
             }
-        if(order.itemList[i].product.upsellProductId && !alreadyBought){
+        }
+        if (order.itemList[i].product.upsellProductId && !alreadyBought) {
             a.push(products[order.itemList[i].product.upsellProductId]);
         }
-        if(a.length>=3){
+        if (a.length >= 3) {
             break;
         }
     }
 
     // Fills in the list of recommendations
-    for(let p in products){
-        if(a.length>=3){
+    for (let p in products) {
+        if (a.length >= 3) {
             break;
         }
-        let alreadyBought=false;
-        for(let j=0;j<order.itemList.length;j++){
-            if(order.itemList[j].product._id === products[p]._id){
-                alreadyBought=true;
+        let alreadyBought = false;
+        for (let j = 0; j < order.itemList.length; j++) {
+            if (order.itemList[j].product._id === products[p]._id) {
+                alreadyBought = true;
             }
         }
-        if(!alreadyBought){
+        if (!alreadyBought) {
             a.push(products[p]);
         }
     }
 
 
     function addToOrder(p: Product) {
-        setOrder({itemList:[...order.itemList, {product: p, quantity: 1, giftWrap: false}],recurring:order.recurring});
+        setOrder({
+            itemList: [...order.itemList, {product: p, quantity: 1, giftWrap: false}],
+            recurring: order.recurring
+        });
     }
+
     return (
         <div className="suggestions">
             <h2>You might also like</h2>
 
             <div className="suggestion-grid">
-            {a.map((item) => (
-                <div>
+                {a.map((item) => (
+                    <div>
 
-                <div title="suggestion" className="suggestion-card" onClick={()=>addToOrder(item)}>
-                    <div style={{textAlign:"center"}}>
-                        <img src={item.imageUrl} height={120} width={120} />
+                        <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
+                            <div style={{textAlign: "center"}}>
+                                <img src={item.imageUrl} height={120} width={120}/>
+                            </div>
+                            <p title="suggestion-name">{item.name}</p>
+                            <p>{item.price} {item.currency}</p>
+                        </div>
                     </div>
-                    <p title="suggestion-name">{item.name}</p>
-                    <p>{item.price} {item.currency}</p>
-                </div>
-                </div>
 
-            ))}
+                ))}
             </div>
         </div>
     );
