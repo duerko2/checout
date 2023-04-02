@@ -50,11 +50,7 @@ export function Basket({
     )
 
     function changeRecurringOrder() {
-        if (order.recurring) {
-            setOrder({itemList: order.itemList, recurring: false})
-        } else {
-            setOrder({itemList: order.itemList, recurring: true})
-        }
+        setOrder({itemList: order.itemList, recurring: !order.recurring})
     }
 
 
@@ -113,50 +109,38 @@ function BasketGrid({
 
 
     function changeGiftWrapped(item: Item) {
-        let newItems = order.itemList.map(e => e);
-        for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product._id === item.product._id) {
-                newItems[i].giftWrap = !newItems[i].giftWrap
-            }
-        }
+        const itemIndex = order.itemList.indexOf(item)
+        const newItems = order.itemList.map(e => e);
+        newItems[itemIndex].giftWrap = !newItems[itemIndex].giftWrap;
+
         setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function less(item: Item) {
-        let newItems = order.itemList.map(e => e);
-        for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product._id === item.product._id && order.itemList[i].quantity > 0) {
-                newItems[i].quantity--;
-            }
-        }
+        // Guard clause
+        if(item.quantity === 0) return;
+
+        const itemIndex = order.itemList.indexOf(item)
+        const newItems = order.itemList.map(e => e);
+        newItems[itemIndex].quantity--;
+
         setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function more(item: Item) {
-        let newItems = order.itemList.map(e => e);
-        for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product._id === item.product._id) {
-                newItems[i].quantity++;
-                if (newItems[i].quantity > 100) {
-                    newItems[i].quantity = 100;
-                }
-            }
-        }
+        // Guard clause
+        if(item.quantity >= 100) return;
+
+        const itemIndex = order.itemList.indexOf(item)
+        const newItems = order.itemList.map(e => e);
+        newItems[itemIndex].quantity++;
 
         setOrder({itemList: newItems, recurring: order.recurring});
     }
 
     function removeItem(item: Item) {
-        let newItems = order.itemList.map(e => e);
-        for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product._id === item.product._id) {
-                if (i === 0) {
-                    newItems.shift();
-                } else {
-                    newItems.splice(i, 1);
-                }
-            }
-        }
+        const newItems = order.itemList.filter(e => e.product._id !== item.product._id)
+
         setOrder({itemList: newItems, recurring: order.recurring});
     }
 
@@ -262,35 +246,43 @@ function Suggestions({
                          order,
                          setOrder
                      }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void }) {
-    let a: Array<Product> = [];
-    for (let i = 0; i < order.itemList.length; i++) {
-        let alreadyBought = false;
-        for (let j = 0; j < order.itemList.length; j++) {
-            if (order.itemList[j].product._id === order.itemList[i].product.upsellProductId) {
-                alreadyBought = true;
-            }
-        }
-        if (order.itemList[i].product.upsellProductId && !alreadyBought) {
-            a.push(products[order.itemList[i].product.upsellProductId]);
-        }
-        if (a.length >= 3) {
-            break;
-        }
-    }
+    let suggestions: Array<Product> = [];
 
-    // Fills in the list of recommendations
+    // Adds suggestions based on upsell id
+    order.itemList.forEach((item) => {
+
+        // Checks if the upsell product is already in basket
+        let alreadyBought = false;
+        order.itemList.forEach((item2) => {
+            if (item2.product._id === item.product.upsellProductId) {
+                alreadyBought = true;
+            }
+        })
+
+        // If not there is an upsell product and it is not already in basket, add it to suggestions
+        if(item.product.upsellProductId && !alreadyBought){
+            suggestions.push(products[item.product.upsellProductId]);
+        }
+
+        // Max 3 suggestions
+        if (suggestions.length >= 3) {
+            return;
+        }
+    })
+
+    // Fills in the list of recommendations with products not in the basket
     for (let p in products) {
-        if (a.length >= 3) {
+        if (suggestions.length >= 3) {
             break;
         }
         let alreadyBought = false;
-        for (let j = 0; j < order.itemList.length; j++) {
-            if (order.itemList[j].product._id === products[p]._id) {
+        order.itemList.forEach((item) => {
+            if(item.product._id === products[p]._id) {
                 alreadyBought = true;
             }
-        }
+        })
         if (!alreadyBought) {
-            a.push(products[p]);
+            suggestions.push(products[p]);
         }
     }
 
@@ -307,7 +299,7 @@ function Suggestions({
             <h2>You might also like</h2>
 
             <div className="suggestion-grid">
-                {a.map((item) => (
+                {suggestions.map((item) => (
                     <div>
 
                         <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
