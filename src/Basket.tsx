@@ -1,23 +1,24 @@
 import React, {useEffect, useState} from "react";
 import {Product, Zipcode, Item, Order} from "./types";
+import {getRebate,getTotal,getSubtotal} from "./OrderUtilityFunctions";
 import minus from "./assets/trashCan.png";
 import question from "./assets/question-mark.png";
 
 // Dictionary of products
 let products: { [id: string] : Product } = {};
 
-export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number}) {
+export function Basket({order,setOrder}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void}) {
     const [show,setShowRebate] = useState<{ showRebate:boolean; product?:Product;pos:{x:number;y:number} }>({showRebate:false,product:undefined,pos:{x:0,y:0}});
 
     useEffect( () => {
             async function fetchProducts() {
-                const URL = "https://raw.githubusercontent.com/larsthorup/checkout-data/main/product-v2.json";
+                const URL = "http://130.225.170.79:8080/products";
 
                 try {
                     const response = await fetch(URL);
                     const result = (await response.json()) as Product[];
                     result.map(
-                        (p) => (products[p.id] = p)
+                        (p) => (products[p._id] = p)
                     );
                     console.log(result);
                 } catch (e) {
@@ -46,13 +47,7 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
         }
     }
 
-    function calculateSubtotal() {
-        let subtotal : number = 0;
-        order.itemList.map(
-            (item) => (subtotal += (item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity))
-        )
-        return subtotal;
-    }
+
 
     if (order.itemList.length === 0) {
         return <div>
@@ -75,13 +70,13 @@ export function Basket({order,setOrder,getTotal}:{order:{itemList:Item[],recurri
     </div>
     <div>
         <div className="grand-total">
-        <p>Sub-total: {calculateSubtotal().toFixed(2)} {order.itemList[0]?.product.currency}</p>
+        <p>Sub-total: {getSubtotal(order).toFixed(2)} {order.itemList[0]?.product.currency}</p>
         </div>
         <div className="grand-total">
-        <p>Discount: {(calculateSubtotal()-getTotal()).toFixed(2)} {order.itemList[0]?.product.currency}</p>
+        <p>Discount: {(getSubtotal(order)-getTotal(order)).toFixed(2)} {order.itemList[0]?.product.currency}</p>
         </div>
         <div className="grand-total">
-        <h2>GRAND TOTAL: {getTotal().toFixed(2)} {order.itemList[0]?.product.currency}</h2>
+        <h2>GRAND TOTAL: {getTotal(order).toFixed(2)} {order.itemList[0]?.product.currency}</h2>
         </div>
     </div>
 
@@ -116,7 +111,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
     function changeGiftWrapped(item: Item) {
         let newItems = order.itemList.map(e => e);
         for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product.id === item.product.id) {
+            if (order.itemList[i].product._id === item.product._id) {
                 newItems[i].giftWrap = !newItems[i].giftWrap
             }
         }
@@ -126,7 +121,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
     function less(item: Item) {
         let newItems = order.itemList.map(e => e);
         for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product.id === item.product.id && order.itemList[i].quantity > 0) {
+            if (order.itemList[i].product._id === item.product._id && order.itemList[i].quantity > 0) {
                 newItems[i].quantity--;
             }
         }
@@ -136,7 +131,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
     function more(item: Item) {
         let newItems = order.itemList.map(e => e);
         for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product.id === item.product.id) {
+            if (order.itemList[i].product._id === item.product._id) {
                 newItems[i].quantity++;
                 if(newItems[i].quantity>100){
                     newItems[i].quantity=100;
@@ -149,7 +144,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
     function removeItem(item: Item) {
         let newItems = order.itemList.map(e => e);
         for (let i = 0; i < order.itemList.length; i++) {
-            if (order.itemList[i].product.id === item.product.id) {
+            if (order.itemList[i].product._id === item.product._id) {
                 if (i === 0) {
                     newItems.shift();
                 } else {
@@ -212,7 +207,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                                 <p title="removeItem" className="minus-button" onClick={()=>removeItem(item)}>Remove Item</p>
                             </div>
                         </div>
-                        <div className="grid-item">{calculateRebate(item)}%
+                        <div className="grid-item">{getRebate(item)}%
                             <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
                                  onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
                                                                                         className="question-img"/></div>
@@ -224,7 +219,7 @@ function BasketGrid({order,setOrder,show,setShowRebate}: {order:{itemList:Item[]
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
                         <div
-                            className="grid-item">{(item.product.price * (1 - calculateRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                            className="grid-item">{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
                         <div className="grid-item" style={{justifySelf:"center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
@@ -259,7 +254,7 @@ function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boole
     for(let i=0;i<order.itemList.length;i++){
         let alreadyBought=false;
             for(let j=0;j<order.itemList.length;j++){
-                if(order.itemList[j].product.id === order.itemList[i].product.upsellProductId){
+                if(order.itemList[j].product._id === order.itemList[i].product.upsellProductId){
                     alreadyBought=true;
                 }
             }
@@ -278,7 +273,7 @@ function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boole
         }
         let alreadyBought=false;
         for(let j=0;j<order.itemList.length;j++){
-            if(order.itemList[j].product.id === products[p].id){
+            if(order.itemList[j].product._id === products[p]._id){
                 alreadyBought=true;
             }
         }
@@ -314,8 +309,4 @@ function Suggestions( {order, setOrder}: {order:{itemList:Item[],recurring:boole
     );
 }
 
-function calculateRebate(item: Item) {
-    if (item.quantity >= item.product.rebateQuantity && item.product.rebateQuantity != 0) {
-        return item.product.rebatePercent;
-    } else return 0;
-}
+

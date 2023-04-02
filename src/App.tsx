@@ -3,8 +3,10 @@ import './App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
-import {Order, OrderInfo,} from "./types";
+import {Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
+import {OrderBox} from "./OrderBox";
+
 
 
 function App() {
@@ -35,40 +37,31 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"));
     }
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-    function getTotal() {
-
-        let total: number = 0;
-        let total2: number = 0;
-        order.itemList.forEach( p => {if(p.quantity>=p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
-        else {total += p.product.price * p.quantity;}
-            total2=total
-            if (total2 > 300) {
-                total2 = total * 0.9;
-            }
-        })
-        return total2;
-
-    }
     return (
         <div>
-        <div className= "header-logo">
-            <img src={Logo} width="250px"/>
+            <div className= "header-logo">
+                <img src={Logo} width="175px"/>
 
-        </div>
-<div className="content">
+            </div>
+            <div className="content">
                 <div className="page-grid">
+                    {page === "delivery" && (
                     <div className="basket">
                         <Basket
                         order={order}
-                        setOrder={setOrder}
-                        getTotal={getTotal}/>
+                        setOrder={setOrder}/>
                     </div>
+                    )}
+                    {page==="payment" && (
+                        <div className="basket">
+                            <OrderBox
+                                order={order}
+                                />
+                        </div>)}
                     {page === "delivery" && (
                     <div className="delivery">
                         <Delivery
                             order={order}
-                            setOrder={setOrder}
-                            getTotal={getTotal}
                             setOrderInfo={setOrderInfo}
                             navigateToPayment={navigateToPayment}
                         />
@@ -81,11 +74,12 @@ function App() {
                         </div>)}
 
                 </div>
-</div>
+            </div>
         </div>
 
     )
 }
+
 
 
 

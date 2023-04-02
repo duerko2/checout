@@ -1,7 +1,7 @@
 export type {Product, Zipcode, Item, Order, PurchaseInfo, OrderInfo};
 
 type Product = {
-    id: string;
+    _id: string;
     name: string;
     price: number;
     currency: string;

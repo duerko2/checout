@@ -1,10 +1,11 @@
 import {Item, Order, Product, Zipcode, PurchaseInfo, OrderInfo} from "./types";
 import React, {FormEvent, useEffect, useState} from "react";
+import {getTotal} from "./OrderUtilityFunctions";
 
 
 
 
-export function Delivery({order,setOrder,getTotal,setOrderInfo,navigateToPayment}:{order:{itemList:Item[],recurring:boolean},setOrder:(order:{itemList:Item[],recurring:boolean})=>void,getTotal:()=>number,setOrderInfo:(orderInfo:OrderInfo)=>void,navigateToPayment: ()=> void}) {
+export function Delivery({order,setOrderInfo,navigateToPayment}:{order:{itemList:Item[],recurring:boolean},setOrderInfo:(orderInfo:OrderInfo)=>void,navigateToPayment: ()=> void}) {
     const [zipcodes,setZipcodes] = useState<Zipcode[]>([]);
     const [separateBilling, setSeparateBilling] = useState<boolean>(false);
     const [cityText, setCityText] = useState<String>("");
@@ -106,7 +107,7 @@ export function Delivery({order,setOrder,getTotal,setOrderInfo,navigateToPayment
             termsAndConditions: target.termsConditions.checked,
             marketingEmails: target.marketingEmails.checked,
             order: order,
-            totalPrice : getTotal()
+            totalPrice : getTotal(order)
         });
         navigateToPayment()
 /*
