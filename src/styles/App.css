@@ -47,9 +47,9 @@
 @media (max-width: 1000px) {
     .page-grid{
         display: flex;
-        padding: 0.5em;
         justify-items: center;
         flex-direction: column;
+        padding: 0.5em;
     }
     .delivery {
         justify-self: center;
@@ -57,9 +57,10 @@
     .header-logo{
     }
     .header-logo img{
-        width: 100px;
+        width: 120px;
     }
     .content{
+        display:block;
         padding-top: 45px;
     }
 }

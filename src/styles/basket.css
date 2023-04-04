@@ -9,8 +9,8 @@
 #unit-area{
     display: flex;
 }
-.blank-grid-item{
-    width:140px;
+#blank-grid-item{
+    width:120px;
 }
 
 .product-card{
@@ -140,8 +140,11 @@ width:120px;
         height:40px;
         border-radius: 50%;
     }
+    #blank-grid-item{
+        width:40px;
+    }
     .product-grid {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: auto 2fr 1fr 1fr 1fr 1fr;
     }
     .grid-title{
         font-size: 0.8em;

@@ -60,7 +60,6 @@ textarea {
 @media (prefers-color-scheme: light) {
     .right-side-form{
         background-color: var(--card-color);
-        width:50%
     }
     .right-side-form button{
         border: 1px solid #ccc;
@@ -70,7 +69,8 @@ textarea {
 }
 @media (max-width: 1000px) {
     .right-side-form input, textarea{
-        width: 320px;
+        max-width: 400px;
+        width: 100%;
     }
     .right-side-form{
         padding: 0.5em;
