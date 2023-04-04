@@ -1,0 +1,80 @@
+.right-side-form{
+    background-color: var(--card-color-dark);
+    border-radius: 1em;
+    padding: 1em;
+    margin: 1em;
+
+    width: 400px;
+    /* Form outline */
+}
+.right-side-form ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.right-side-form li + li{
+    margin-top: 1em;
+    list-style-type: none;
+}
+.right-side-form label {
+    /* Uniform size & alignment */
+    display: contents;
+    text-align: left;
+}
+.right-side-form input,
+textarea {
+    display: flex;
+    /* To make sure that all text fields have the same font settings
+       By default, textareas have a monospace font */
+    font: 1em sans-serif;
+
+    /* Uniform text field size */
+    width: 400px;
+    box-sizing: border-box;
+
+    /* Match form field borders */
+    border: 1px solid #999;
+}
+
+.right-side-form #checkbox{
+    width:auto;
+}
+.right-side-form button{
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: var(--card-color-dark);
+}
+.right-side-form button:hover{
+    cursor: pointer;
+    background-color: #0ab100;
+    border-color:#535bf2;
+}
+
+#validZip{
+    display:none;
+}
+.accept-condition{
+    display: flex;
+}
+
+@media (prefers-color-scheme: light) {
+    .right-side-form{
+        background-color: var(--card-color);
+        width:50%
+    }
+    .right-side-form button{
+        border: 1px solid #ccc;
+        background-color: var(--card-color);
+    }
+
+}
+@media (max-width: 1000px) {
+    .right-side-form input, textarea{
+        width: 320px;
+    }
+    .right-side-form{
+        padding: 0.5em;
+        margin: 0.5em;
+        width: auto;
+    }
+}

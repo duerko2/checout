@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import "./styles/Basket.css";
 import {Item, Product} from "./types";
 import {getRebate} from "./OrderUtilityFunctions";
 import question from "./assets/question-mark.png";
@@ -163,7 +164,7 @@ function BasketGrid({
     return (<div>
             <div className="product-card">
                 <div className="product-grid">
-                    <div className="grid-title" style={{width: "140px"}}></div>
+                    <div className="grid-title" id="blank-grid-item"></div>
                     <div className="grid-title">Product</div>
                     <div className="grid-title">Discount</div>
                     <div className="grid-title">Units</div>
@@ -176,7 +177,7 @@ function BasketGrid({
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <img src={item.product.imageUrl} height={120} width={120} alt={item.product.name + " icon"}/>
+                            <img src={item.product.imageUrl} className="product-image" alt={item.product.name + " icon"}/>
                         </div>
                         <div title="itemName" style={{display: "grid", alignContent: "space-between"}}>
                             <div>
@@ -187,10 +188,10 @@ function BasketGrid({
                                     <p>Unit price: {item.product.price} {item.product.currency}</p>
                                 </div>
                                 <div>
-                                    <p>{item.product.rebateQuantity > 0 &&
-                                        <div>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}%
+                                    <div>{item.product.rebateQuantity > 0 &&
+                                        <p>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}%
                                             discount
-                                        </div>}</p>
+                                        </p>}</div>
                                 </div>
                             </div>
                             <div>
@@ -198,19 +199,19 @@ function BasketGrid({
                                     Item</p>
                             </div>
                         </div>
-                        <div className="grid-item">{getRebate(item)}%
+                        <div className="grid-item"><p>{getRebate(item)}%</p>
                             <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
                                  onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
                                                                                         className="question-img" alt={"buy "+item.product.rebateQuantity+" to get " +item.product.rebatePercent+"% discount"}/></div>
 
                         </div>
-                        <div className="grid-item" style={{display: "flex"}}>
+                        <div className="grid-item" id="unit-area">
                             <button className="unit-button" onClick={() => less(item)}>-</button>
                             <p title="units" style={{margin: "5px"}}>{item.quantity}</p>
                             <button className="unit-button" onClick={() => more(item)}>+</button>
                         </div>
                         <div
-                            className="grid-item">{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                            className="grid-item"><p>{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</p></div>
                         <div className="grid-item" style={{justifySelf: "center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
@@ -300,10 +301,9 @@ function Suggestions({
             <div className="suggestion-grid">
                 {suggestions.map((item) => (
                     <div>
-
                         <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
                             <div style={{textAlign: "center"}}>
-                                <img src={item.imageUrl} height={120} width={120} alt={"Order suggestion icon for product: "+item.name}/>
+                                <img src={item.imageUrl} className="product-image" alt={"Order suggestion icon for product: "+item.name}/>
                             </div>
                             <p title="suggestion-name">{item.name}</p>
                             <p>{item.price} {item.currency}</p>

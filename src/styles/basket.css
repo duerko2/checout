@@ -1,0 +1,155 @@
+.product-grid{
+    display: grid;
+    grid-template-columns: auto 4fr 1fr 1fr 1fr 1fr;
+}
+
+.grid-item{
+    align-self:center;
+}
+#unit-area{
+    display: flex;
+}
+.blank-grid-item{
+    width:140px;
+}
+
+.product-card{
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding:3px;
+}
+.grid-title{
+    font-weight: bold;
+}
+.unit-button{
+    width: 25px;
+    height: 25px;
+    padding:0px;
+    margin:0px;
+    border:0px;
+}
+.grand-total{
+    justify-content: right;
+    display: flex;
+}
+.recurring-order{
+    justify-content: right;
+    display: flex;
+}
+.minus-button{
+    width: max-content;
+    cursor:pointer;
+    color: var(--header-color);
+}
+.minus-button:hover{
+    cursor: pointer;
+}
+.rebate-question{
+    display: inline;
+}
+.question-img{
+    height:8px;
+    width:8px;
+    filter: invert(70%);
+    padding:1px;
+    margin:2px;
+    border: 1px solid #646cffaa;
+    border-radius: 10px;
+}
+.floating-rebate-card{
+    position: absolute;
+    display: block;
+}
+.suggestion-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.suggestion-card{
+    /* Form outline */
+    padding: 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    display:block;
+    background-color: var(--card-color-dark);
+    width: 17em;
+    justify-self: center;
+}
+.suggestion-card:hover{
+    background-color: #0ab100;
+    border-color:#535bf2;
+    cursor: pointer;
+}
+.suggestions{
+    padding: 10px;
+}
+.background-box{
+    background-color: var(--card-color-dark);
+    border-radius: 1em;
+    padding: 1em;
+    margin: 1em;
+}
+.product-image{
+height:120px;
+width:120px;
+}
+
+@media (prefers-color-scheme: light) {
+    .suggestion-card{
+        background-color: var(--card-color);
+    }
+    .background-box{
+        background-color: var(--card-color);
+    }
+    .product-card {
+        border-bottom: 1px solid var(--header-color)
+    }
+}
+
+@media (max-width: 1000px) {
+
+    .background-box{
+        padding: 0.5em;
+        margin: 0.5em;
+    }
+
+    .suggestion-grid {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+    }
+    .suggestion-card{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .floating-rebate-card {
+        opacity: 100%;
+    }
+
+    .question-img {
+        display: none;
+    }
+    .product-image{
+        width:40px;
+        height:40px;
+        border-radius: 50%;
+    }
+    .product-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+    .grid-title{
+        font-size: 0.8em;
+    }
+    #unit-area{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+}

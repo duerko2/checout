@@ -68,3 +68,26 @@ button:focus-visible {
   }
 
 }
+@media (max-width: 1000px) {
+  :root{
+    font-size: 12px;
+    transform: scale(1.1);
+    transform-origin: 0 0;
+  }
+  h1 {
+    font-size: 1.6em;
+    line-height: 1.05;
+  }
+  h2 {
+    font-size: 1.4em;
+    line-height: 1.1;
+  }
+  h3 {
+    font-size: 1.2em;
+    line-height: 1.1;
+  }
+  p{
+    font-size: 0.7em;
+  }
+}
+

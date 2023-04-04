@@ -1,4 +1,16 @@
-export type {Product, Zipcode, Item, Order, PurchaseInfo, OrderInfo};
+export type {Product, Zipcode, Item, Order, PurchaseInfo, OrderInfo, Address};
+
+type Address = {
+    name: string;
+    phone: string;
+    email: string;
+    address: string;
+    zip: string;
+    city: string;
+    country: string;
+    company: string;
+    VAT: string;
+}
 
 type Product = {
     _id: string;

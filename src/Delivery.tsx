@@ -1,4 +1,5 @@
 import {Item, OrderInfo, Zipcode} from "./types";
+import "./styles/delivery.css";
 import React, {FormEvent, useEffect, useState} from "react";
 import {getTotal} from "./OrderUtilityFunctions";
 
