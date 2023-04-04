@@ -33,7 +33,7 @@ function OrderItems({order}: { order: Order }) {
     return (<div>
             <div className="product-card">
                 <div className="product-grid">
-                    <div className="grid-title" style={{width: "140px"}}></div>
+                    <div className="grid-title" id="blank-grid-item"></div>
                     <div className="grid-title">Product</div>
                     <div className="grid-title">Discount</div>
                     <div className="grid-title">Units</div>
@@ -46,7 +46,7 @@ function OrderItems({order}: { order: Order }) {
                 <div className="product-card">
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
-                            <img src={item.product.imageUrl} height={120} width={120}/>
+                            <img src={item.product.imageUrl} className="product-image" alt={item.product.name + " icon"}/>
                         </div>
                         <div title="itemName" style={{display: "grid", alignContent: "space-between"}}>
                             <div>
@@ -58,13 +58,13 @@ function OrderItems({order}: { order: Order }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="grid-item">{getRebate(item)}%
+                        <div className="grid-item"><p>{getRebate(item)}%</p>
                         </div>
-                        <div className="grid-item" style={{display: "flex"}}>
+                        <div className="grid-item" id="unit-area">
                             <p title="units" style={{margin: "5px"}}>{item.quantity}</p>
                         </div>
                         <div
-                            className="grid-item">{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</div>
+                            className="grid-item"><p>{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</p></div>
                         <div className="grid-item" style={{justifySelf: "center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" readOnly={true} checked={item.giftWrap}/>
