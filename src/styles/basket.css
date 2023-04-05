@@ -1,6 +1,7 @@
 .product-grid{
     display: grid;
     grid-template-columns: auto 4fr 1fr 1fr 1fr 1fr;
+    column-gap: 5px;
 }
 
 .grid-item{
@@ -154,5 +155,8 @@ width:120px;
         flex-direction: column-reverse;
         align-items: center;
     }
-
+    .unit-button{
+        width: 15px;
+        height: 15px;
+    }
 }
