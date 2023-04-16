@@ -6,14 +6,17 @@ import {Delivery} from "./Delivery";
 
 function App() {
     return (
-        <div className="page-grid">
-            <div className="basket">
-                <Basket/>
+
+
+            <div className="page-grid">
+                <div className="basket">
+                    <Basket/>
+                </div>
+                <div className="delivery">
+                    <Delivery/>
+                </div>
             </div>
-            <div className="delivery">
-                <Delivery/>
-            </div>
-        </div>
+
     )
 }
 
