@@ -1,6 +1,6 @@
 import {OrderInfo} from "./types";
 import {FormEvent, useState} from "react";
-import "./styles/delivery.css";
+import "./styles/Delivery.css";
 
 
 export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
