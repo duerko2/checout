@@ -27,7 +27,6 @@ p{
 
 body {
   margin: 0;
-  display: flex;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -67,4 +66,26 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+
 }
+@media (max-width: 1000px) {
+  :root{
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 1.6em;
+    line-height: 1.05;
+  }
+  h2 {
+    font-size: 1.4em;
+    line-height: 1.1;
+  }
+  h3 {
+    font-size: 1.2em;
+    line-height: 1.1;
+  }
+  p{
+    font-size: 0.7em;
+  }
+}
+
