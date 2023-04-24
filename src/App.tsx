@@ -9,6 +9,7 @@ import {OrderBox} from "./OrderBox";
 
 
 function App() {
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState("delivery");
     const [navigating, setNavigating] = useState(true);
     const [order, setOrder] = useState<Order>({itemList: [], recurring: false});
@@ -43,7 +44,17 @@ function App() {
         totalPrice: 0
     });
 
+
     useEffect(() => {
+
+        function simulateLoading() {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 3000);
+        }
+
+        simulateLoading();
+
         function popstateHandler() {
             const url = new URLSearchParams(window.location.search);
             const urlPage = url.get("page");
@@ -68,44 +79,65 @@ function App() {
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-    return (
-        <div>
-            <div className="header-logo">
-                <img src={Logo} width="175px"/>
 
-            </div>
-            <div className="content">
-                <div className="page-grid">
-                    {page === "delivery" && (
-                        <div className="basket">
-                            <Basket
-                                order={order}
-                                setOrder={setOrder}/>
-                        </div>
-                    )}
-                    {page === "payment" && (
-                        <div className="basket">
-                            <OrderBox
-                                order={order}
-                            />
-                        </div>)}
-                    {page === "delivery" && (
-                        <div className="delivery">
-                            <Delivery
-                                order={order}
-                                setOrderInfo={setOrderInfo}
-                                navigateToPayment={navigateToPayment}
-                            />
-                        </div>)}
-                    {page === "payment" && (
-                        <div className="delivery">
-                            <Payment
-                                orderInfo={orderInfo}
-                            />
-                        </div>)}
+
+    function AppContent() {
+        return (
+            <div>
+                <div className="header-logo">
+                    <img src={Logo} width="175px"/>
 
                 </div>
+                <div className="content">
+                    <div className="page-grid">
+                        {page === "delivery" && (
+                            <div className="basket">
+                                <Basket
+                                    order={order}
+                                    setOrder={setOrder}/>
+                            </div>
+                        )}
+                        {page === "payment" && (
+                            <div className="basket">
+                                <OrderBox
+                                    order={order}
+                                />
+                            </div>)}
+                        {page === "delivery" && (
+                            <div className="delivery">
+                                <Delivery
+                                    order={order}
+                                    setOrderInfo={setOrderInfo}
+                                    navigateToPayment={navigateToPayment}
+                                />
+                            </div>)}
+                        {page === "payment" && (
+                            <div className="delivery">
+                                <Payment
+                                    orderInfo={orderInfo}
+                                />
+                            </div>)}
+
+                    </div>
+                </div>
             </div>
+        );
+    }
+
+    return (
+        <div>
+            <div className="container">
+                {isLoading ? (
+                    <div className="loader-container">
+                        <div className="spinner"></div>
+                    </div>
+                ) : (
+                    <React.StrictMode>
+                        <AppContent />
+                    </React.StrictMode>
+                )}
+            </div>
+            );
         </div>
 
     )
