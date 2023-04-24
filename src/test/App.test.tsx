@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import {fireEvent, render, screen} from "@testing-library/react";
+import {describe, expect, it, test} from "vitest";
 import React from "react";
 import Delivery from "../App";
 
@@ -12,5 +12,6 @@ describe(Delivery.name, () => {
             { name: /Go To Payment/i }
         )).toBeInTheDocument();
     });
+
 });
 
