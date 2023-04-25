@@ -17,13 +17,13 @@ export function Delivery({
     const [billingZipVisible, setBillingZipVisible] = useState<Boolean>(false);
 
 
-    function checkZip(Inputzip: string) {
-        if (Inputzip === "") {
+    function checkZip(inputZip: string) {
+        if (inputZip === "") {
             setZipVisible(false);
             setCityText("");
         } else {
             for (let zipcode of zipcodes) {
-                if (Inputzip === zipcode.nr) {
+                if (inputZip === zipcode.nr) {
                     setCityText(zipcode.navn);
                     setZipVisible(false);
                     break;
@@ -95,15 +95,15 @@ export function Delivery({
             },
             separateBilling: target.separateBilling.checked,
             billing: {
-                billingAddress: target.billingAddress?.value ?? "",
-                billingCity: target.billingCity?.value ?? "",
-                billingCompany: target.billingCompany?.value ?? "",
-                billingCountry: target.billingCountry?.value ?? "",
-                billingEmail: target.billingEmail?.value ?? "",
-                billingName: target.billingName?.value ?? "",
-                billingPhone: target.billingPhone?.value ?? "",
-                billingVAT: target.billingVAT?.value ?? "",
-                billingZip: target.billingZip?.value ?? "",
+                address: target.billingAddress?.value ?? "",
+                city: target.billingCity?.value ?? "",
+                company: target.billingCompany?.value ?? "",
+                country: target.billingCountry?.value ?? "",
+                email: target.billingEmail?.value ?? "",
+                name: target.billingName?.value ?? "",
+                phone: target.billingPhone?.value ?? "",
+                VAT: target.billingVAT?.value ?? "",
+                zip: target.billingZip?.value ?? "",
             },
             comment: target.comment?.value ?? "",
             termsAndConditions: target.termsConditions.checked,
@@ -111,18 +111,8 @@ export function Delivery({
             order: order,
             totalPrice: getTotal(order)
         });
+        console.log(order);
         navigateToPayment()
-        /*
-                const body =JSON.stringify(order);
-                console.log(body);
-
-                const URL = "https://eo81kffsyk5suvw.m.pipedream.net"
-                const response = await fetch(URL, {
-                    method: "POST", headers: {"content-type": "application/Json"}, body: body
-                });
-                console.log(response);
-                console.log(response.json())
-              */
     }
 
 

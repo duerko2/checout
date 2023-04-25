@@ -3,9 +3,9 @@ import './styles/App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
-import {Item, Order, OrderInfo,} from "./types";
+import {Address, Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
-import {OrderBox} from "./OrderBox";
+import {PaymentBasket} from "./PaymentBasket";
 
 
 function App() {
@@ -13,29 +13,9 @@ function App() {
     const [navigating, setNavigating] = useState(true);
     const [order, setOrder] = useState<Order>({itemList: [], recurring: false});
     const [orderInfo, setOrderInfo] = useState<OrderInfo>({
-        delivery: {
-            name: "",
-            phone: "",
-            email: "",
-            address: "",
-            zip: "",
-            city: "",
-            country: "",
-            company: "",
-            VAT: ""
-        },
+        delivery: emptyAddress,
         separateBilling: false,
-        billing: {
-            billingAddress: "",
-            billingCity: "",
-            billingCompany: "",
-            billingCountry: "",
-            billingEmail: "",
-            billingName: "",
-            billingPhone: "",
-            billingVAT: "",
-            billingZip: ""
-        },
+        billing: emptyAddress,
         comment: "",
         termsAndConditions: false,
         marketingEmails: false,
@@ -75,41 +55,53 @@ function App() {
 
             </div>
             <div className="content">
-                <div className="page-grid">
-                    {page === "delivery" && (
+                {page === "delivery" && (
+                    <div className="page-grid">
                         <div className="basket">
                             <Basket
                                 order={order}
                                 setOrder={setOrder}/>
                         </div>
-                    )}
-                    {page === "payment" && (
-                        <div className="basket">
-                            <OrderBox
-                                order={order}
-                            />
-                        </div>)}
-                    {page === "delivery" && (
                         <div className="delivery">
                             <Delivery
                                 order={order}
                                 setOrderInfo={setOrderInfo}
                                 navigateToPayment={navigateToPayment}
                             />
-                        </div>)}
-                    {page === "payment" && (
+                        </div>
+                    </div>
+                )}
+                {page === "payment" && (
+                    <div className="page-grid">
+                        <div className="basket">
+                            <PaymentBasket
+                                order={order}
+                            />
+                        </div>
                         <div className="delivery">
                             <Payment
                                 orderInfo={orderInfo}
                             />
-                        </div>)}
-
-                </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
 
     )
 }
 
+
+const emptyAddress : Address = {
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    zip: "",
+    city: "",
+    country: "",
+    company: "",
+    VAT: ""
+}
 
 export default App
