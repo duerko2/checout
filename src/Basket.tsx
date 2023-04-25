@@ -27,7 +27,6 @@ export function Basket({
                     result.map(
                         (p) => (products[p._id] = p)
                     );
-                    console.log(result);
                 } catch (e) {
                     console.log(e)
                 }
