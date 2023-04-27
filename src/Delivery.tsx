@@ -165,6 +165,11 @@ export function Delivery({
                            required={true}/>
                 </li>
                 <li>
+                    <label htmlFor="country">Country:
+                        <input type="text" id="country" name="country" value="Denmark" readOnly={true} required={true}/>
+                    </label>
+                </li>
+                <li>
                     <label htmlFor="address">Address: </label>
                     <textarea name="address" aria-label="address" rows={2} required={true}
                               placeholder="Address"></textarea>
@@ -183,11 +188,7 @@ export function Delivery({
                                value={cityText.valueOf()}/>
                     </label>
                 </li>
-                <li>
-                    <label htmlFor="country">Country:
-                        <input type="text" id="country" name="country" value="Denmark" readOnly={true} required={true}/>
-                    </label>
-                </li>
+
                 <li>
                     <label htmlFor="Company Name">Company:
                         <input type="text" id="company" name="company" placeholder="Company"/>
@@ -226,6 +227,12 @@ export function Delivery({
                         </label>
                     </li>
                     <li>
+                        <label htmlFor="billingCountry">Country:
+                            <input type="text" id="billingCountry" name="billingCountry" value="Denmark" readOnly={true}
+                                   required={separateBilling}/>
+                        </label>
+                    </li>
+                    <li>
                         <label htmlFor="billingAddress">Address:
                             <textarea name="billingAddress" aria-label="billingAddress" rows={2}
                                       required={separateBilling} placeholder="Address"></textarea>
@@ -243,12 +250,6 @@ export function Delivery({
                         <label htmlFor="billingCity">City:
                             <input type="text" id="billingCity" name="billingCity" placeholder="City" readOnly={true}
                                    required={separateBilling} value={billingCityText.valueOf()}/>
-                        </label>
-                    </li>
-                    <li>
-                        <label htmlFor="billingCountry">Country:
-                            <input type="text" id="billingCountry" name="billingCountry" value="Denmark" readOnly={true}
-                                   required={separateBilling}/>
                         </label>
                     </li>
                     <li>
