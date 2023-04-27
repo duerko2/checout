@@ -55,6 +55,10 @@ function App() {
 
         simulateLoading();
 
+    }, [])
+
+    useEffect(() => {
+
         function popstateHandler() {
             const url = new URLSearchParams(window.location.search);
             const urlPage = url.get("page");
@@ -79,7 +83,6 @@ function App() {
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-
 
     function AppContent() {
         return (
@@ -117,7 +120,6 @@ function App() {
                                     orderInfo={orderInfo}
                                 />
                             </div>)}
-
                     </div>
                 </div>
             </div>
@@ -139,11 +141,8 @@ function App() {
             </div>
             );
         </div>
-
     )
 }
-
-
 
 
 export default App
