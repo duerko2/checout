@@ -43,11 +43,13 @@ describe("APIs", () => {
         await user.type(screen.getByRole("textbox", {name: /zip/i}), "2500");
         await user.click(screen.getByRole("checkbox", {name: /termsConditions/i}))
         expect(screen.getByRole("checkbox", {name: /termsConditions/i})).toBeChecked();
-
+        /*
         await new Promise(r => setTimeout(r, 500));
         const form : HTMLFormElement= screen.getByRole("form", {name: /deliveryForm/i});
-        //fireEvent.submit(form);
-        //await new Promise(r => setTimeout(r, 1500));
+        fireEvent.submit(form);
+        await new Promise(r => setTimeout(r, 1500));
+
+         */
 
 
 

@@ -17,13 +17,13 @@ export function Delivery({
     const [billingZipVisible, setBillingZipVisible] = useState<Boolean>(false);
 
 
-    function checkZip(Inputzip: string) {
-        if (Inputzip === "") {
+    function checkZip(inputZip: string) {
+        if (inputZip === "") {
             setZipVisible(false);
             setCityText("");
         } else {
             for (let zipcode of zipcodes) {
-                if (Inputzip === zipcode.nr) {
+                if (inputZip === zipcode.nr) {
                     setCityText(zipcode.navn);
                     setZipVisible(false);
                     break;
@@ -77,7 +77,6 @@ export function Delivery({
             billingVAT?: { value: string },
             billingZip?: { value: string },
         }
-        console.log(e);
         console.log(target.name.value);
 
 
@@ -95,15 +94,15 @@ export function Delivery({
             },
             separateBilling: target.separateBilling.checked,
             billing: {
-                billingAddress: target.billingAddress?.value ?? "",
-                billingCity: target.billingCity?.value ?? "",
-                billingCompany: target.billingCompany?.value ?? "",
-                billingCountry: target.billingCountry?.value ?? "",
-                billingEmail: target.billingEmail?.value ?? "",
-                billingName: target.billingName?.value ?? "",
-                billingPhone: target.billingPhone?.value ?? "",
-                billingVAT: target.billingVAT?.value ?? "",
-                billingZip: target.billingZip?.value ?? "",
+                address: target.billingAddress?.value ?? "",
+                city: target.billingCity?.value ?? "",
+                company: target.billingCompany?.value ?? "",
+                country: target.billingCountry?.value ?? "",
+                email: target.billingEmail?.value ?? "",
+                name: target.billingName?.value ?? "",
+                phone: target.billingPhone?.value ?? "",
+                VAT: target.billingVAT?.value ?? "",
+                zip: target.billingZip?.value ?? "",
             },
             comment: target.comment?.value ?? "",
             termsAndConditions: target.termsConditions.checked,
@@ -111,18 +110,8 @@ export function Delivery({
             order: order,
             totalPrice: getTotal(order)
         });
+        console.log(order);
         navigateToPayment()
-        /*
-                const body =JSON.stringify(order);
-                console.log(body);
-
-                const URL = "https://eo81kffsyk5suvw.m.pipedream.net"
-                const response = await fetch(URL, {
-                    method: "POST", headers: {"content-type": "application/Json"}, body: body
-                });
-                console.log(response);
-                console.log(response.json())
-              */
     }
 
 
@@ -148,23 +137,23 @@ export function Delivery({
         <form aria-label="deliveryForm" name="delivery" onSubmit={postOrder}>
             <h3>Delivery information</h3>
             <ul>
-                <li>
+                <li key="name">
                     <label htmlFor="name">Name:
                         <input type="text" id="name" name="name" placeholder="Name" required={true}/>
                     </label>
                 </li>
-                <li>
+                <li key="phone">
                     <label htmlFor="phone">Phone: </label>
                     <input type="text" id="phone" name="phone" pattern="((\+[0-9]{2}[0-9]{8}))|([0-9]{8})"
                            placeholder="00000000" required={true}
                            title="Please enter valid phone number"/>
                 </li>
-                <li>
+                <li key="email">
                     <label htmlFor="email">E-mail: </label>
                     <input role="text" type="email" id="email" name="email" placeholder="eksempel@eksempel.dk"
                            required={true}/>
                 </li>
-                <li>
+                <li key="country">
                     <label htmlFor="country">Country:
                         <input type="text" id="country" name="country" value="Denmark" readOnly={true} required={true}/>
                     </label>
@@ -174,7 +163,7 @@ export function Delivery({
                     <textarea name="address" aria-label="address" rows={2} required={true}
                               placeholder="Address"></textarea>
                 </li>
-                <li>
+                <li key="zip">
                     <label htmlFor="zip">Zip:
                         <input type="text" id="zip" name="zip" placeholder="Zip"
                                onChange={(e) => checkZip(e.target.value)}
@@ -182,7 +171,7 @@ export function Delivery({
                     </label>
                     <p id="validZip" style={{display: zipVisible ? "block" : "none"}}>Not a valid zip</p>
                 </li>
-                <li>
+                <li key="city">
                     <label htmlFor="city">City:
                         <input type="text" id="city" name="city" placeholder="City" readOnly={true} required={true}
                                value={cityText.valueOf()}/>
@@ -194,12 +183,12 @@ export function Delivery({
                         <input type="text" id="company" name="company" placeholder="Company"/>
                     </label>
                 </li>
-                <li>
+                <li key="vat">
                     <label htmlFor="VAT">VAT:
                         <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </label>
                 </li>
-                <li className="accept-condition">
+                <li className="accept-condition" key="seperateBilling">
                     <label htmlFor="separateBilling">
                         <input type="checkbox" id="checkbox" name="separateBilling"
                                onChange={() => setSeparateBilling(!separateBilling)}/>
@@ -207,38 +196,38 @@ export function Delivery({
                 </li>
                 <div style={{display: separateBilling ? "block" : "none"}}>
                     <h3>Billing Address</h3>
-                    <li>
+                    <li key="billingName">
                         <label htmlFor="billingName">Name:
                             <input type="text" id="billingName" name="billingName" placeholder="Name"
                                    required={separateBilling}/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingPhone">
                         <label htmlFor="billingPhone">Phone:
                             <input type="text" id="billingPhone" name="billingPhone" pattern="\+{1}[0-9]{10}|[0-9]{8}"
                                    placeholder="0000000" required={separateBilling}
                                    title="Please enter valid phone number"/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingEmail">
                         <label htmlFor="billingEmail">E-mail:
                             <input type="email" id="billingEmail" name="billingEmail" placeholder="eksempel@eksempel.dk"
                                    required={separateBilling}/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingCountry">
                         <label htmlFor="billingCountry">Country:
                             <input type="text" id="billingCountry" name="billingCountry" value="Denmark" readOnly={true}
                                    required={separateBilling}/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingAddress">
                         <label htmlFor="billingAddress">Address:
                             <textarea name="billingAddress" aria-label="billingAddress" rows={2}
                                       required={separateBilling} placeholder="Address"></textarea>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingZip">
                         <label htmlFor="billingZip">Zip:
                             <input type="text" id="billingZip" name="billingZip" placeholder="Zip"
                                    onChange={(e) => checkBillingZip(e.target.value)}
@@ -246,42 +235,42 @@ export function Delivery({
                         </label>
                         <p id="validZip" style={{display: billingZipVisible ? "block" : "none"}}>Not a valid zip</p>
                     </li>
-                    <li>
+                    <li key="billingCity">
                         <label htmlFor="billingCity">City:
                             <input type="text" id="billingCity" name="billingCity" placeholder="City" readOnly={true}
                                    required={separateBilling} value={billingCityText.valueOf()}/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingCompanyName">
                         <label htmlFor="billingCompanyName">Company:
                             <input type="text" id="company" name="billingCompanyName" placeholder="Company"/>
                         </label>
                     </li>
-                    <li>
+                    <li key="billingVAT">
                         <label htmlFor="billingVAT">VAT:
                             <input type="text" id="vat" name="billingVAT" placeholder="00000000"
                                    pattern="\+{1}[0-9]{10}|[0-9]{8}"/>
                         </label>
                     </li>
                 </div>
-                <li className="accept-condition" style={{marginTop: "1em"}}>
+                <li className="accept-condition" style={{marginTop: "1em"}} key="termsConditions">
                     <label htmlFor="termsConditions">
                         <input name="termsConditions" aria-label="termsConditions" type="checkbox" id="checkbox"
                                required={true}/>
                         I accept terms & conditions</label>
                 </li>
-                <li className="accept-condition">
+                <li className="accept-condition" key="marketingEmails">
                     <label htmlFor="marketingEmails">
                         <input name="marketingEmails" type="checkbox" id="checkbox"/>
                         I accept to receive marketing emails</label>
                 </li>
-                <li>
+                <li key="comment">
                     <label htmlFor="comment">Comment</label>
                     <textarea name="comment" rows={4}>
                     </textarea>
                 </li>
 
-                <li className="button">
+                <li className="button" key="submit">
                     <button type="submit" name="submit">Go to payment</button>
                 </li>
             </ul>

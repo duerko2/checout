@@ -37,11 +37,6 @@ describe(Basket.name, () => {
 
         // Get all items
         const items: HTMLElement[] = (await screen.findAllByTitle("itemName"));
-        console.log('------')
-        screen.debug(items[0])
-        screen.debug(items[1])
-        screen.debug(items[2])
-        console.log('------')
         expect(items).toHaveLength(2)
 
         // Check the item has been removed from the list of items now displayed.

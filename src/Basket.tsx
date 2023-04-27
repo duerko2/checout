@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import "./styles/Basket.css";
 import {Item, Product} from "./types";
-import {getRebate} from "./OrderUtilityFunctions";
-import question from "./assets/question-mark.png";
 import {OrderSummary} from "./OrderSummary";
+import {BasketGrid} from "./BasketGrid";
 
 // Dictionary of products
 let products: { [id: string]: Product } = {};
@@ -28,7 +27,6 @@ export function Basket({
                     result.map(
                         (p) => (products[p._id] = p)
                     );
-                    console.log(result);
                 } catch (e) {
                     console.log(e)
                 }
@@ -67,6 +65,7 @@ export function Basket({
                     setOrder={setOrder}
                     show={show}
                     setShowRebate={setShowRebate}
+                    editable={true}
                 />
                 <div>
                     <p>
@@ -82,14 +81,6 @@ export function Basket({
                     </label>
                 </div>
             </div>
-
-            <div>
-                <ShowRebate
-                    showRebate={show.showRebate}
-                    product={show.product}
-                    pos={show.pos}
-                />
-            </div>
             <div className="background-box">
                 <Suggestions
                     order={order}
@@ -99,148 +90,6 @@ export function Basket({
         </div>
     )
 }
-
-function BasketGrid({
-                        order,
-                        setOrder,
-                        show,
-                        setShowRebate
-                    }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void, show: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }, setShowRebate: (show: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }) => void }) {
-
-
-    function changeGiftWrapped(item: Item) {
-        const itemIndex = order.itemList.indexOf(item)
-        const newItems = order.itemList.map(e => e);
-        newItems[itemIndex].giftWrap = !newItems[itemIndex].giftWrap;
-
-        setOrder({itemList: newItems, recurring: order.recurring});
-    }
-
-    function less(item: Item) {
-        // Guard clause
-        if (item.quantity === 0) return;
-
-        const itemIndex = order.itemList.indexOf(item)
-        const newItems = order.itemList.map(e => e);
-        newItems[itemIndex].quantity--;
-
-        setOrder({itemList: newItems, recurring: order.recurring});
-    }
-
-    function more(item: Item) {
-        // Guard clause
-        if (item.quantity >= 100) return;
-
-        const itemIndex = order.itemList.indexOf(item)
-        const newItems = order.itemList.map(e => e);
-        newItems[itemIndex].quantity++;
-
-        setOrder({itemList: newItems, recurring: order.recurring});
-    }
-
-    function removeItem(item: Item) {
-        const newItems = order.itemList.filter(e => e.product._id !== item.product._id)
-
-        setOrder({itemList: newItems, recurring: order.recurring});
-    }
-
-    function showRebateItem(item: Item, event: React.MouseEvent<HTMLDivElement>) {
-        const x = event.pageX;
-        const y = event.pageY
-        if (show.pos.y === 0 && show.pos.x === 0) {
-            setShowRebate({showRebate: true, product: item.product, pos: {x: x, y: y}})
-
-        }
-    }
-
-    function unshowRebateItem(event: React.MouseEvent<HTMLDivElement>) {
-        const x = event.pageX;
-        const y = event.pageY
-        if (show.pos.x != x && show.pos.y != y) {
-            setShowRebate({showRebate: false, product: undefined, pos: {x: 0, y: 0}})
-        }
-    }
-
-    return (<div>
-            <div className="product-card">
-                <div className="product-grid">
-                    <div className="grid-title" id="blank-grid-item"></div>
-                    <div className="grid-title">Product</div>
-                    <div className="grid-title">Discount</div>
-                    <div className="grid-title">Units</div>
-                    <div className="grid-title">Line price</div>
-                    <div className="grid-title">Gift Wrapped</div>
-                </div>
-            </div>
-
-            {order.itemList.map((item) => (
-                <div className="product-card">
-                    <div className="product-grid">
-                        <div className="grid-item" id="minus-thing">
-                            <img src={item.product.imageUrl} className="product-image" alt={item.product.name + " icon"}/>
-                        </div>
-                        <div title="itemName" style={{display: "grid", alignContent: "space-between"}}>
-                            <div>
-                                <div>
-                                    <p><b>{item.product.name}</b></p>
-                                </div>
-                                <div>
-                                    <p>Unit price: {item.product.price} {item.product.currency}</p>
-                                </div>
-                                <div>
-                                    <div>{item.product.rebateQuantity > 0 &&
-                                        <p>Buy {item.product.rebateQuantity} units for {item.product.rebatePercent}%
-                                            discount
-                                        </p>}</div>
-                                </div>
-                            </div>
-                            <div>
-                                <p title="removeItem" className="minus-button" onClick={() => removeItem(item)}>Remove
-                                    Item</p>
-                            </div>
-                        </div>
-                        <div className="grid-item"><p>{getRebate(item)}%</p>
-                            <div className="rebate-question" onMouseEnter={(event) => showRebateItem(item, event)}
-                                 onMouseLeave={(event) => unshowRebateItem(event)}><img src={question}
-                                                                                        className="question-img" alt={"buy "+item.product.rebateQuantity+" to get " +item.product.rebatePercent+"% discount"}/></div>
-
-                        </div>
-                        <div className="grid-item" id="unit-area">
-                            <button className="unit-button" onClick={() => less(item)}>-</button>
-                            <p title="units" style={{margin: "5px"}}>{item.quantity}</p>
-                            <button className="unit-button" onClick={() => more(item)}>+</button>
-                        </div>
-                        <div
-                            className="grid-item"><p>{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</p></div>
-                        <div className="grid-item" style={{justifySelf: "center"}}>
-                            <label>
-                                <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)}/>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
-}
-
-function ShowRebate(state: { showRebate: boolean; product?: Product; pos: { x: number; y: number } }) {
-    if (state.showRebate && state.product && state.product.rebatePercent === 0)
-        return (
-            <div className="floating-rebate-card" style={{top: state.pos.y, left: state.pos.x}}>
-                <p>No discount on this product</p>
-            </div>
-        )
-    else if (state.showRebate && state.product)
-        return (
-            <div className="floating-rebate-card" style={{top: state.pos.y, left: state.pos.x}}>
-                <p>Buy {state.product.rebateQuantity} to get {state.product.rebatePercent}% discount</p>
-            </div>
-        );
-    else
-        return (<div></div>);
-}
-
 
 function Suggestions({
                          order,

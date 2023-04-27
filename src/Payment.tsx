@@ -47,25 +47,25 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
             <div>
                 <form onSubmit={submitOrder}>
                     <ul>
-                        <li>
+                        <li key="cardNumber">
                             <label htmlFor="cardNumber">
                                 Card number:
                                 <input type="card" name="cardNumber" required={true} pattern="[0-9]{16}"/>
                             </label>
                         </li>
-                        <li>
+                        <li key="expirationDate">
                             <label htmlFor="expirationDate">
                                 Expiration date:
                                 <input type="text" name="expirationDate" required={true}/>
                             </label>
                         </li>
-                        <li>
+                        <li key="securityCode">
                             <label htmlFor="securityCode">
                                 Security code:
                                 <input type="text" name="securityCode" required={true} pattern="[0-9]{3}"/>
                             </label>
                         </li>
-                        <li className="button">
+                        <li className="button" key="submit">
                             <button type="submit" value="Submit">Submit order</button>
                         </li>
                     </ul>

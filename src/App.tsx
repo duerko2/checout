@@ -3,39 +3,31 @@ import './styles/App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
-import {Item, Order, OrderInfo,} from "./types";
+import {Address, Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
-import {OrderBox} from "./OrderBox";
+import {PaymentBasket} from "./PaymentBasket";
 
+const emptyAddress : Address = {
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    zip: "",
+    city: "",
+    country: "",
+    company: "",
+    VAT: ""
+}
 
 function App() {
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState("delivery");
     const [navigating, setNavigating] = useState(true);
     const [order, setOrder] = useState<Order>({itemList: [], recurring: false});
     const [orderInfo, setOrderInfo] = useState<OrderInfo>({
-        delivery: {
-            name: "",
-            phone: "",
-            email: "",
-            address: "",
-            zip: "",
-            city: "",
-            country: "",
-            company: "",
-            VAT: ""
-        },
+        delivery: emptyAddress,
         separateBilling: false,
-        billing: {
-            billingAddress: "",
-            billingCity: "",
-            billingCompany: "",
-            billingCountry: "",
-            billingEmail: "",
-            billingName: "",
-            billingPhone: "",
-            billingVAT: "",
-            billingZip: ""
-        },
+        billing: emptyAddress,
         comment: "",
         termsAndConditions: false,
         marketingEmails: false,
@@ -43,7 +35,17 @@ function App() {
         totalPrice: 0
     });
 
+
     useEffect(() => {
+
+        function simulateLoading() {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 3000);
+        }
+
+        simulateLoading();
+
         function popstateHandler() {
             const url = new URLSearchParams(window.location.search);
             const urlPage = url.get("page");
@@ -68,47 +70,68 @@ function App() {
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-    return (
-        <div>
-            <div className="header-logo">
-                <img src={Logo} width="175px"/>
 
-            </div>
-            <div className="content">
-                <div className="page-grid">
+    function AppContent() {
+        return (
+            <div>
+                <div className="header-logo">
+                    <img src={Logo} width="175px"/>
+
+                </div>
+                <div className="content">
                     {page === "delivery" && (
-                        <div className="basket">
-                            <Basket
-                                order={order}
-                                setOrder={setOrder}/>
+                        <div className="page-grid">
+                            <div className="basket">
+                                <Basket
+                                    order={order}
+                                    setOrder={setOrder}/>
+                            </div>
+                            <div className="delivery">
+                                <Delivery
+                                    order={order}
+                                    setOrderInfo={setOrderInfo}
+                                    navigateToPayment={navigateToPayment}
+                                />
+                            </div>
                         </div>
                     )}
                     {page === "payment" && (
-                        <div className="basket">
-                            <OrderBox
-                                order={order}
-                            />
-                        </div>)}
-                    {page === "delivery" && (
-                        <div className="delivery">
-                            <Delivery
-                                order={order}
-                                setOrderInfo={setOrderInfo}
-                                navigateToPayment={navigateToPayment}
-                            />
-                        </div>)}
-                    {page === "payment" && (
-                        <div className="delivery">
-                            <Payment
-                                orderInfo={orderInfo}
-                            />
-                        </div>)}
-
+                        <div className="page-grid">
+                            <div className="basket">
+                                <PaymentBasket
+                                    order={order}
+                                />
+                            </div>
+                            <div className="delivery">
+                                <Payment
+                                    orderInfo={orderInfo}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
+        );
+    }
+
+    return (
+        <div>
+            <div className="container">
+                {isLoading ? (
+                    <div className="loader-container">
+                        <div className="spinner"></div>
+                    </div>
+                ) : (
+                    <React.StrictMode>
+                        <AppContent />
+                    </React.StrictMode>
+                )}
+            </div>
+            );
         </div>
 
     )
+
 }
 
 
