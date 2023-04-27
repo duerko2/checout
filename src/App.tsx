@@ -71,49 +71,6 @@ function App() {
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
 
-    function AppContent() {
-        return (
-            <div>
-                <div className="header-logo">
-                    <img src={Logo} width="175px"/>
-
-                </div>
-                <div className="content">
-                    {page === "delivery" && (
-                        <div className="page-grid">
-                            <div className="basket">
-                                <Basket
-                                    order={order}
-                                    setOrder={setOrder}/>
-                            </div>
-                            <div className="delivery">
-                                <Delivery
-                                    order={order}
-                                    setOrderInfo={setOrderInfo}
-                                    navigateToPayment={navigateToPayment}
-                                />
-                            </div>
-                        </div>
-                    )}
-                    {page === "payment" && (
-                        <div className="page-grid">
-                            <div className="basket">
-                                <PaymentBasket
-                                    order={order}
-                                />
-                            </div>
-                            <div className="delivery">
-                                <Payment
-                                    orderInfo={orderInfo}
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div>
             <div className="container">
@@ -122,16 +79,50 @@ function App() {
                         <div className="spinner"></div>
                     </div>
                 ) : (
-                    <React.StrictMode>
-                        <AppContent />
-                    </React.StrictMode>
+                    <div>
+                        <div className="header-logo">
+                            <img src={Logo} width="175px"/>
+
+                        </div>
+                        <div className="content">
+                            {page === "delivery" && (
+                                <div className="page-grid">
+                                    <div className="basket">
+                                        <Basket
+                                            order={order}
+                                            setOrder={setOrder}/>
+                                    </div>
+                                    <div className="delivery">
+                                        <Delivery
+                                            order={order}
+                                            setOrderInfo={setOrderInfo}
+                                            navigateToPayment={navigateToPayment}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                            {page === "payment" && (
+                                <div className="page-grid">
+                                    <div className="basket">
+                                        <PaymentBasket
+                                            order={order}
+                                        />
+                                    </div>
+                                    <div className="delivery">
+                                        <Payment
+                                            orderInfo={orderInfo}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 )}
             </div>
             );
         </div>
 
     )
-
 }
 
 
