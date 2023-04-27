@@ -1,10 +1,51 @@
 import {OrderInfo} from "./types";
-import {FormEvent, useState} from "react";
+import React, {FormEvent, useState} from "react";
 import "./styles/Delivery.css";
 
 
 export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [expirationDateValid, setExpirationDateValid] = useState<boolean>(false);
+    const currentDate = new Date();
+    const currentYear = parseInt(currentDate.getFullYear().toString().slice(2));
+    const currentMonth = currentDate.getMonth() + 1;
+    const [expVisible, setExpVisible] = useState<Boolean>(false);
+
+    function isValidExpirationDate(expirationDate: string): boolean {
+        if (expirationDate === "") {
+            setExpVisible(false);
+        }
+
+        const regex = /^([0-9]{2})-([0-9]{2})$/;
+        let [month, year] = expirationDate.split("-");
+
+        if (!regex.test(expirationDate)) {
+            setExpVisible(true);
+            return false;
+        }
+
+        if (month.startsWith("0")) {
+            month = month.slice(1);
+        }
+
+        if (Number(month) < 1 || Number(month) > 12) {
+            setExpVisible(true);
+            return false;
+        }
+
+        if (Number(year) < currentYear) {
+            setExpVisible(true);
+            return false;
+        }
+
+        if (Number(year) === currentYear && Number(month) < currentMonth) {
+            setExpVisible(true);
+            return false;
+        }
+
+        setExpVisible(false);
+        return true;
+    }
 
     async function submitOrder(e: FormEvent) {
         e.preventDefault();
@@ -13,6 +54,14 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
             expirationDate: { value: string };
             securityCode: { value: string };
         }
+
+        const expirationDate = target.expirationDate.value;
+        if (!isValidExpirationDate(expirationDate)) {
+            setExpirationDateValid(false);
+            return;
+        }
+        setExpirationDateValid(true);
+
         const paymentInformation = {
             type: "card",
             info: {
@@ -21,6 +70,7 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                 securityCode: target.securityCode.value
             },
         }
+
         const body = JSON.stringify({paymentInformation: paymentInformation, orderInfo: orderInfo});
 
         const URL = "https://eoyy8shk0uki1al.m.pipedream.net/"
@@ -58,9 +108,13 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                         <li key="expirationDate">
                             <label htmlFor="expirationDate">
                                 Expiration date:
-                                <input type="text" name="expirationDate" placeholder="01-01" required={true} pattern="(0[1-9]|1[0-2])-(2[3-9]|[3-9][0-9])"
-                                       title="Please enter valid expiration date, make sure that between month and year that there is hyphen ('-')."/>
+                                <input type="text" name="expirationDate" placeholder="MM-YY" required={true}
+                                       pattern="(0[1-9]|1[0-2])-([0-9]{2})"
+                                       title="Please enter valid expiration date, make sure that between month and year that there is hyphen ('-')."
+                                       onChange={(e) => setExpirationDateValid(isValidExpirationDate(e.target.value))}
+                                />
                             </label>
+                            <p id="validZip" style={{display: expVisible ? "block" : "none"}}>Not a valid expiration date</p>
                         </li>
                         <li key="securityCode">
                             <label htmlFor="securityCode">
@@ -75,7 +129,6 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                 </form>
             </div>
         </div>
-
 
     )
 }
