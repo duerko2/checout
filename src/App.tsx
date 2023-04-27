@@ -42,7 +42,7 @@ function App() {
         function simulateLoading() {
             setTimeout(() => {
                 setIsLoading(false);
-            }, 1500);
+            }, 1200);
         }
 
         simulateLoading();
