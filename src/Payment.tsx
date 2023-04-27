@@ -40,29 +40,32 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
             </div>
         )
     } else return (
+
         <div className="right-side-form">
             <div>
                 <h2>Payment</h2>
             </div>
             <div>
-                <form onSubmit={submitOrder}>
+                <form aria-label="paymentForm" name="delivery" onSubmit={submitOrder}>
                     <ul>
                         <li key="cardNumber">
                             <label htmlFor="cardNumber">
                                 Card number:
-                                <input type="card" name="cardNumber" required={true} pattern="[0-9]{16}"/>
+                                <input type="card" name="cardNumber" placeholder="1234-1234-1234-1234" required={true} pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"
+                                       title="Please enter valid card number, make sure that after each 4 numbers there is hyphen ('-')."/>
                             </label>
                         </li>
                         <li key="expirationDate">
                             <label htmlFor="expirationDate">
                                 Expiration date:
-                                <input type="text" name="expirationDate" required={true}/>
+                                <input type="text" name="expirationDate" placeholder="01-01" required={true} pattern="(0[1-9]|1[0-2])-(2[3-9]|[3-9][0-9])"
+                                       title="Please enter valid expiration date, make sure that between month and year that there is hyphen ('-')."/>
                             </label>
                         </li>
                         <li key="securityCode">
                             <label htmlFor="securityCode">
                                 Security code:
-                                <input type="text" name="securityCode" required={true} pattern="[0-9]{3}"/>
+                                <input type="text" name="securityCode" placeholder="123" required={true} pattern="[0-9]{3}"/>
                             </label>
                         </li>
                         <li className="button" key="submit">
