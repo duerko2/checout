@@ -3,6 +3,7 @@ import './styles/App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
+import Spinner from "./assets/loading-gif.gif";
 import {Address, Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
@@ -76,7 +77,9 @@ function App() {
             <div className="container">
                 {isLoading ? (
                     <div className="loader-container">
-                        <div className="spinner"></div>
+
+                            <img src={Spinner} width="175px"/>
+
                     </div>
                 ) : (
                     <div>
@@ -119,9 +122,7 @@ function App() {
                     </div>
                 )}
             </div>
-            );
         </div>
-
     )
 }
 
