@@ -44,7 +44,6 @@ function App() {
         totalPrice: 0
     });
 
-
     useEffect(() => {
 
         function simulateLoading() {
@@ -134,15 +133,48 @@ function App() {
                         <div className="spinner"></div>
                     </div>
                 ) : (
-                    <React.StrictMode>
-                        <AppContent />
-                    </React.StrictMode>
+                    <div>
+                        <div className="header-logo">
+                            <img src={Logo} width="175px"/>
+
+                        </div>
+                        <div className="content">
+                            <div className="page-grid">
+                                {page === "delivery" && (
+                                    <div className="basket">
+                                        <Basket
+                                            order={order}
+                                            setOrder={setOrder}/>
+                                    </div>
+                                )}
+                                {page === "payment" && (
+                                    <div className="basket">
+                                        <OrderBox
+                                            order={order}
+                                        />
+                                    </div>)}
+                                {page === "delivery" && (
+                                    <div className="delivery">
+                                        <Delivery
+                                            order={order}
+                                            setOrderInfo={setOrderInfo}
+                                            navigateToPayment={navigateToPayment}
+                                        />
+                                    </div>)}
+                                {page === "payment" && (
+                                    <div className="delivery">
+                                        <Payment
+                                            orderInfo={orderInfo}
+                                        />
+                                    </div>)}
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
             );
         </div>
     )
 }
-
 
 export default App
