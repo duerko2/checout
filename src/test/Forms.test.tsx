@@ -71,7 +71,7 @@ describe(Delivery.name, () => {
         expect(input).toHaveValue("test address");
 
         // Allow multiple line
-        fireEvent.change(input, { target: { value: "test address\n2nd line" } });
+        fireEvent.change(input, { target: { value: "test address 2" } });
         expect(input).toHaveValue("test address\n2nd line");
         cleanup();
     })

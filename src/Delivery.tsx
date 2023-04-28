@@ -2,6 +2,7 @@ import {Item, OrderInfo, Zipcode} from "./types";
 import "./styles/Delivery.css";
 import React, {FormEvent, useEffect, useState} from "react";
 import {getTotal} from "./OrderUtilityFunctions";
+import {BasketGrid} from "./BasketGrid";
 
 
 export function Delivery({
@@ -53,6 +54,13 @@ export function Delivery({
 
     async function postOrder(e: FormEvent) {
         e.preventDefault();
+        order.itemList.forEach(item => {
+            removeItemWhenQuantityZero(item);
+        });
+        if (order.itemList.length === 0) {
+            return;
+        }
+
         const target = e.target as typeof e.target & {
             name: { value: string };
             phone: { value: string };
@@ -113,7 +121,15 @@ export function Delivery({
         console.log(order);
         navigateToPayment()
     }
-
+    function removeItemWhenQuantityZero (item : Item){
+        if (item.quantity <= 0) {
+            order.itemList = order.itemList.filter((i: Item) => i !== item);
+        }
+        /*  if (item.quantity === 0){
+            const index = order.itemList.indexOf(item);
+            order.itemList.splice(index, 1);
+        }*/
+    }
 
     function checkBillingZip(inputZip: string) {
         if (inputZip === "") {
@@ -135,6 +151,7 @@ export function Delivery({
 
     return (<div className="right-side-form">
         <form aria-label="deliveryForm" name="delivery" onSubmit={postOrder}>
+
             <h3>Delivery information</h3>
             <ul>
                 <li key="name">
@@ -271,7 +288,7 @@ export function Delivery({
                 </li>
 
                 <li className="button" key="submit">
-                    <button type="submit" name="submit">Go to payment</button>
+                    <button type="submit" name="submit">Go to payment </button>
                 </li>
             </ul>
         </form>
