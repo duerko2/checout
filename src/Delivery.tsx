@@ -57,6 +57,9 @@ export function Delivery({
         order.itemList.forEach(item => {
             removeItemWhenQuantityZero(item);
         });
+        if (order.itemList.length === 0) {
+            return;
+        }
 
         const target = e.target as typeof e.target & {
             name: { value: string };
