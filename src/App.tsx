@@ -3,6 +3,7 @@ import './styles/App.css';
 import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
+import Spinner from "./assets/loading-gif.gif";
 import {Address, Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
@@ -41,7 +42,7 @@ function App() {
         function simulateLoading() {
             setTimeout(() => {
                 setIsLoading(false);
-            }, 3000);
+            }, 1200);
         }
 
         simulateLoading();
@@ -70,67 +71,59 @@ function App() {
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-    function AppContent() {
-        return (
-            <div>
-                    <div className="header">
-                        <div className="header-logo"><img src={Logo} width="175px"/></div>
-                        <div className="header-login" key="login " onSubmit={}> <button type="submit" name="login" >Login</button> </div>
-                    </div>
-                <div className="content">
-                    {page === "delivery" && (
-                        <div className="page-grid">
-                            <div className="basket">
-                                <Basket
-                                    order={order}
-                                    setOrder={setOrder}/>
-                            </div>
-                            <div className="delivery">
-                                <Delivery
-                                    order={order}
-                                    setOrderInfo={setOrderInfo}
-                                    navigateToPayment={navigateToPayment}
-                                />
-                            </div>
-                        </div>
-                    )}
-                    {page === "payment" && (
-                        <div className="page-grid">
-                            <div className="basket">
-                                <PaymentBasket
-                                    order={order}
-                                />
-                            </div>
-                            <div className="delivery">
-                                <Payment
-                                    orderInfo={orderInfo}
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div>
             <div className="container">
                 {isLoading ? (
                     <div className="loader-container">
-                        <div className="spinner"></div>
+
+                            <img src={Spinner} width="175px"/>
+
                     </div>
                 ) : (
-                    <React.StrictMode>
-                        <AppContent />
-                    </React.StrictMode>
+                    <div>
+                        <div className="header">
+                            <div className="header-logo"><img src={Logo} width="175px"/></div>
+                            <div className="header-login" key="login " onSubmit={}> <button type="submit" name="login" >Login</button> </div>
+                        </div>
+                        <div className="content">
+                            {page === "delivery" && (
+                                <div className="page-grid">
+                                    <div className="basket">
+                                        <Basket
+                                            order={order}
+                                            setOrder={setOrder}/>
+                                    </div>
+                                    <div className="delivery">
+                                        <Delivery
+                                            order={order}
+                                            setOrderInfo={setOrderInfo}
+                                            navigateToPayment={navigateToPayment}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                            {page === "payment" && (
+                                <div className="page-grid">
+                                    <div className="basket">
+                                        <PaymentBasket
+                                            order={order}
+                                        />
+                                    </div>
+                                    <div className="delivery">
+                                        <Payment
+                                            orderInfo={orderInfo}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 )}
             </div>
-            );
         </div>
-
     )
-
 }
 
 
