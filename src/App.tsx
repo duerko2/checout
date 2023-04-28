@@ -70,14 +70,13 @@ function App() {
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
-
     function AppContent() {
         return (
             <div>
-                <div className="header-logo">
-                    <img src={Logo} width="175px"/>
-
-                </div>
+                    <div className="header">
+                        <div className="header-logo"><img src={Logo} width="175px"/></div>
+                        <div className="header-login" key="login " onSubmit={}> <button type="submit" name="login" >Login</button> </div>
+                    </div>
                 <div className="content">
                     {page === "delivery" && (
                         <div className="page-grid">
