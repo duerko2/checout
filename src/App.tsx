@@ -35,17 +35,7 @@ function App() {
         order: order,
         totalPrice: 0
     });
-
-
     useEffect(() => {
-
-        function simulateLoading() {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1200);
-        }
-
-        simulateLoading();
 
         function popstateHandler() {
             const url = new URLSearchParams(window.location.search);
@@ -75,53 +65,52 @@ function App() {
     return (
         <div>
             <div className="container">
-                {isLoading ? (
-                    <div className="loader-container">
-
-                            <img src={Spinner} width="175px"/>
+                <div>
+                    <div className="header-logo">
+                        <img src={Logo} width="175px"/>
 
                     </div>
-                ) : (
-                    <div>
-                        <div className="header-logo">
-                            <img src={Logo} width="175px"/>
-
-                        </div>
-                        <div className="content">
-                            {page === "delivery" && (
-                                <div className="page-grid">
-                                    <div className="basket">
-                                        <Basket
-                                            order={order}
-                                            setOrder={setOrder}/>
-                                    </div>
-                                    <div className="delivery">
-                                        <Delivery
-                                            order={order}
-                                            setOrderInfo={setOrderInfo}
-                                            navigateToPayment={navigateToPayment}
-                                        />
-                                    </div>
+                    <div className="content">
+                        {page === "delivery" && (
+                            <div className="page-grid">
+                                <div className="basket">
+                                    <Basket
+                                        order={order}
+                                        setOrder={setOrder}
+                                        setIsLoading={setIsLoading}
+                                    />
                                 </div>
-                            )}
-                            {page === "payment" && (
-                                <div className="page-grid">
-                                    <div className="basket">
-                                        <PaymentBasket
-                                            order={order}
-                                        />
-                                    </div>
-                                    <div className="delivery">
-                                        <Payment
-                                            orderInfo={orderInfo}
-                                        />
-                                    </div>
+                                <div className="delivery">
+                                    <Delivery
+                                        order={order}
+                                        setOrderInfo={setOrderInfo}
+                                        navigateToPayment={navigateToPayment}
+                                    />
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
+                        {page === "payment" && (
+                            <div className="page-grid">
+                                <div className="basket">
+                                    <PaymentBasket
+                                        order={order}
+                                    />
+                                </div>
+                                <div className="delivery">
+                                    <Payment
+                                        orderInfo={orderInfo}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
+            {isLoading && (
+                <div className="loader-container">
+                    <img src={Spinner} width="175px"/>
+                </div>
+            )}
         </div>
     )
 }

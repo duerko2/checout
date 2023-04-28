@@ -93,7 +93,7 @@ export function BasketGrid({order,setOrder,show,setShowRebate,editable}: basketG
             </div>
 
             {order.itemList.map((item) => (
-                <div className="product-card">
+                <div className="product-card" key={item.product._id}>
                     <div className="product-grid">
                         <div className="grid-item" id="minus-thing">
                             <img src={item.product.imageUrl} className="product-image"
