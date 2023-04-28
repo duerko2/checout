@@ -7,6 +7,7 @@ import Spinner from "./assets/loading-gif.gif";
 import {Address, Item, Order, OrderInfo,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
+import {SignUp} from "./SignUp";
 
 const emptyAddress : Address = {
     name: "",
@@ -70,6 +71,32 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"));
     }
 
+    function navigateToSigUp(){
+        history.pushState({}, "","?page=login")
+        dispatchEvent(new PopStateEvent("popstate"))
+    }
+
+
+
+
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
 
     return (
@@ -83,9 +110,16 @@ function App() {
                     </div>
                 ) : (
                     <div>
-                        <div className="header">
+                        <div className="header" >
                             <div className="header-logo"><img src={Logo} width="175px"/></div>
-                            <div className="header-login" key="login " onSubmit={}> <button type="submit" name="login" >Login</button> </div>
+                            <div className="dropdown">
+                                <button onSubmit="myFunction()" className="dropbtn">Dropdown</button>
+                                <div id="myDropdown" className="dropdown-content">
+                                    <button onClick="navigateToLogin" className="signUp">Sign up</button>
+                                    <button onClick="" className="login">Login</button>
+
+                                </div>
+                            </div>
                         </div>
                         <div className="content">
                             {page === "delivery" && (
@@ -99,7 +133,7 @@ function App() {
                                         <Delivery
                                             order={order}
                                             setOrderInfo={setOrderInfo}
-                                            navigateToPayment={navigateToPayment}
+                                            navigate={navigateToPayment}
                                         />
                                     </div>
                                 </div>
@@ -118,6 +152,16 @@ function App() {
                                     </div>
                                 </div>
                             )}
+                            {page === "signup" && (
+                                <div className = "signup">
+                                    <SignUp
+
+                                    />
+
+
+
+
+                                </div>)}
                         </div>
                     </div>
                 )}

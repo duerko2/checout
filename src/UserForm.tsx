@@ -1,108 +1,10 @@
-import {Item, OrderInfo, Zipcode} from "./types";
-import "./styles/Delivery.css";
 import React, {FormEvent, useEffect, useState} from "react";
+import {Item, Zipcode} from "./types";
 import {getTotal} from "./OrderUtilityFunctions";
-import {UserForm} from "./UserForm";
+
+export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) {
 
 
-export function Delivery({
-                             order,
-                             setOrderInfo,
-                             navigate
-                         }: { order: { itemList: Item[], recurring: boolean }, setOrderInfo: (orderInfo: OrderInfo) => void, navigate: () => void }) {
-
-
-    async function postOrder(e: FormEvent) {
-        e.preventDefault();
-        const target = e.target as typeof e.target & {
-            name: { value: string };
-            phone: { value: string };
-            email: { value: string };
-            address: { value: string };
-            zip: { value: string };
-            city: { value: string };
-            country: { value: string };
-            company?: { value: string };
-            VAT?: { value: string };
-            separateBilling: { checked: boolean };
-            comment?: { value: string };
-            termsConditions: { checked: boolean };
-            marketingEmails: { checked: boolean };
-            billingAddress?: { value: string },
-            billingCity?: { value: string },
-            billingCompany?: { value: string },
-            billingCountry?: { value: string },
-            billingEmail?: { value: string },
-            billingName?: { value: string },
-            billingPhone?: { value: string },
-            billingVAT?: { value: string },
-            billingZip?: { value: string },
-        }
-        console.log(target.name.value);
-
-
-        setOrderInfo({
-            delivery: {
-                name: target.name.value,
-                phone: target.phone.value,
-                email: target.email.value,
-                address: target.address.value,
-                zip: target.zip.value,
-                city: target.city.value,
-                country: target.country.value,
-                company: target.company?.value ?? "",
-                VAT: target.VAT?.value ?? "",
-            },
-            separateBilling: target.separateBilling.checked,
-            billing: {
-                address: target.billingAddress?.value ?? "",
-                city: target.billingCity?.value ?? "",
-                company: target.billingCompany?.value ?? "",
-                country: target.billingCountry?.value ?? "",
-                email: target.billingEmail?.value ?? "",
-                name: target.billingName?.value ?? "",
-                phone: target.billingPhone?.value ?? "",
-                VAT: target.billingVAT?.value ?? "",
-                zip: target.billingZip?.value ?? "",
-            },
-            comment: target.comment?.value ?? "",
-            termsAndConditions: target.termsConditions.checked,
-            marketingEmails: target.marketingEmails.checked,
-            order: order,
-            totalPrice: getTotal(order)
-        });
-        console.log(order);
-        navigate()
-    }
-
-    function checkBillingZip(inputZip: string) {
-        if (inputZip === "") {
-            setBillingZipVisible(false);
-            setBillingCityText("");
-        } else {
-            for (let zipcode of zipcodes) {
-                if (inputZip === zipcode.nr) {
-                    setBillingCityText(zipcode.navn);
-                    setBillingZipVisible(false);
-                    break;
-                } else {
-                    setBillingZipVisible(true);
-                    setBillingCityText("");
-                }
-            }
-        }
-    }
-   return(
-       <div>
-           <div className="delivery-form">
-               <h2>Delivery information</h2>
-               <UserForm/>
-           </div>
-       </div>
-   )
-
-
-/*
     const [zipcodes, setZipcodes] = useState<Zipcode[]>([]);
     const [separateBilling, setSeparateBilling] = useState<boolean>(false);
     const [cityText, setCityText] = useState<String>("");
@@ -145,70 +47,6 @@ export function Delivery({
     }, []);
 
 
-    async function postOrder(e: FormEvent) {
-        e.preventDefault();
-        const target = e.target as typeof e.target & {
-            name: { value: string };
-            phone: { value: string };
-            email: { value: string };
-            address: { value: string };
-            zip: { value: string };
-            city: { value: string };
-            country: { value: string };
-            company?: { value: string };
-            VAT?: { value: string };
-            separateBilling: { checked: boolean };
-            comment?: { value: string };
-            termsConditions: { checked: boolean };
-            marketingEmails: { checked: boolean };
-            billingAddress?: { value: string },
-            billingCity?: { value: string },
-            billingCompany?: { value: string },
-            billingCountry?: { value: string },
-            billingEmail?: { value: string },
-            billingName?: { value: string },
-            billingPhone?: { value: string },
-            billingVAT?: { value: string },
-            billingZip?: { value: string },
-        }
-        console.log(target.name.value);
-
-
-        setOrderInfo({
-            delivery: {
-                name: target.name.value,
-                phone: target.phone.value,
-                email: target.email.value,
-                address: target.address.value,
-                zip: target.zip.value,
-                city: target.city.value,
-                country: target.country.value,
-                company: target.company?.value ?? "",
-                VAT: target.VAT?.value ?? "",
-            },
-            separateBilling: target.separateBilling.checked,
-            billing: {
-                address: target.billingAddress?.value ?? "",
-                city: target.billingCity?.value ?? "",
-                company: target.billingCompany?.value ?? "",
-                country: target.billingCountry?.value ?? "",
-                email: target.billingEmail?.value ?? "",
-                name: target.billingName?.value ?? "",
-                phone: target.billingPhone?.value ?? "",
-                VAT: target.billingVAT?.value ?? "",
-                zip: target.billingZip?.value ?? "",
-            },
-            comment: target.comment?.value ?? "",
-            termsAndConditions: target.termsConditions.checked,
-            marketingEmails: target.marketingEmails.checked,
-            order: order,
-            totalPrice: getTotal(order)
-        });
-        console.log(order);
-        navigate()
-    }
-
-
     function checkBillingZip(inputZip: string) {
         if (inputZip === "") {
             setBillingZipVisible(false);
@@ -228,8 +66,7 @@ export function Delivery({
     }
 
     return (<div className="right-side-form">
-        <form aria-label="deliveryForm" name="delivery" onSubmit={postOrder}>
-            <h3>Delivery information</h3>
+        <form aria-label="form" name="form" onSubmit={post}>
             <ul>
                 <li key="name">
                     <label htmlFor="name">Name:
@@ -282,12 +119,14 @@ export function Delivery({
                         <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </label>
                 </li>
+                {editable &&(
                 <li className="accept-condition" key="seperateBilling">
                     <label htmlFor="separateBilling">
                         <input type="checkbox" id="checkbox" name="separateBilling"
                                onChange={() => setSeparateBilling(!separateBilling)}/>
                         Separate Billing Address: </label>
                 </li>
+                )}
                 <div style={{display: separateBilling ? "block" : "none"}}>
                     <h3>Billing Address</h3>
                     <li key="billingName">
@@ -361,7 +200,7 @@ export function Delivery({
                 <li key="comment">
                     <label htmlFor="comment">Comment</label>
                     <textarea name="comment" rows={4}>
-                    </textarea>
+        </textarea>
                 </li>
 
                 <li className="button" key="submit">
@@ -371,7 +210,4 @@ export function Delivery({
         </form>
     </div>)
 
-
-
- */
 }

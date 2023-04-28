@@ -48,3 +48,23 @@ type OrderInfo= {
     order: Order;
     totalPrice: number;
 }
+
+type User={
+    name: string
+    phone: string
+    email: string
+    country: string
+    address: string
+    zip: string
+}
+type UserWithCompany={
+    name: string
+    phone: string
+    email: string
+    country: string
+    address: string
+    zip: string
+    company: string
+    VAT: string
+}
+
