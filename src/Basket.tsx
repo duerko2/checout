@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./styles/Basket.css";
-import {Item, Product} from "./types";
+import {Item, Product,BasketType} from "./types";
 import {OrderSummary} from "./OrderSummary";
 import {BasketGrid} from "./BasketGrid";
 
@@ -16,6 +16,7 @@ export function Basket({
         product: undefined,
         pos: {x: 0, y: 0}
     });
+    const [mutex,setMutex]=useState(true);
 
     useEffect(() => {
             async function fetchProducts() {
@@ -35,17 +36,54 @@ export function Basket({
             async function fetchBasket() {
                 // TODO: async kald til backend for at hente indkøbskurv
 
-                let basket = [
-                    {product: products["vitamin-c-500-200"], quantity: 1, giftWrap: false},
-                    {product: products["trimmer"], quantity: 1, giftWrap: false},
-                    {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
-                ];
-                setOrder({itemList: basket, recurring: false});
-            }
+                const URL="http://130.225.170.79:8080/basket/1";
+                let basket: Item[] = [];
+                try {
+                    const response = await fetch(URL,{method:"GET"});
+                    console.log("response: "+JSON.stringify(await response.body));
 
-            fetchProducts().then(fetchBasket);
+                    const result = (await response.json()) as BasketType;
+                    console.log("result: "+JSON.stringify(result));
+                    basket=result.itemList;
+                    if(basket.length===0) throw new Error("Basket is empty, using default basket");
+                    console.log(result.recurring);
+                    setOrder({itemList: basket, recurring: result.recurring});
+                } catch (e) {
+                    console.log(e);
+                    basket = [
+                        {product: products["vitamin-c-500-200"], quantity: 1, giftWrap: false},
+                        {product: products["trimmer"], quantity: 1, giftWrap: false},
+                        {product: products["coffeebeans-500g"], quantity: 1, giftWrap: false},
+                    ];
+                    setOrder({itemList: basket, recurring: false});
+                }
+            }
+            setMutex(true);
+            fetchProducts().then(fetchBasket).then(()=>setMutex(false));
+
         }, []
     )
+
+    useEffect(()=>{
+        async function updateBasket() {
+            const URL = "http://130.225.170.79:8080/basket/new";
+            const body = JSON.stringify({id_:1,itemList:order.itemList,recurring:order.recurring});
+            //console.log("body: " + body);
+
+            try {
+                const response = await fetch(URL, {
+                    method: "POST", headers: {"content-type": "application/Json"}, body: body
+                });
+                //console.log("response: "+JSON.stringify(response.body));
+
+            } catch (e) {
+                console.log(e);
+            }
+
+        }
+        if(!mutex)
+        updateBasket().then(()=>setMutex(false));
+    },[order]);
 
     function changeRecurringOrder() {
         setOrder({itemList: order.itemList, recurring: !order.recurring})
@@ -76,7 +114,7 @@ export function Basket({
                     order={order}/>
                 <div className="recurring-order">
                     <label>
-                        <h2>Monthly recurring order: <input type="checkbox" onChange={() => changeRecurringOrder()}/>
+                        <h2>Monthly recurring order: <input type="checkbox" checked={order.recurring} onChange={() => changeRecurringOrder()}/>
                         </h2>
                     </label>
                 </div>
