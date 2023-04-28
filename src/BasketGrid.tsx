@@ -46,6 +46,8 @@ export function BasketGrid({order,setOrder,show,setShowRebate,editable}: basketG
         const newItems = order.itemList.map(e => e);
         newItems[itemIndex].quantity++;
 
+
+        //console.log(JSON.stringify(order));
         if (setOrder) {
             setOrder({itemList: newItems, recurring: order.recurring});
         }
