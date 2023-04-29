@@ -102,7 +102,7 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                             <label htmlFor="cardNumber">
                                 Card number:
                                 <input type="card" name="cardNumber" placeholder="1234-1234-1234-1234" required={true} pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"
-                                       title="Please enter valid card number, make sure that after each 4 numbers there is hyphen ('-')."/>
+                                       title="Please enter valid card number, make sure that after each 4 digits there is hyphen ('-') besides the last set."/>
                             </label>
                         </li>
                         <li key="expirationDate">
