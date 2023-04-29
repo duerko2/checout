@@ -121,7 +121,8 @@ export function Delivery({
         console.log(order);
         navigateToPayment()
     }
-    function removeItemWhenQuantityZero (item : Item){
+
+    function removeItemWhenQuantityZero(item: Item) {
         if (item.quantity <= 0) {
             order.itemList = order.itemList.filter((i: Item) => i !== item);
         }
@@ -163,11 +164,12 @@ export function Delivery({
                     <label htmlFor="phone">Phone: </label>
                     <input type="text" id="phone" name="phone" pattern="((\+[0-9]{2}[0-9]{8}))|([0-9]{8})"
                            placeholder="00000000" required={true}
-                           title="Please enter valid phone number"/>
+                           title="Must have 8 digits excluding country code if used (such as +45)"/>
                 </li>
                 <li key="email">
                     <label htmlFor="email">E-mail: </label>
-                    <input role="text" type="email" id="email" name="email" placeholder="eksempel@eksempel.dk"
+                    <input role="text" type="email" id="email" name="email" placeholder="example@example.dk"
+
                            required={true}/>
                 </li>
                 <li key="country">
@@ -184,7 +186,11 @@ export function Delivery({
                     <label htmlFor="zip">Zip:
                         <input type="text" id="zip" name="zip" placeholder="Zip"
                                onChange={(e) => checkZip(e.target.value)}
-                               pattern="[0-9]{4}" required={true}/>
+                               pattern="[0-9]{4}"
+                               title="The zip code must have 4 digits."
+                               required={true}
+                        />
+
                     </label>
                     <p id="validZip" style={{display: zipVisible ? "block" : "none"}}>Not a valid zip</p>
                 </li>
@@ -202,7 +208,9 @@ export function Delivery({
                 </li>
                 <li key="vat">
                     <label htmlFor="VAT">VAT:
-                        <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
+                        <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}
+                               title="Must have 8 digits."
+                        />
                     </label>
                 </li>
                 <li className="accept-condition" key="seperateBilling">
@@ -221,9 +229,9 @@ export function Delivery({
                     </li>
                     <li key="billingPhone">
                         <label htmlFor="billingPhone">Phone:
-                            <input type="text" id="billingPhone" name="billingPhone" pattern="\+{1}[0-9]{10}|[0-9]{8}"
+                            <input type="text" id="billingPhone" name="billingPhone" pattern="((\+[0-9]{2}[0-9]{8}))|([0-9]{8})"
                                    placeholder="0000000" required={separateBilling}
-                                   title="Please enter valid phone number"/>
+                                   title="Must have 8 digits excluding country code if used (such as +45)"/>
                         </label>
                     </li>
                     <li key="billingEmail">
@@ -248,7 +256,9 @@ export function Delivery({
                         <label htmlFor="billingZip">Zip:
                             <input type="text" id="billingZip" name="billingZip" placeholder="Zip"
                                    onChange={(e) => checkBillingZip(e.target.value)}
-                                   pattern="[0-9]{4}" required={separateBilling}/>
+                                   pattern="[0-9]{4}"
+                                   title="The zip code must have 4 digits."
+                                   required={separateBilling}/>
                         </label>
                         <p id="validZip" style={{display: billingZipVisible ? "block" : "none"}}>Not a valid zip</p>
                     </li>
@@ -266,6 +276,7 @@ export function Delivery({
                     <li key="billingVAT">
                         <label htmlFor="billingVAT">VAT:
                             <input type="text" id="vat" name="billingVAT" placeholder="00000000"
+                                   title="Must have 8 digits."
                                    pattern="\+{1}[0-9]{10}|[0-9]{8}"/>
                         </label>
                     </li>
@@ -288,7 +299,7 @@ export function Delivery({
                 </li>
 
                 <li className="button" key="submit">
-                    <button type="submit" name="submit">Go to payment </button>
+                    <button type="submit" name="submit">Go to payment</button>
                 </li>
             </ul>
         </form>
