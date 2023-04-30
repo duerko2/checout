@@ -10,6 +10,8 @@
     "test": "tsc && vitest --run --coverage && vite build"
   },
   "dependencies": {
+    "@descope/node-sdk": "^1.1.1",
+    "@descope/web-js-sdk": "^1.0.21",
     "@vue/test-utils": "^2.3.2",
     "jsdom": "^21.1.0",
     "msw": "^1.2.1",

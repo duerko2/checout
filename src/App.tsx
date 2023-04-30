@@ -4,7 +4,7 @@ import {Basket} from "./Basket";
 import {Delivery} from "./Delivery";
 import Logo from "./assets/WebshopLogo.png";
 import Spinner from "./assets/loading-gif.gif";
-import {Address, Item, Order, OrderInfo,} from "./types";
+import {Address, Item, Order, OrderInfo, User,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
 import {SignUp} from "./SignUp";
@@ -35,6 +35,17 @@ function App() {
         marketingEmails: false,
         order: order,
         totalPrice: 0
+    });
+    const [userinfo, setCustomerInfo] = useState<User>({
+        name: "",
+        phone: "",
+        email: "",
+        country: "",
+        address: "",
+        zip: "",
+        termsAndConditions: false
+
+
     });
 
 
@@ -71,30 +82,19 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"));
     }
 
-    function navigateToSigUp(){
-        history.pushState({}, "","?page=login")
+    function navigateToSignUp(){
+        history.pushState({}, "","?page=signup")
+        dispatchEvent(new PopStateEvent("popstate"))
+    }
+    function navigateToDelivery(){
+        history.pushState({}, "","?page=")
+        dispatchEvent(new PopStateEvent("popstate"))
+    }
+    function navigateToLogin(){
+        history.pushState({},",","?page=login")
         dispatchEvent(new PopStateEvent("popstate"))
     }
 
-
-
-
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
 
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
@@ -115,7 +115,7 @@ function App() {
                             <div className="dropdown">
                                 <button onSubmit="myFunction()" className="dropbtn">Dropdown</button>
                                 <div id="myDropdown" className="dropdown-content">
-                                    <button onClick="navigateToLogin" className="signUp">Sign up</button>
+                                    <button onClick={navigateToSignUp} className="signUp">Sign up</button>
                                     <button onClick="" className="login">Login</button>
 
                                 </div>
@@ -129,7 +129,7 @@ function App() {
                                             order={order}
                                             setOrder={setOrder}/>
                                     </div>
-                                    <div className="delivery">
+                                    <div className="">
                                         <Delivery
                                             order={order}
                                             setOrderInfo={setOrderInfo}
@@ -153,12 +153,14 @@ function App() {
                                 </div>
                             )}
                             {page === "signup" && (
-                                <div className = "signup">
-                                    <SignUp
+                                <div className="page-grid">
 
-                                    />
-
-
+                                    <div className="sign-up">
+                                        <SignUp
+                                            navigateBack={navigateToDelivery}
+                                            setSignUpInfo={setCustomerInfo}
+                                        />
+                                    </div>
 
 
                                 </div>)}

@@ -1,9 +1,33 @@
 //export function signUp
-
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {UserForm} from "./UserForm";
+import {User} from "./types";
+import {expect} from "vitest";
+import DescopeSdk from "@descope/web-js-sdk"
 
-export function SignUp() {
+import DescopeClient from '@descope/node-sdk';
+
+const managementKey = "xxxx"
+
+try{
+    //  baseUrl="<URL>" // When initializing the Descope clientyou can also configure the baseUrl ex: https://auth.company.com  - this is useful when you utilize CNAME within your Descope project.
+    const descopeClient = DescopeClient({ projectId: 'P2OsOvJpvyJyafR9xhs2sYc4PeLC', managementKey: managementKey });
+} catch (error) {
+    // handle the error
+    console.log("failed to initialize: " + error)
+}
+type Descope = ReturnType <typeof DescopeSdk>
+
+
+export function SignUp({navigateBack, setSignUpInfo
+}:
+                           { navigateBack: () => void, setSignUpInfo: (userInfo: User)=> void }) {
+
+    const [requesting, setRequesting] = useState(false)
+
+
+
+
 
 
     async function createUser(e: FormEvent) {
@@ -17,19 +41,53 @@ export function SignUp() {
             city: { value: string };
             country: { value: string };
             company?: { value: string };
-            VAT?: { value: string };
+            VAT?: { value: string }
+            termsAndConditions: { checked: boolean}
+
+
         }
+        console.log(target.name)
+        setSignUpInfo({
+            name: target.name.value,
+            phone: target.phone.value,
+            email: target.email.value,
+            country: target.country.value,
+            address: target.address.value,
+            zip: target.zip.value,
+            termsAndConditions: target.termsAndConditions.checked
 
 
-        return (
-            <div>
-                <div className="signUo">
-                    <h2>Sign up</h2>
-                    <UserForm isSignUp={true}
+        })
+        const resp = await DescopeClient.arguments.user.create(
+            target.name.value,
+            target.phone.value,
+            target.email.value,
+            target.country.value,
+            target.address.value,
+            target.zip.value,
+            target.termsAndConditions.checked
 
-                    />
-                </div>
-            </div>
         )
+        if (!resp.ok) {
+            console.log("Failed to create user.")
+            console.log("Status Code: " + resp.code)
+            console.log("Error Code: " + resp.error.errorCode)
+            console.log("Error Description: " + resp.error.errorDescription)
+            console.log("Error Message: " + resp.error.message)
+        }
+        else {
+            console.log("Successfully created user.")
+            console.log(resp.data)
+        }
+        navigateBack()
+
+
     }
+
+    return (<div className="sign-up-form">
+        <form aria-label="signUpForm" name="signUp" onSubmit={createUser}>
+            <h3>Sign up</h3>
+            <UserForm isSignUp={true}/>
+        </form>
+    </div>)
 }

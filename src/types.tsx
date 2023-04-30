@@ -1,4 +1,4 @@
-export type {Product, Zipcode, Item, Order, OrderInfo, Address,BasketType};
+export type {Product, Zipcode, Item, Order, OrderInfo, Address,BasketType,User,UserWithCompany};
 
 type Address = {
     name: string;
@@ -58,6 +58,7 @@ type User={
     country: string
     address: string
     zip: string
+    termsAndConditions: boolean;
 }
 type UserWithCompany={
     name: string

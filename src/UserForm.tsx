@@ -1,8 +1,11 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import {Item, Zipcode} from "./types";
 import {getTotal} from "./OrderUtilityFunctions";
+type UserFormProps = {
+    isSignUp: boolean,
+}
 
-export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) {
+export function UserForm({isSignUp}: UserFormProps) {
 
 
     const [zipcodes, setZipcodes] = useState<Zipcode[]>([]);
@@ -30,23 +33,6 @@ export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) 
             }
         }
     }
-
-    useEffect(() => {
-        async function fetchZip() {
-            const URL = "https://api.dataforsyningen.dk/postnumre";
-            try {
-                const response = await fetch(URL);
-                const result = (await response.json()) as Zipcode[];
-                setZipcodes(result)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        fetchZip();
-    }, []);
-
-
     function checkBillingZip(inputZip: string) {
         if (inputZip === "") {
             setBillingZipVisible(false);
@@ -65,8 +51,23 @@ export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) 
         }
     }
 
-    return (<div className="right-side-form">
-        <form aria-label="form" name="form" onSubmit={post}>
+    useEffect(() => {
+        async function fetchZip() {
+            const URL = "https://api.dataforsyningen.dk/postnumre";
+            try {
+                const response = await fetch(URL);
+                const result = (await response.json()) as Zipcode[];
+                setZipcodes(result)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        fetchZip();
+    }, []);
+
+
+    return (<div className="Form">
             <ul>
                 <li key="name">
                     <label htmlFor="name">Name:
@@ -119,7 +120,7 @@ export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) 
                         <input type="text" id="vat" name="vat" placeholder="00000000" pattern={"[0-9]{8}"}/>
                     </label>
                 </li>
-                {editable &&(
+                { !isSignUp &&(
                 <li className="accept-condition" key="seperateBilling">
                     <label htmlFor="separateBilling">
                         <input type="checkbox" id="checkbox" name="separateBilling"
@@ -192,22 +193,25 @@ export function UserForm({isSignUp, post}: { isSignUp: boolean, post: String }) 
                                required={true}/>
                         I accept terms & conditions</label>
                 </li>
+                { !isSignUp &&(
                 <li className="accept-condition" key="marketingEmails">
                     <label htmlFor="marketingEmails">
                         <input name="marketingEmails" type="checkbox" id="checkbox"/>
                         I accept to receive marketing emails</label>
                 </li>
+                )}
+                { !isSignUp &&(
                 <li key="comment">
                     <label htmlFor="comment">Comment</label>
                     <textarea name="comment" rows={4}>
         </textarea>
                 </li>
+                    )}
 
                 <li className="button" key="submit">
-                    <button type="submit" name="submit">Go to payment</button>
+                    <button type="submit" name="submit">Continue</button>
                 </li>
             </ul>
-        </form>
     </div>)
 
 }
