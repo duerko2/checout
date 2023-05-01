@@ -41,6 +41,7 @@ export function BasketGrid({order,setOrder,show,setShowRebate,editable}: basketG
     function more(item: Item) {
         // Guard clause
         if (item.quantity >= 100) return;
+        if (item.quantity >= item.product.stock) return;
 
         const itemIndex = order.itemList.indexOf(item)
         const newItems = order.itemList.map(e => e);
