@@ -5,6 +5,7 @@
     margin: 1em;
 
     width: 400px;
+    z-index:1;
     /* Form outline */
 }
 .right-side-form ul {

@@ -23,7 +23,6 @@
 }
 
 .delivery{
-  position: sticky;
   top: 15px;
   box-sizing: border-box;
   justify-self: right;

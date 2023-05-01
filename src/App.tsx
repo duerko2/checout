@@ -8,6 +8,8 @@ import {Address, Item, Order, OrderInfo, User,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
 import {LogIn, Register} from "./UserAuthentication";
+import {UserForm} from "./UserForm";
+import {UserResponse} from "@descope/web-js-sdk";
 
 const emptyAddress : Address = {
     name: "",
@@ -26,6 +28,7 @@ function App() {
     const [page, setPage] = useState("delivery");
     const [navigating, setNavigating] = useState(true);
     const [order, setOrder] = useState<Order>({itemList: [], recurring: false});
+    const [user, setUser] = useState<UserResponse | undefined>(undefined);
     const [orderInfo, setOrderInfo] = useState<OrderInfo>({
         delivery: emptyAddress,
         separateBilling: false,
@@ -45,6 +48,7 @@ function App() {
             setPage(urlPage || "delivery");
             setNavigating(true);
         }
+
 
         addEventListener("popstate", popstateHandler);
         popstateHandler();
@@ -78,9 +82,12 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"))
     }
 
-
-
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
+
+    function logOut(){
+        setUser(undefined);
+        navigateToDelivery();
+    }
 
     return (
         <div>
@@ -90,11 +97,18 @@ function App() {
                         <div className="background">
                             <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px" /></div>
                             <div className="dropdown">
-                                <div id="myDropdown" className="dropdown-content">
-                                    <button onClick={navigateToSignUp} className="signUp">Sign up</button>
-                                    <button onClick={navigateToLogIn} className="login">Login</button>
+                                {user === undefined && (
+                                    <div id="myDropdown" className="dropdown-content">
+                                        <button onClick={navigateToSignUp} className="signUp">Sign up</button>
+                                        <button onClick={navigateToLogIn} className="login">Login</button>
+                                    </div>
+                                )}
+                                {user!==undefined && (
+                                    <div id="myDropdown" className="dropdown-content">
+                                        <button className="name">{user.email}</button>
+                                        <button onClick={logOut} className="logout">Log Out</button>
+                                    </div>)}
 
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +126,7 @@ function App() {
                                     <Delivery
                                         order={order}
                                         setOrderInfo={setOrderInfo}
-                                        navigateToPayment={navigateToPayment}
+                                        navigate={navigateToPayment}
                                     />
                                 </div>
                             </div>
@@ -134,24 +148,24 @@ function App() {
                         {page === "signup" && (
                             <div className="page-grid">
 
-                                <div className="sign-up">
-                                    <Register
-                                        navigateBack={navigateToDelivery}
-                                        setSignUpInfo={setCustomerInfo}
-                                    />
-                                </div>
+                                    <div className="sign-up">
+                                        <Register
+                                            setUser={setUser}
+                                            navigateBack={navigateToDelivery}
+                                        />
+                                    </div>
 
 
                             </div>)}
                         {page === "login" && (
                             <div className="page-grid">
 
-                                <div className="login">
-                                    <LogIn
-                                        navigateBack={navigateToDelivery}
-                                        setSignUpInfo={setCustomerInfo}
-                                    />
-                                </div>
+                                    <div className="login">
+                                        <LogIn
+                                            setUser={setUser}
+                                            navigateBack={navigateToDelivery}
+                                        />
+                                    </div>
 
 
                             </div>)}

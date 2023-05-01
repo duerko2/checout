@@ -2,6 +2,8 @@ import React, {FormEvent, useEffect, useState} from "react";
 import {Item, Zipcode} from "./types";
 import {getTotal} from "./OrderUtilityFunctions";
 import {Register} from "./UserAuthentication";
+import App from "./App";
+import {UserResponse} from "@descope/web-js-sdk";
 type UserFormProps = {
     isSignUp: boolean,
 }
@@ -21,8 +23,8 @@ export function RegisterForm(){
             <li className="registerbutton" key="submit">
                 <button type="submit" name="submit">Register</button>
             </li>
-            <li className="signinbutton" key="submit">
-                <button name="submit">Log In</button>
+            <li className="signinbutton">
+                <p>Already registered? <a href="/?page=login">Log in</a></p>
             </li>
         </ul>
     </div>)
@@ -43,8 +45,8 @@ export function SignInForm(){
             <li className="signinbutton" key="submit">
                 <button type="submit" name="submit">Log In</button>
             </li>
-            <li className="registerbutton" key="submit">
-                <button name="submit">Register</button>
+            <li className="registerbutton">
+                <p>Not registered? <a href="/?page=login">Create a user</a></p>
             </li>
         </ul>
     </div>)

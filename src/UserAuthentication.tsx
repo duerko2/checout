@@ -2,20 +2,12 @@
 import React, {FormEvent, useState} from "react";
 import {RegisterForm, SignInForm, UserForm} from "./UserForm";
 import {User} from "./types";
-import {expect} from "vitest";
+import './styles/UserAuthentication.css';
+import DescopeSdk, {UserResponse} from "@descope/web-js-sdk";
 
-import DescopeSdk from "@descope/web-js-sdk";
-import Any = jasmine.Any;
 
-/*try {
-    //  baseUrl="<URL>" // you can also configure the baseUrl ex: https://auth.company.com - this is useful when you utilize CNAME within your Descope project.
-
-} catch (error) {
-    // handle the error
-    console.log("failed to initialize: " + error)
-}*/
 export function LogIn(
-    {navigateBack, setSignUpInfo}:{ navigateBack: () => void, setSignUpInfo: (userInfo: User)=> void }
+    {setUser, navigateBack}:{ navigateBack: () => void, setUser: (user:UserResponse | undefined) => void }
 ){
     const descopeSdk = DescopeSdk({ projectId: 'P2PAX7V2d2itZjlitQL5JWmcwgUo' });
     async function loginUser(e: FormEvent){
@@ -26,10 +18,7 @@ export function LogIn(
             password: {value: string };
         }
 
-        // Args:
-//    loginId (str): The login ID of the user being signed in
         const loginId =target.email.value;
-//    password (str): The user's password
         const password = target.password.value;
 
         const resp = await descopeSdk.password.signIn(loginId, password);
@@ -40,6 +29,8 @@ export function LogIn(
             console.log("Error Description: " + resp.error?.errorDescription)
         }
         else {
+            setUser(resp.data?.user);
+            navigateBack()
             console.log("Successfully signed in via password")
             console.log(resp);
         }
@@ -54,9 +45,9 @@ export function LogIn(
     </div>)
 }
 
-export function Register({navigateBack, setSignUpInfo
-}:
-                           { navigateBack: () => void, setSignUpInfo: (userInfo: User)=> void }) {
+export function Register(
+    {setUser, navigateBack}:{ navigateBack: () => void, setUser: (user:UserResponse | undefined) => void }
+){
 
     const [requesting, setRequesting] = useState(false)
 
@@ -67,20 +58,15 @@ export function Register({navigateBack, setSignUpInfo
     async function createUser(e: FormEvent) {
         e.preventDefault();
 
-        // Args:
-        //    loginId (str): The login ID of the user being signed up
         const target = e.target as typeof e.target & {
             email: { value: string };
             password: {value: string };
         }
 
-        // Args:
-        //    loginId (str): The login ID of the user being signed in
+
         const loginId =target.email.value;
-        //    password (str): The user's password
         const password = target.password.value;
-        //    user (dict) optional: Preserve additional user metadata in the form of
-        const user = { "name": "Joe Biden", "phone": "+15555555555", "email": "email@company.com"}
+        const user = { "name": "Joe Biden", "phone": "+15555555555", "email": target.email.value}
 
         const resp = await descopeSdk.password.signUp(loginId, password, user);
         if (!resp.ok) {
@@ -90,7 +76,9 @@ export function Register({navigateBack, setSignUpInfo
             console.log("Error Description: " + resp.error?.errorDescription)
         }
         else {
-            console.log("Successfully signed up via password")
+            setUser(resp.data?.user);
+            navigateBack();
+            console.log("Successfully signed up via password");
             console.log(resp);
         }
 
