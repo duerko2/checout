@@ -7,7 +7,7 @@ import Spinner from "./assets/loading-gif.gif";
 import {Address, Item, Order, OrderInfo, User,} from "./types";
 import {Payment} from "./Payment";
 import {PaymentBasket} from "./PaymentBasket";
-import {SignUp} from "./SignUp";
+import {LogIn, Register} from "./UserAuthentication";
 
 const emptyAddress : Address = {
     name: "",
@@ -86,12 +86,16 @@ function App() {
         history.pushState({}, "","?page=signup")
         dispatchEvent(new PopStateEvent("popstate"))
     }
+    function navigateToLogIn(){
+        history.pushState({},"","?page=login")
+        dispatchEvent(new PopStateEvent("popstate"))
+    }
     function navigateToDelivery(){
         history.pushState({}, "","?page=")
         dispatchEvent(new PopStateEvent("popstate"))
     }
-    function navigateToLogin(){
-        history.pushState({},",","?page=login")
+    function navigateToHome(){
+        history.pushState({},",","")
         dispatchEvent(new PopStateEvent("popstate"))
     }
 
@@ -110,14 +114,15 @@ function App() {
                     </div>
                 ) : (
                     <div>
-                        <div className="header" >
-                            <div className="header-logo"><img src={Logo} width="175px"/></div>
-                            <div className="dropdown">
-                                <button onSubmit="myFunction()" className="dropbtn">Dropdown</button>
-                                <div id="myDropdown" className="dropdown-content">
-                                    <button onClick={navigateToSignUp} className="signUp">Sign up</button>
-                                    <button onClick="" className="login">Login</button>
+                        <div className="header">
+                            <div className="background">
+                                <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px" /></div>
+                                <div className="dropdown">
+                                    <div id="myDropdown" className="dropdown-content">
+                                        <button onClick={navigateToSignUp} className="signUp">Sign up</button>
+                                        <button onClick={navigateToLogIn} className="login">Login</button>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +161,19 @@ function App() {
                                 <div className="page-grid">
 
                                     <div className="sign-up">
-                                        <SignUp
+                                        <Register
+                                            navigateBack={navigateToDelivery}
+                                            setSignUpInfo={setCustomerInfo}
+                                        />
+                                    </div>
+
+
+                                </div>)}
+                            {page === "login" && (
+                                <div className="page-grid">
+
+                                    <div className="login">
+                                        <LogIn
                                             navigateBack={navigateToDelivery}
                                             setSignUpInfo={setCustomerInfo}
                                         />

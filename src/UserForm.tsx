@@ -1,9 +1,55 @@
 import React, {FormEvent, useEffect, useState} from "react";
 import {Item, Zipcode} from "./types";
 import {getTotal} from "./OrderUtilityFunctions";
+import {Register} from "./UserAuthentication";
 type UserFormProps = {
     isSignUp: boolean,
 }
+export function RegisterForm(){
+    return (<div className="SignInForm">
+        <ul>
+            <li key="email">
+                <label htmlFor="email">E-mail: </label>
+                <input role="text" type="email" id="email" name="email" placeholder="eksempel@eksempel.dk"
+                       required={true}/>
+            </li>
+            <li key="password">
+                <label htmlFor="password">password:
+                    <input type="password" id="password" name="password" placeholder="Password" required={true}/>
+                </label>
+            </li>
+            <li className="registerbutton" key="submit">
+                <button type="submit" name="submit">Register</button>
+            </li>
+            <li className="signinbutton" key="submit">
+                <button name="submit">Log In</button>
+            </li>
+        </ul>
+    </div>)
+}
+export function SignInForm(){
+    return (<div className="SignInForm">
+        <ul>
+            <li key="email">
+                <label htmlFor="email">E-mail: </label>
+                <input role="text" type="email" id="email" name="email" placeholder="eksempel@eksempel.dk"
+                       required={true}/>
+            </li>
+            <li key="password">
+                <label htmlFor="password">password:
+                    <input type="password" id="password" name="password" placeholder="Password" required={true}/>
+                </label>
+            </li>
+            <li className="signinbutton" key="submit">
+                <button type="submit" name="submit">Log In</button>
+            </li>
+            <li className="registerbutton" key="submit">
+                <button name="submit">Register</button>
+            </li>
+        </ul>
+    </div>)
+}
+
 
 export function UserForm({isSignUp}: UserFormProps) {
 

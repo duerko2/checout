@@ -28,22 +28,27 @@
   box-sizing: border-box;
   justify-self: right;
 }
-.header-logo{
-  position:fixed;
-  top:0px;
-  background-color: #1a1a1a;
-  z-index: 100;
-  width: 100%;
+.background {
+    position: fixed;
+    top: 0;
+    background: #1a1a1a;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    order: 1;
+    flex: 0 0 auto;
 }
 
 .dropdown {
-    position: fixed;
-    padding: 10px;
-    z-index: 101;
-    width: 100%;
+    order: 2;
+    flex: 1 1 auto;
     text-align: right;
-    border: none;
-
+    padding-right:10px;
 }
 
 .dropbtn:hover, .dropbtn:focus {
@@ -88,6 +93,7 @@
     }
     .header-logo img{
         width: 120px;
+        z-index: 100;
     }
     .content{
         display:block;
