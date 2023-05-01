@@ -7,18 +7,19 @@ import DescopeSdk, {UserResponse} from "@descope/web-js-sdk";
 
 
 export function LogIn(
-    {setUser, navigateBack}:{ navigateBack: () => void, setUser: (user:UserResponse | undefined) => void }
-){
-    const descopeSdk = DescopeSdk({ projectId: 'P2PAX7V2d2itZjlitQL5JWmcwgUo' });
-    async function loginUser(e: FormEvent){
+    {setUser, navigateBack}: { navigateBack: () => void, setUser: (user: UserResponse | undefined) => void }
+) {
+    const descopeSdk = DescopeSdk({projectId: 'P2PAX7V2d2itZjlitQL5JWmcwgUo'});
+
+    async function loginUser(e: FormEvent) {
         e.preventDefault();
 
         const target = e.target as typeof e.target & {
             email: { value: string };
-            password: {value: string };
+            password: { value: string };
         }
 
-        const loginId =target.email.value;
+        const loginId = target.email.value;
         const password = target.password.value;
 
         const resp = await descopeSdk.password.signIn(loginId, password);
@@ -27,8 +28,7 @@ export function LogIn(
             console.log("Status Code: " + resp.code)
             console.log("Error Code: " + resp.error?.errorCode)
             console.log("Error Description: " + resp.error?.errorDescription)
-        }
-        else {
+        } else {
             setUser(resp.data?.user);
             navigateBack()
             console.log("Successfully signed in via password")
@@ -46,13 +46,12 @@ export function LogIn(
 }
 
 export function Register(
-    {setUser, navigateBack}:{ navigateBack: () => void, setUser: (user:UserResponse | undefined) => void }
-){
+    {setUser, navigateBack}: { navigateBack: () => void, setUser: (user: UserResponse | undefined) => void }
+) {
 
     const [requesting, setRequesting] = useState(false)
 
-    const descopeSdk = DescopeSdk({ projectId: 'P2PAX7V2d2itZjlitQL5JWmcwgUo' });
-
+    const descopeSdk = DescopeSdk({projectId: 'P2PAX7V2d2itZjlitQL5JWmcwgUo'});
 
 
     async function createUser(e: FormEvent) {
@@ -60,13 +59,13 @@ export function Register(
 
         const target = e.target as typeof e.target & {
             email: { value: string };
-            password: {value: string };
+            password: { value: string };
         }
 
 
-        const loginId =target.email.value;
+        const loginId = target.email.value;
         const password = target.password.value;
-        const user = { "name": "Joe Biden", "phone": "+15555555555", "email": target.email.value}
+        const user = {"name": "Joe Biden", "phone": "+15555555555", "email": target.email.value}
 
         const resp = await descopeSdk.password.signUp(loginId, password, user);
         if (!resp.ok) {
@@ -74,8 +73,7 @@ export function Register(
             console.log("Status Code: " + resp.code)
             console.log("Error Code: " + resp.error?.errorCode)
             console.log("Error Description: " + resp.error?.errorDescription)
-        }
-        else {
+        } else {
             setUser(resp.data?.user);
             navigateBack();
             console.log("Successfully signed up via password");
@@ -88,7 +86,7 @@ export function Register(
     return (<div className="sign-up-form">
         <form aria-label="signUpForm" name="signUp" onSubmit={createUser}>
             <h3>Sign up</h3>
-            <RegisterForm />
+            <RegisterForm/>
         </form>
     </div>)
 }

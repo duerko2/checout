@@ -1,27 +1,31 @@
-.right-side-form{
+.right-side-form {
     background-color: var(--card-color-dark);
     border-radius: 1em;
     padding: 1em;
     margin: 1em;
 
     width: 400px;
-    z-index:1;
+    z-index: 1;
     /* Form outline */
 }
+
 .right-side-form ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.right-side-form li + li{
+
+.right-side-form li + li {
     margin-top: 1em;
     list-style-type: none;
 }
+
 .right-side-form label {
     /* Uniform size & alignment */
     display: contents;
     text-align: left;
 }
+
 .right-side-form input,
 textarea {
     display: flex;
@@ -37,43 +41,49 @@ textarea {
     border: 1px solid #999;
 }
 
-.right-side-form #checkbox{
-    width:auto;
+.right-side-form #checkbox {
+    width: auto;
 }
-.right-side-form button{
+
+.right-side-form button {
     border: 1px solid #ccc;
     border-radius: 1em;
     background-color: var(--card-color-dark);
 }
-.right-side-form button:hover{
+
+.right-side-form button:hover {
     cursor: pointer;
     background-color: #0ab100;
-    border-color:#535bf2;
+    border-color: #535bf2;
 }
 
-#validZip{
-    display:none;
+#validZip {
+    display: none;
 }
-.accept-condition{
+
+.accept-condition {
     display: flex;
 }
 
 @media (prefers-color-scheme: light) {
-    .right-side-form{
+    .right-side-form {
         background-color: var(--card-color);
     }
-    .right-side-form button{
+
+    .right-side-form button {
         border: 1px solid #ccc;
         background-color: var(--card-color);
     }
 
 }
+
 @media (max-width: 1000px) {
-    .right-side-form input, textarea{
+    .right-side-form input, textarea {
         max-width: 400px;
         width: 100%;
     }
-    .right-side-form{
+
+    .right-side-form {
         padding: 0.5em;
         margin: 0.5em;
         width: auto;

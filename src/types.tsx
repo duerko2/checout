@@ -1,4 +1,4 @@
-export type {Product, Zipcode, Item, Order, OrderInfo, Address,BasketType,User,UserWithCompany};
+export type {Product, Zipcode, Item, Order, OrderInfo, Address, BasketType, User, UserWithCompany};
 
 type Address = {
     name: string;
@@ -21,7 +21,7 @@ type Product = {
     rebatePercent: number;
     upsellProductId: string;
     imageUrl: string;
-    stock:number;
+    stock: number;
 };
 
 type Zipcode = {
@@ -39,7 +39,7 @@ type Zipcode = {
 }
 type Item = { product: Product; quantity: number; giftWrap: boolean };
 type Order = { itemList: Item[]; recurring: boolean };
-type OrderInfo= {
+type OrderInfo = {
     delivery: Address;
     separateBilling: boolean;
     billing: Address;
@@ -49,9 +49,9 @@ type OrderInfo= {
     order: Order;
     totalPrice: number;
 }
-type BasketType = {_id: number; itemList: Item[]; recurring: boolean}
+type BasketType = { _id: number; itemList: Item[]; recurring: boolean }
 
-type User={
+type User = {
     name: string
     phone: string
     email: string
@@ -60,7 +60,7 @@ type User={
     zip: string
     termsAndConditions: boolean;
 }
-type UserWithCompany={
+type UserWithCompany = {
     name: string
     phone: string
     email: string

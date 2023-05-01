@@ -85,7 +85,8 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
             setPaymentError(true);
         }
     }
-    if(paymentError){
+
+    if (paymentError) {
         return (
             <div>
                 <h2>Something went wrong with your payment. Please go back and try again.</h2>
@@ -108,7 +109,8 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                         <li key="cardNumber">
                             <label htmlFor="cardNumber">
                                 Card number:
-                                <input type="card" name="cardNumber" placeholder="1234-1234-1234-1234" required={true} pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"
+                                <input type="card" name="cardNumber" placeholder="1234-1234-1234-1234" required={true}
+                                       pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"
                                        title="Please enter valid card number, make sure that after each 4 digits there is hyphen ('-') besides the last set."/>
                             </label>
                         </li>
@@ -121,12 +123,14 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
                                        onChange={(e) => setExpirationDateValid(isValidExpirationDate(e.target.value))}
                                 />
                             </label>
-                            <p id="validZip" style={{display: expVisible ? "block" : "none"}}>Not a valid expiration date</p>
+                            <p id="validZip" style={{display: expVisible ? "block" : "none"}}>Not a valid expiration
+                                date</p>
                         </li>
                         <li key="securityCode">
                             <label htmlFor="securityCode">
                                 Security code:
-                                <input type="text" name="securityCode" placeholder="123" required={true} pattern="[0-9]{3}"/>
+                                <input type="text" name="securityCode" placeholder="123" required={true}
+                                       pattern="[0-9]{3}"/>
                             </label>
                         </li>
                         <li className="button" key="submit">

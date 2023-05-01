@@ -1,4 +1,5 @@
 import {Item, Order} from "./types";
+
 export {getRebate, getTotal, getSubtotal};
 
 function getRebate(item: Item) {
@@ -6,21 +7,27 @@ function getRebate(item: Item) {
         return item.product.rebatePercent;
     } else return 0;
 }
-function getTotal(order:Order) {
+
+function getTotal(order: Order) {
 
     let total: number = 0;
     let total2: number = 0;
-    order.itemList.forEach( p => {if(p.quantity>=p.product.rebateQuantity){ total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity}
-    else {total += p.product.price * p.quantity;}
-        total2=total
+    order.itemList.forEach(p => {
+        if (p.quantity >= p.product.rebateQuantity) {
+            total += p.product.price * (1 - p.product.rebatePercent * (1 / 100)) * p.quantity
+        } else {
+            total += p.product.price * p.quantity;
+        }
+        total2 = total
         if (total2 > 300) {
             total2 = total * 0.9;
         }
     })
     return total2;
 }
-function getSubtotal(order:Order) {
-    let subtotal : number = 0;
+
+function getSubtotal(order: Order) {
+    let subtotal: number = 0;
     order.itemList.map(
         (item) => (subtotal += (item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity))
     )

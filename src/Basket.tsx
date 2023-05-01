@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./styles/Basket.css";
-import {Item, Product,BasketType} from "./types";
+import {Item, Product, BasketType} from "./types";
 import {OrderSummary} from "./OrderSummary";
 import {BasketGrid} from "./BasketGrid";
 
@@ -11,13 +11,13 @@ export function Basket({
                            order,
                            setOrder,
                            setIsLoading
-                       }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void , setIsLoading: (isLoading: boolean) => void}) {
+                       }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void, setIsLoading: (isLoading: boolean) => void }) {
     const [show, setShowRebate] = useState<{ showRebate: boolean; product?: Product; pos: { x: number; y: number } }>({
         showRebate: false,
         product: undefined,
         pos: {x: 0, y: 0}
     });
-    const [mutex,setMutex]=useState(true);
+    const [mutex, setMutex] = useState(true);
 
     useEffect(() => {
             async function fetchProducts() {
@@ -37,13 +37,13 @@ export function Basket({
             async function fetchBasket() {
                 // TODO: async kald til backend for at hente indkøbskurv
 
-                const URL="http://130.225.170.79:8080/basket/1";
+                const URL = "http://130.225.170.79:8080/basket/1";
                 let basket: Item[] = [];
                 try {
-                    const response = await fetch(URL,{method:"GET"});
+                    const response = await fetch(URL, {method: "GET"});
                     const result = (await response.json()) as BasketType;
-                    basket=result.itemList;
-                    if(basket.length===0) throw new Error("Basket is empty, using default basket");
+                    basket = result.itemList;
+                    if (basket.length === 0) throw new Error("Basket is empty, using default basket");
                     setOrder({itemList: basket, recurring: result.recurring});
                 } catch (e) {
                     console.log(e);
@@ -55,19 +55,22 @@ export function Basket({
                     setOrder({itemList: basket, recurring: false});
                 }
             }
+
             setMutex(true);
             setIsLoading(true);
-            fetchProducts().then(fetchBasket).then(()=>setMutex(false));
+            fetchProducts().then(fetchBasket).then(() => setMutex(false));
             // Added a 300 ms timer on the loading page to make it clear that the page actually has a loading screen
-            setTimeout(()=>{setIsLoading(false)},150);
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 150);
 
         }, []
     )
 
-    useEffect(()=>{
+    useEffect(() => {
         async function updateBasket() {
             const URL = "http://130.225.170.79:8080/basket/new";
-            const body = JSON.stringify({id_:1,itemList:order.itemList,recurring:order.recurring});
+            const body = JSON.stringify({id_: 1, itemList: order.itemList, recurring: order.recurring});
             //console.log("body: " + body);
 
             try {
@@ -81,9 +84,10 @@ export function Basket({
             }
 
         }
-        if(!mutex)
-        updateBasket().then(()=>setMutex(false));
-    },[order]);
+
+        if (!mutex)
+            updateBasket().then(() => setMutex(false));
+    }, [order]);
 
     function changeRecurringOrder() {
         setOrder({itemList: order.itemList, recurring: !order.recurring})
@@ -114,7 +118,8 @@ export function Basket({
                     order={order}/>
                 <div className="recurring-order">
                     <label>
-                        <h2>Monthly recurring order: <input type="checkbox" checked={order.recurring} onChange={() => changeRecurringOrder()}/>
+                        <h2>Monthly recurring order: <input type="checkbox" checked={order.recurring}
+                                                            onChange={() => changeRecurringOrder()}/>
                         </h2>
                     </label>
                 </div>
@@ -190,7 +195,8 @@ function Suggestions({
                     <div key={item._id}>
                         <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
                             <div style={{textAlign: "center"}}>
-                                <img src={item.imageUrl} className="product-image" alt={"Order suggestion icon for product: "+item.name}/>
+                                <img src={item.imageUrl} className="product-image"
+                                     alt={"Order suggestion icon for product: " + item.name}/>
                             </div>
                             <p title="suggestion-name">{item.name}</p>
                             <p>{item.price} {item.currency}</p>

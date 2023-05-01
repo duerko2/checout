@@ -11,7 +11,7 @@ import {LogIn, Register} from "./UserAuthentication";
 import {UserForm} from "./UserForm";
 import {UserResponse} from "@descope/web-js-sdk";
 
-const emptyAddress : Address = {
+const emptyAddress: Address = {
     name: "",
     phone: "",
     email: "",
@@ -65,26 +65,29 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"));
     }
 
-    function navigateToSignUp(){
-        history.pushState({}, "","?page=signup")
+    function navigateToSignUp() {
+        history.pushState({}, "", "?page=signup")
         dispatchEvent(new PopStateEvent("popstate"))
     }
-    function navigateToLogIn(){
-        history.pushState({},"","?page=login")
+
+    function navigateToLogIn() {
+        history.pushState({}, "", "?page=login")
         dispatchEvent(new PopStateEvent("popstate"))
     }
-    function navigateToDelivery(){
-        history.pushState({}, "","?page=")
+
+    function navigateToDelivery() {
+        history.pushState({}, "", "?page=")
         dispatchEvent(new PopStateEvent("popstate"))
     }
-    function navigateToHome(){
-        history.pushState({},",","")
+
+    function navigateToHome() {
+        history.pushState({}, ",", "")
         dispatchEvent(new PopStateEvent("popstate"))
     }
 
     const pageClasses = `card ${navigating ? "navigating" : "navigated"}`;
 
-    function logOut(){
+    function logOut() {
         setUser(undefined);
         navigateToDelivery();
     }
@@ -95,7 +98,8 @@ function App() {
                 <div>
                     <div className="header">
                         <div className="background">
-                            <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px" /></div>
+                            <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px"/>
+                            </div>
                             <div className="dropdown">
                                 {user === undefined && (
                                     <div id="myDropdown" className="dropdown-content">
@@ -103,7 +107,7 @@ function App() {
                                         <button onClick={navigateToLogIn} className="login">Login</button>
                                     </div>
                                 )}
-                                {user!==undefined && (
+                                {user !== undefined && (
                                     <div id="myDropdown" className="dropdown-content">
                                         <button className="name">{user.email}</button>
                                         <button onClick={logOut} className="logout">Log Out</button>
@@ -148,24 +152,24 @@ function App() {
                         {page === "signup" && (
                             <div className="page-grid">
 
-                                    <div className="sign-up">
-                                        <Register
-                                            setUser={setUser}
-                                            navigateBack={navigateToDelivery}
-                                        />
-                                    </div>
+                                <div className="sign-up">
+                                    <Register
+                                        setUser={setUser}
+                                        navigateBack={navigateToDelivery}
+                                    />
+                                </div>
 
 
                             </div>)}
                         {page === "login" && (
                             <div className="page-grid">
 
-                                    <div className="login">
-                                        <LogIn
-                                            setUser={setUser}
-                                            navigateBack={navigateToDelivery}
-                                        />
-                                    </div>
+                                <div className="login">
+                                    <LogIn
+                                        setUser={setUser}
+                                        navigateBack={navigateToDelivery}
+                                    />
+                                </div>
 
 
                             </div>)}
