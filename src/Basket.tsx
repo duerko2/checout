@@ -9,8 +9,9 @@ let products: { [id: string]: Product } = {};
 
 export function Basket({
                            order,
-                           setOrder
-                       }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void }) {
+                           setOrder,
+                           setIsLoading
+                       }: { order: { itemList: Item[], recurring: boolean }, setOrder: (order: { itemList: Item[], recurring: boolean }) => void , setIsLoading: (isLoading: boolean) => void}) {
     const [show, setShowRebate] = useState<{ showRebate: boolean; product?: Product; pos: { x: number; y: number } }>({
         showRebate: false,
         product: undefined,
@@ -40,13 +41,9 @@ export function Basket({
                 let basket: Item[] = [];
                 try {
                     const response = await fetch(URL,{method:"GET"});
-                    console.log("response: "+JSON.stringify(await response.body));
-
                     const result = (await response.json()) as BasketType;
-                    console.log("result: "+JSON.stringify(result));
                     basket=result.itemList;
                     if(basket.length===0) throw new Error("Basket is empty, using default basket");
-                    console.log(result.recurring);
                     setOrder({itemList: basket, recurring: result.recurring});
                 } catch (e) {
                     console.log(e);
@@ -59,7 +56,10 @@ export function Basket({
                 }
             }
             setMutex(true);
+            setIsLoading(true);
             fetchProducts().then(fetchBasket).then(()=>setMutex(false));
+            // Added a 300 ms timer on the loading page to make it clear that the page actually has a loading screen
+            setTimeout(()=>{setIsLoading(false)},150);
 
         }, []
     )
@@ -187,7 +187,7 @@ function Suggestions({
 
             <div className="suggestion-grid">
                 {suggestions.map((item) => (
-                    <div>
+                    <div key={item._id}>
                         <div title="suggestion" className="suggestion-card" onClick={() => addToOrder(item)}>
                             <div style={{textAlign: "center"}}>
                                 <img src={item.imageUrl} className="product-image" alt={"Order suggestion icon for product: "+item.name}/>

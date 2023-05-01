@@ -20,37 +20,33 @@ describe(Basket.name, () => {
 
         const {user} = setup(<App/>)
 
-        const allItems = await screen.findAllByTitle("itemName");
-        expect(allItems).toHaveLength(3)
-        screen.debug(allItems[0])
-        screen.debug(allItems[1])
-        screen.debug(allItems[2])
+        let allItems = await screen.findAllByTitle("itemName");
+        let initialAmountOfItems = allItems.length;
+
         const firstItem: HTMLElement = (allItems)[0];
         const firstItemName = firstItem.textContent;
-
 
         // Remove the first item
         await user.click((await screen.findAllByTitle("removeItem"))[0]);
 
-
-        await new Promise(r => setTimeout(r, 1000));
+        //await new Promise(r => setTimeout(r, 1000));
 
         // Get all items
-        const items: HTMLElement[] = (await screen.findAllByTitle("itemName"));
-        expect(items).toHaveLength(2)
+        allItems = await screen.findAllByTitle("itemName");
+        expect(allItems).toHaveLength(initialAmountOfItems - 1);
 
         // Check the item has been removed from the list of items now displayed.
-        for (let item of items) {
-            // expect(item).not.toBe(firstItem);
+        for (let item of allItems) {
+            expect(item.textContent).not.toBe(firstItem.textContent);
         }
 
 
         // minus buttons
-        const removeButtons: HTMLInputElement[] = await screen.findAllByTitle("removeItem")
+        const removeButtons = await screen.findAllByTitle("removeItem")
 
         // remove all items
         for (let i = 0; i < removeButtons.length; i++) {
-            await user.click(removeButtons[0]);
+            await user.click(removeButtons[i]);
         }
         await new Promise(r => setTimeout(r, 1000));
 
@@ -107,8 +103,10 @@ describe(Basket.name, () => {
 
 
     // Test suggestions.
-    test('suggestions') , async () => {
+    test('suggestions' , async () => {
         const {user} = setup(<App/>)
+        await new Promise(r => setTimeout(r, 1000));
+
 
         const suggestions = await screen.getAllByTitle("suggestion");
 
@@ -117,7 +115,12 @@ describe(Basket.name, () => {
 
         // Get first suggestion name
         const firstSuggestion = (await screen.getAllByTitle("suggestion"))[0];
-        const firstSuggestionName = firstSuggestion.textContent;
+        const firstSuggestionString = firstSuggestion.textContent;
+        expect(firstSuggestionString).not.toBe(null);
+        let firstSuggestionName : string = "";
+        if(firstSuggestionString) {
+            firstSuggestionName = firstSuggestionString.split(" ")[0];
+        }
 
         // click on a suggestion
         await user.click(firstSuggestion);
@@ -127,11 +130,13 @@ describe(Basket.name, () => {
 
         let present:boolean = false;
         for(let item of basket) {
-            if(item.textContent===firstSuggestionName){
+            console.log(item.textContent);
+            console.log(firstSuggestionName)
+            if(item.textContent && item.textContent.includes(firstSuggestionName)){
                 present = true;
             }
         }
         expect(present).toBe(true);
         cleanup()
-    }
+    })
 })

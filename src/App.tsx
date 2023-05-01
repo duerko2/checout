@@ -36,28 +36,7 @@ function App() {
         order: order,
         totalPrice: 0
     });
-    const [userinfo, setCustomerInfo] = useState<User>({
-        name: "",
-        phone: "",
-        email: "",
-        country: "",
-        address: "",
-        zip: "",
-        termsAndConditions: false
-
-
-    });
-
-
     useEffect(() => {
-
-        function simulateLoading() {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 1200);
-        }
-
-        simulateLoading();
 
         function popstateHandler() {
             const url = new URLSearchParams(window.location.search);
@@ -106,85 +85,84 @@ function App() {
     return (
         <div>
             <div className="container">
-                {isLoading ? (
-                    <div className="loader-container">
+                <div>
+                    <div className="header">
+                        <div className="background">
+                            <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px" /></div>
+                            <div className="dropdown">
+                                <div id="myDropdown" className="dropdown-content">
+                                    <button onClick={navigateToSignUp} className="signUp">Sign up</button>
+                                    <button onClick={navigateToLogIn} className="login">Login</button>
 
-                            <img src={Spinner} width="175px"/>
-
-                    </div>
-                ) : (
-                    <div>
-                        <div className="header">
-                            <div className="background">
-                                <div className="header-logo" onClick={navigateToDelivery}><img src={Logo} width="175px" /></div>
-                                <div className="dropdown">
-                                    <div id="myDropdown" className="dropdown-content">
-                                        <button onClick={navigateToSignUp} className="signUp">Sign up</button>
-                                        <button onClick={navigateToLogIn} className="login">Login</button>
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="content">
-                            {page === "delivery" && (
-                                <div className="page-grid">
-                                    <div className="basket">
-                                        <Basket
-                                            order={order}
-                                            setOrder={setOrder}/>
-                                    </div>
-                                    <div className="">
-                                        <Delivery
-                                            order={order}
-                                            setOrderInfo={setOrderInfo}
-                                            navigate={navigateToPayment}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                            {page === "payment" && (
-                                <div className="page-grid">
-                                    <div className="basket">
-                                        <PaymentBasket
-                                            order={order}
-                                        />
-                                    </div>
-                                    <div className="delivery">
-                                        <Payment
-                                            orderInfo={orderInfo}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                            {page === "signup" && (
-                                <div className="page-grid">
-
-                                    <div className="sign-up">
-                                        <Register
-                                            navigateBack={navigateToDelivery}
-                                            setSignUpInfo={setCustomerInfo}
-                                        />
-                                    </div>
-
-
-                                </div>)}
-                            {page === "login" && (
-                                <div className="page-grid">
-
-                                    <div className="login">
-                                        <LogIn
-                                            navigateBack={navigateToDelivery}
-                                            setSignUpInfo={setCustomerInfo}
-                                        />
-                                    </div>
-
-
-                                </div>)}
-                        </div>
                     </div>
-                )}
+                    <div className="content">
+                        {page === "delivery" && (
+                            <div className="page-grid">
+                                <div className="basket">
+                                    <Basket
+                                        order={order}
+                                        setOrder={setOrder}
+                                        setIsLoading={setIsLoading}
+                                    />
+                                </div>
+                                <div className="delivery">
+                                    <Delivery
+                                        order={order}
+                                        setOrderInfo={setOrderInfo}
+                                        navigateToPayment={navigateToPayment}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {page === "payment" && (
+                            <div className="page-grid">
+                                <div className="basket">
+                                    <PaymentBasket
+                                        order={order}
+                                    />
+                                </div>
+                                <div className="delivery">
+                                    <Payment
+                                        orderInfo={orderInfo}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        {page === "signup" && (
+                            <div className="page-grid">
+
+                                <div className="sign-up">
+                                    <Register
+                                        navigateBack={navigateToDelivery}
+                                        setSignUpInfo={setCustomerInfo}
+                                    />
+                                </div>
+
+
+                            </div>)}
+                        {page === "login" && (
+                            <div className="page-grid">
+
+                                <div className="login">
+                                    <LogIn
+                                        navigateBack={navigateToDelivery}
+                                        setSignUpInfo={setCustomerInfo}
+                                    />
+                                </div>
+
+
+                            </div>)}
+                    </div>
+                </div>
             </div>
+            {isLoading && (
+                <div className="loader-container">
+                    <img src={Spinner} width="175px"/>
+                </div>
+            )}
         </div>
     )
 }
