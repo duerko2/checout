@@ -42,6 +42,7 @@
 .header-logo {
     order: 1;
     flex: 0 0 auto;
+    cursor: pointer;
 }
 
 .dropdown {

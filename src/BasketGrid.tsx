@@ -139,7 +139,7 @@ export function BasketGrid({order,setOrder,show,setShowRebate,editable}: basketG
                             className="grid-item">
                             <p>{(item.product.price * (1 - getRebate(item) * (1 / 100)) * item.quantity).toFixed(2)} {item.product.currency}</p>
                         </div>
-                        <div className="grid-item" style={{justifySelf: "center"}}>
+                        <div className="grid-item" id="gift-wrapped" style={{justifySelf: "center"}}>
                             <label>
                                 <input title="giftwrapped" type="checkbox" onChange={() => changeGiftWrapped(item)} readOnly={!editable} checked={item.giftWrap}/>
                             </label>

@@ -24,6 +24,11 @@
 .grid-title{
     font-weight: bold;
 }
+
+.gift-wrapped{
+    cursor: pointer;
+}
+
 .unit-button{
     width: 25px;
     height: 25px;
