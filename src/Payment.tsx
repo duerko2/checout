@@ -5,6 +5,7 @@ import "./styles/Delivery.css";
 
 export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
     const [submitted, setSubmitted] = useState<boolean>(false);
+    const [paymentError, setPaymentError] = useState<boolean>(false);
     const [expirationDateValid, setExpirationDateValid] = useState<boolean>(false);
     const currentDate = new Date();
     const currentYear = parseInt(currentDate.getFullYear().toString().slice(2));
@@ -73,24 +74,30 @@ export function Payment({orderInfo}: { orderInfo: OrderInfo }) {
 
         const body = JSON.stringify({paymentInformation: paymentInformation, orderInfo: orderInfo});
 
-        const URL = "https://eoyy8shk0uki1al.m.pipedream.net/"
-        const response = await fetch(URL, {
-            method: "POST", headers: {"content-type": "application/Json"}, body: body
-        });
-        console.log(response);
-
-
-        setSubmitted(true);
+        try {
+            const URL = "https://eoyy8shk0uki1al.m.pipedream.nt/"
+            const response = await fetch(URL, {
+                method: "POST", headers: {"content-type": "application/Json"}, body: body
+            });
+            console.log(response);
+            setSubmitted(true);
+        } catch (e) {
+            setPaymentError(true);
+        }
     }
-
-    if (submitted) {
+    if(paymentError){
+        return (
+            <div>
+                <h2>Something went wrong with your payment. Please go back and try again.</h2>
+            </div>
+        )
+    } else if (submitted) {
         return (
             <div>
                 <h2>Thank you for your order!</h2>
             </div>
         )
     } else return (
-
         <div className="right-side-form">
             <div>
                 <h2>Payment</h2>
