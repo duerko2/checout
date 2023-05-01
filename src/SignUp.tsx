@@ -14,7 +14,7 @@ const managementKey = "xxxx"
 
 
 
-
+const descopeSdk = DescopeSdk({ projectId: 'P2OsOvJpvyJyafR9xhs2sYc4PeLC' });
 
 export function SignUp({navigateBack, setSignUpInfo
 }:
@@ -56,7 +56,7 @@ export function SignUp({navigateBack, setSignUpInfo
 
 
         })
-        const resp =  DescopeClient.arguments.user.create(
+        const resp =  descopeSdk(
             target.name.value,
             target.phone.value,
             target.email.value,
