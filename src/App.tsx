@@ -49,6 +49,8 @@ function App() {
     });
 
 
+
+
     useEffect(() => {
 
         function simulateLoading() {
@@ -87,9 +89,11 @@ function App() {
         dispatchEvent(new PopStateEvent("popstate"))
     }
     function navigateToDelivery(){
-        history.pushState({}, "","?page=")
+        history.pushState({}, "","?page=delivery")
         dispatchEvent(new PopStateEvent("popstate"))
     }
+
+
     function navigateToLogin(){
         history.pushState({},",","?page=login")
         dispatchEvent(new PopStateEvent("popstate"))
@@ -129,7 +133,7 @@ function App() {
                                             order={order}
                                             setOrder={setOrder}/>
                                     </div>
-                                    <div className="">
+                                    <div className="delivery">
                                         <Delivery
                                             order={order}
                                             setOrderInfo={setOrderInfo}

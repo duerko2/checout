@@ -9,25 +9,23 @@ import DescopeClient from '@descope/node-sdk';
 
 const managementKey = "xxxx"
 
-try{
-    //  baseUrl="<URL>" // When initializing the Descope clientyou can also configure the baseUrl ex: https://auth.company.com  - this is useful when you utilize CNAME within your Descope project.
-    const descopeClient = DescopeClient({ projectId: 'P2OsOvJpvyJyafR9xhs2sYc4PeLC', managementKey: managementKey });
-} catch (error) {
-    // handle the error
-    console.log("failed to initialize: " + error)
-}
-type Descope = ReturnType <typeof DescopeSdk>
+//const descopeClient = DescopeClient({ projectId: 'P2OsOvJpvyJyafR9xhs2sYc4PeLC', /*managementKey: managementKey */});
+
+
+
+
 
 
 export function SignUp({navigateBack, setSignUpInfo
 }:
                            { navigateBack: () => void, setSignUpInfo: (userInfo: User)=> void }) {
 
-    const [requesting, setRequesting] = useState(false)
 
 
 
 
+
+        //
 
 
     async function createUser(e: FormEvent) {
@@ -58,7 +56,7 @@ export function SignUp({navigateBack, setSignUpInfo
 
 
         })
-        const resp = await DescopeClient.arguments.user.create(
+        const resp =  DescopeClient.arguments.user.create(
             target.name.value,
             target.phone.value,
             target.email.value,
@@ -74,11 +72,12 @@ export function SignUp({navigateBack, setSignUpInfo
             console.log("Error Code: " + resp.error.errorCode)
             console.log("Error Description: " + resp.error.errorDescription)
             console.log("Error Message: " + resp.error.message)
-        }
-        else {
+        } else {
             console.log("Successfully created user.")
             console.log(resp.data)
         }
+
+
         navigateBack()
 
 
