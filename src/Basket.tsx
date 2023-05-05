@@ -69,7 +69,7 @@ export function Basket({
 
     useEffect(() => {
         async function updateBasket() {
-            const URL = "http://130.225.170.79:8080/basket/new";
+            const URL = "https://130.225.170.79:8085/basket/new";
             const body = JSON.stringify({id_: 1, itemList: order.itemList, recurring: order.recurring});
             //console.log("body: " + body);
 
