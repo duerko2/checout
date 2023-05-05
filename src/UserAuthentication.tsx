@@ -3,7 +3,7 @@ import React, {FormEvent, useState} from "react";
 import {RegisterForm, SignInForm, UserForm} from "./UserForm";
 import {User} from "./types";
 import './styles/UserAuthentication.css';
-import DescopeSdk, {UserResponse} from "@descope/web-js-sdk";
+import DescopeSdk, {UserResponse} from '@descope/web-js-sdk';
 
 
 export function LogIn(

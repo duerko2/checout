@@ -21,7 +21,7 @@ export function Basket({
 
     useEffect(() => {
             async function fetchProducts() {
-                const URL = "http://130.225.170.79:8080/products";
+                const URL = "https://130.225.170.79:8085/products";
 
                 try {
                     const response = await fetch(URL);
@@ -35,9 +35,9 @@ export function Basket({
             }
 
             async function fetchBasket() {
-                // TODO: async kald til backend for at hente indkøbskurv
+                // async kald til backend for at hente indkøbskurv
 
-                const URL = "http://130.225.170.79:8080/basket/1";
+                const URL = "https://130.225.170.79:8085/basket/1";
                 let basket: Item[] = [];
                 try {
                     const response = await fetch(URL, {method: "GET"});
